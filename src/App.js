@@ -1,8 +1,9 @@
+import BookMeeting from "./pages/BookMeeting";
 
 function App() {
   return (
     <div className="App">
-      Hello world!
+      <BookMeeting />
     </div>
   );
 }
