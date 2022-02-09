@@ -1,4 +1,4 @@
-import Timer from '../components/Timer/Timer';
+import Timer from '../components/BookMeeting/Timer/Timer';
 
 const BookMeeting = () => {
   return <Timer />;

@@ -1,5 +1,5 @@
-import BookMeeting from "./pages/BookMeeting";
 import { Route, Routes } from 'react-router-dom';
+import BookMeeting from "./pages/BookMeeting";
 
 function App() {
   return (

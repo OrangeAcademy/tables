@@ -1,5 +1,8 @@
-import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import Wrapper from '../Wrapper/Wrapper';
+
+import './Timer.css';
 
 const currentTimeFormatted = () => dayjs().format('HH:mm:ss');
 
@@ -15,7 +18,11 @@ const Timer = () => {
     return () => clearInterval(updateTime);
   });
 
-  return <h3>{currentTime}</h3>;
+  return (
+    <Wrapper>
+      <h3 className="timer">{currentTime}</h3>
+    </Wrapper>
+  );
 };
 
 export default Timer;
