@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import Wrapper from '../Wrapper/Wrapper';
 
-import './Timer.css';
+import { Typography, Container } from '@mui/material';
 
 const currentTimeFormatted = () => dayjs().format('HH:mm:ss');
 
@@ -19,9 +18,13 @@ const Timer = () => {
   });
 
   return (
-    <Wrapper>
-      <h3 className="timer">{currentTime}</h3>
-    </Wrapper>
+    <Container
+      sx={{ display: 'grid', margin: 0, padding: 0, minWidth: '100%' }}
+    >
+      <Typography variant="h3" color="#fef9e7" sx={{ justifySelf: 'right' }}>
+        {currentTime}
+      </Typography>
+    </Container>
   );
 };
 
