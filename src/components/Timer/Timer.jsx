@@ -15,11 +15,7 @@ const Timer = () => {
     return () => clearInterval(updateTime);
   });
 
-  return (
-    <>
-      <h3>{currentTime}</h3>
-    </>
-  );
+  return <h3>{currentTime}</h3>;
 };
 
 export default Timer;
