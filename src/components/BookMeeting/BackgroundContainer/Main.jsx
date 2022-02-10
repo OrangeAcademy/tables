@@ -1,5 +1,7 @@
+//MUI Imports
 import { Grid } from '@mui/material';
 
+// Container for the 'slide 1' page
 const BackgroundContainer = ({ children }) => {
   return (
     <Grid
