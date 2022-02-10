@@ -1,8 +1,12 @@
-import { OutlinedTextField } from '../FormUI/OutlinedField';
-import { OutlinedSelectField } from '../FormUI/OutlinedField';
+//MUI Imports
 import { EmailRounded } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 
+// Local imports
+import { OutlinedTextField } from '../FormUI/OutlinedTextField';
+import { OutlinedSelectField } from '../FormUI/OutlinedSelectField';
+
+// Component containg the form fields for Reporting an Issue popup
 const PopupFormFields = () => {
   return (
     <>

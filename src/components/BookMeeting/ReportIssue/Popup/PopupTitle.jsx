@@ -1,6 +1,8 @@
+// MUI Imports
 import { DialogTitle, Typography } from '@mui/material';
 import GppGoodOutlinedIcon from '@mui/icons-material/GppGoodOutlined';
 
+// Header of the popup card
 const PopupTitle = () => {
   return (
     <DialogTitle sx={{ display: 'flex', justifyContent: 'center' }}>

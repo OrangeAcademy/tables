@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 
-const Wrapper = ({ children }) => {
+const BackgroundContainer = ({ children }) => {
   return (
     <Grid
       container
@@ -17,4 +17,4 @@ const Wrapper = ({ children }) => {
   );
 };
 
-export default Wrapper;
+export default BackgroundContainer;
