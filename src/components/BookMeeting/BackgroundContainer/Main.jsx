@@ -8,7 +8,7 @@ const BackgroundContainer = ({ children }) => {
       container
       direction="column"
       wrap="wrap"
-      padding="4rem"
+      padding="1rem 2rem"
       maxWidth="100%"
       maxHeight="100%"
       height="100vh"

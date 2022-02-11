@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 // Local imports
 import ReportIssuePopup from './Popup/Main';
-import ReportIssueButton from './Partials/ReportIssueButton';
+import ReportIssueButton from './MainButton/Main';
 
 // The main component that embeds
 // 1. The report issue button, which opens the 'Report an Issue' popup

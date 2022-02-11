@@ -3,8 +3,8 @@ import { EmailRounded } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 
 // Local imports
-import { OutlinedTextField } from '../FormUI/OutlinedTextField';
-import { OutlinedSelectField } from '../FormUI/OutlinedSelectField';
+import { OutlinedTextField } from './OutlinedTextField';
+import IssueTypeField from './IssueTypeDropdown';
 
 // Component containg the form fields for Reporting an Issue popup
 const PopupFormFields = () => {
@@ -21,7 +21,7 @@ const PopupFormFields = () => {
         icon={<EditIcon />}
         multiline
       />
-      <OutlinedSelectField />
+      <IssueTypeField />
     </>
   );
 };

@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { FormControl, InputAdornment, OutlinedInput } from '@mui/material';
 
 // Local imports
-import Label from './Partials/InputLabel';
+import Label from '../FormPartials/InputLabel';
 
-// Creates an outlined TEXT field adjusted to the design
+// This is a 'template' component for creating text fields in form.
+// Currently used for Report Issue Popup
 // Key differences compared to the default MUI Component:
 // 1. This one has icon
 // 2. label is fixed to the top

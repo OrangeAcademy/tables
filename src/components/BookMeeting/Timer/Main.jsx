@@ -24,7 +24,7 @@ const Timer = () => {
   });
 
   return (
-    <Container sx={{ display: 'grid', minWidth: '100%' }}>
+    <Container disableGutters={true} sx={{ display: 'grid', minWidth: '100%' }}>
       <Typography variant="h3" color="#fef9e7" sx={{ justifySelf: 'right' }}>
         {currentTime}
       </Typography>

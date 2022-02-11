@@ -1,14 +1,14 @@
 // Local imports
-import Timer from '../components/BookMeeting/Timer/Timer';
+import Timer from '../components/BookMeeting/Timer/Main';
 import BackgroundContainer from '../components/BookMeeting/BackgroundContainer/Main';
 import ReportIssue from '../components/BookMeeting/ReportIssue/Main';
-import Title from '../components/BookMeeting/Title/Title';
+import Title from '../components/BookMeeting/Title/Main';
 
 const BookMeeting = () => {
   return (
     <BackgroundContainer>
       <Timer />
-      < Title />
+      <Title />
       <ReportIssue />
     </BackgroundContainer>
   );

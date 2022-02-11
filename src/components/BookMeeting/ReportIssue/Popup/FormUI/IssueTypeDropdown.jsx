@@ -6,11 +6,14 @@ import CategoryIcon from '@mui/icons-material/Category';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 
 //Local imports
-import Label from './Partials/InputLabel';
-import InputTextContainer from './Partials/InputTextContainer';
+import Label from '../FormPartials/InputLabel';
+import InputTextContainer from './InputTextContainer';
+
+// Styles
+const iconStyles = { color: ' #3d50af' };
 
 // Create an outlined SELECT field. Could be refactored to receive dropdown items as props
-export const OutlinedSelectField = () => {
+const IssueTypeDropdown = () => {
   const [issueType, setIssueType] = useState('App');
   const [open, setOpen] = useState(false);
 
@@ -34,7 +37,7 @@ export const OutlinedSelectField = () => {
         {/* Option 1 */}
         <MenuItem value="App">
           <InputTextContainer>
-            <CategoryIcon sx={{ color: ' #3d50af' }} />
+            <CategoryIcon sx={{ ...iconStyles }} />
             <Typography ml="3px">App</Typography>
           </InputTextContainer>
         </MenuItem>
@@ -42,7 +45,7 @@ export const OutlinedSelectField = () => {
         {/* Option 2*/}
         <MenuItem value="Meeting Room">
           <InputTextContainer>
-            <MeetingRoomIcon sx={{ color: ' #3d50af' }} />
+            <MeetingRoomIcon sx={{ ...iconStyles }} />
             <Typography>Meeting Room</Typography>
           </InputTextContainer>
         </MenuItem>
@@ -50,3 +53,5 @@ export const OutlinedSelectField = () => {
     </FormControl>
   );
 };
+
+export default IssueTypeDropdown;
