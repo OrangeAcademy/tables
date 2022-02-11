@@ -5,8 +5,6 @@ import { grey } from '@mui/material/colors';
 export const boxStyles = {
   display: 'flex',
   justifyContent: 'center',
-  flexGrow: 0.2,
-  flexShrink: 1,
   flexWrap: 'wrap',
   gap: '30px'
 };

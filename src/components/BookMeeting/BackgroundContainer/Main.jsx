@@ -14,7 +14,7 @@ const BackgroundContainer = ({ children }) => {
       padding="1rem 2rem"
       maxWidth="100%"
       maxHeight="100%"
-      height="100vh"
+      minHeight="100vh"
       sx={{ ...gridStyle }}
     >
       {children}
