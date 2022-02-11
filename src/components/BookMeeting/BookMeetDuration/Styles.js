@@ -35,6 +35,25 @@ export const buttonStyles = {
   },
   '&:active > *': {
     color: "#75726c"
+  },
+
+  '&:target': {
+    backgroundColor: "#fef9e5",
+    opacity: [0.4, 0.4, 0.9],
+    borderColor: grey[500]
+  },
+  '&:target > *': {
+    color: "#75726c"
+  }
+  ,
+
+  '&:focus': {
+    backgroundColor: "#fef9e5",
+    opacity: [0.4, 0.4, 0.9],
+    borderColor: grey[500]
+  },
+  '&:focus > *': {
+    color: "#75726c"
   }
 };
 
