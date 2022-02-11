@@ -5,12 +5,11 @@ const ContentContainer = ({ children }) => {
   return (
     <Grid
       display='flex'
-      direction="row"
+      flexDirection='column'
       width='60%'
       height='100vh'
       justifyContent='center'
       alignItems='center'
-      backgroundColor='#50bf8a'
     >
       {children}
     </Grid>
