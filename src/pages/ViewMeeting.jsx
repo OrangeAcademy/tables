@@ -4,6 +4,7 @@ import BackgroundContainer from "../components/ViewMeeting/Containers/Background
 import CircularTimerFunction from "../components/ViewMeeting/CircularTimer/CircularTimerFunction";
 import ContentContainer from "../components/ViewMeeting/Containers/ContentContainer";
 import StateInfo from "../components/ViewMeeting/StateInfo/StateInfo";
+import Details from "../components/ViewMeeting/Details/Details";
 
 const ViewMeeting = () => {
 
@@ -12,6 +13,7 @@ const ViewMeeting = () => {
       <ContentContainer>
         <StateInfo isBusy={false}/>
         <CircularTimerFunction time={5}/>
+        <Details isBusy={false}/>
       </ContentContainer>
       <Calendar/>
     </BackgroundContainer>
