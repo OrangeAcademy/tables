@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 const textStyle = {
   mt: '-0.4rem;',
   color: 'white',
-  fontSize: '3.57rem',
+  fontSize: '5rem',
   backgroundColor: '#50bf8a',
 };
 

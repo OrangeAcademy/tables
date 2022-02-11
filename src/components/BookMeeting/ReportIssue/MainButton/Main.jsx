@@ -3,8 +3,7 @@ import { Typography, Button } from '@mui/material';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 
 // Styles
-const iconStyles = { color: 'black', width: '32px', height: '32px' };
-const buttonStyles = { backgroundColor: 'white', marginLeft: 'auto' };
+import { iconStyles, buttonStyles } from './Styles';
 
 // Button that triggers the popup for Reporting an Issue
 const ReportIssueButton = ({ handleClickOpen }) => {
