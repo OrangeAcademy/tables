@@ -4,6 +4,10 @@ import dayjs from 'dayjs';
 // MUI Imports
 import { Typography, Container } from '@mui/material';
 
+// Styles
+const containerStyles = { display: 'grid', minWidth: '100%' };
+const textStyles = { justifySelf: 'right' };
+
 //Initiating the variable that holds the current local time
 const currentTimeFormatted = () => dayjs().format('HH:mm:ss');
 
@@ -24,8 +28,8 @@ const Timer = () => {
   });
 
   return (
-    <Container disableGutters={true} sx={{ display: 'grid', minWidth: '100%' }}>
-      <Typography variant="h3" color="#fef9e7" sx={{ justifySelf: 'right' }}>
+    <Container disableGutters={true} sx={{ ...containerStyles }}>
+      <Typography variant="h3" color="#fef9e7" sx={{ ...textStyles }}>
         {currentTime}
       </Typography>
     </Container>

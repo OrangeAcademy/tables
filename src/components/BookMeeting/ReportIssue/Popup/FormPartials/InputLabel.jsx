@@ -1,6 +1,9 @@
 // MUI Imports
 import { InputLabel } from '@mui/material';
 
+// Styles
+const labelStyles = { background: 'white', paddingRight: '5px' };
+
 // Creates label for form inputs
 const Label = ({ inputLabel }) => {
   return (
@@ -9,7 +12,7 @@ const Label = ({ inputLabel }) => {
       margin="dense"
       variant="outlined"
       htmlFor="outlined-adornment"
-      sx={{ background: 'white', paddingRight: '5px' }}
+      sx={{ ...labelStyles }}
     >
       {inputLabel}
     </InputLabel>

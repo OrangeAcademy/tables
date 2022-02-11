@@ -11,6 +11,7 @@ import InputTextContainer from './InputTextContainer';
 
 // Styles
 const iconStyles = { color: ' #3d50af' };
+const formControlStyles = { m: 1, width: '100%' };
 
 // Create an outlined SELECT field. Could be refactored to receive dropdown items as props
 const IssueTypeDropdown = () => {
@@ -22,7 +23,7 @@ const IssueTypeDropdown = () => {
   const handleOpen = () => setOpen(true);
 
   return (
-    <FormControl sx={{ m: 1, width: '100%' }}>
+    <FormControl sx={{ ...formControlStyles }}>
       <Label inputLabel={'Issue type'} />
 
       <Select
@@ -34,7 +35,7 @@ const IssueTypeDropdown = () => {
         label="Issue type"
         onChange={handleChange}
       >
-        {/* Option 1 */}
+        {/* Option 1 | App */}
         <MenuItem value="App">
           <InputTextContainer>
             <CategoryIcon sx={{ ...iconStyles }} />
@@ -42,7 +43,7 @@ const IssueTypeDropdown = () => {
           </InputTextContainer>
         </MenuItem>
 
-        {/* Option 2*/}
+        {/* Option 2 | Meeting Room*/}
         <MenuItem value="Meeting Room">
           <InputTextContainer>
             <MeetingRoomIcon sx={{ ...iconStyles }} />

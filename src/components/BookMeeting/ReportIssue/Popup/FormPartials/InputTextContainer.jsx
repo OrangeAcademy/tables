@@ -1,7 +1,7 @@
 // MUI Imports
 import { Container } from '@mui/material';
 
-// styles
+// Styles
 const containerStyles = { display: 'flex', alignItems: 'center' };
 
 // Used in report issue form for select field

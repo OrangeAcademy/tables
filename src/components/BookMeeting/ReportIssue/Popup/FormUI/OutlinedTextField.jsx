@@ -6,6 +6,10 @@ import { FormControl, InputAdornment, OutlinedInput } from '@mui/material';
 // Local imports
 import Label from '../FormPartials/InputLabel';
 
+// Styles
+const InputAdornmentStyles = { color: '#3d50af' };
+const formControlStyles = { m: 1, width: '100%' };
+
 // This is a 'template' component for creating text fields in form.
 // Currently used for Report Issue Popup
 
@@ -18,7 +22,7 @@ export const OutlinedTextField = ({ inputType, label, icon, multiline }) => {
   const handleChange = (e) => setText(e.target.value);
 
   return (
-    <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+    <FormControl sx={{ ...formControlStyles }} variant="outlined">
       <Label inputLabel={label} />
       <OutlinedInput
         multiline={multiline}
@@ -29,7 +33,7 @@ export const OutlinedTextField = ({ inputType, label, icon, multiline }) => {
         value={text}
         onChange={(e) => handleChange(e)}
         startAdornment={
-          <InputAdornment position="start" sx={{ color: '#3d50af' }}>
+          <InputAdornment position="start" sx={{ ...InputAdornmentStyles }}>
             {icon}
           </InputAdornment>
         }

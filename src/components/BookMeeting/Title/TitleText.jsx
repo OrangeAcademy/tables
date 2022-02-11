@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-const style = {
+const textStyle = {
   mt: '-0.4rem;',
   color: 'white',
   fontSize: '3.57rem',
@@ -9,7 +9,7 @@ const style = {
 
 const TitleText = ({ children }) => (
   <Typography
-    sx={{ ...style }}
+    sx={{ ...textStyle }}
     align="center"
     color="textSecondary"
     component="h2"

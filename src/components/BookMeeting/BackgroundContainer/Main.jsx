@@ -1,6 +1,9 @@
 //MUI Imports
 import { Grid } from '@mui/material';
 
+// Styles
+const gridStyle = { bgcolor: '#50bf8a', overflow: 'none' };
+
 // Container for the 'slide 1' page
 const BackgroundContainer = ({ children }) => {
   return (
@@ -12,7 +15,7 @@ const BackgroundContainer = ({ children }) => {
       maxWidth="100%"
       maxHeight="100%"
       height="100vh"
-      sx={{ bgcolor: '#50bf8a', overflow: 'none' }}
+      sx={{ ...gridStyle }}
     >
       {children}
     </Grid>
