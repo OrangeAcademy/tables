@@ -8,12 +8,7 @@ const textStyle = {
 };
 
 const TitleText = ({ children }) => (
-  <Typography
-    sx={{ ...textStyle }}
-    align="center"
-    color="textSecondary"
-    component="h2"
-  >
+  <Typography sx={{ ...textStyle }} align="center" component="h2">
     {children}
   </Typography>
 );

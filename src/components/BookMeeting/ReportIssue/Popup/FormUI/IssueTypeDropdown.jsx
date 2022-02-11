@@ -7,7 +7,7 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 
 //Local imports
 import Label from '../FormPartials/InputLabel';
-import InputTextContainer from './InputTextContainer';
+import InputTextContainer from '../FormPartials/InputTextContainer';
 
 // Styles
 const iconStyles = { color: ' #3d50af' };

@@ -12,8 +12,8 @@ const ReportIssueButton = ({ handleClickOpen }) => {
     <Button
       variant="contained"
       startIcon={<NotificationsNoneOutlinedIcon sx={{ ...iconStyles }} />}
-      onClick={handleClickOpen}
       sx={{ ...buttonStyles }}
+      onClick={handleClickOpen}
     >
       <Typography color="black">Report an issue</Typography>
     </Button>

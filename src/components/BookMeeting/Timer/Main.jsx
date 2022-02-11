@@ -25,7 +25,7 @@ const Timer = () => {
 
     // Cleanup
     return () => clearInterval(updateTime);
-  });
+  }, []);
 
   return (
     <Container disableGutters={true} sx={{ ...containerStyles }}>
