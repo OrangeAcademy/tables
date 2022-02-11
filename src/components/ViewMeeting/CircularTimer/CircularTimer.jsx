@@ -26,9 +26,9 @@ function CircularTimer({seconds, timeForProgressBar}) {
         <CircularProgress
           variant="determinate"
           value={normalise(seconds)}
+          size='20vw'
+          thickness='2'
           style={{
-            width: '20rem',
-            height: '20rem',
             zIndex: '50',
             color: 'white'
           }}
@@ -36,11 +36,12 @@ function CircularTimer({seconds, timeForProgressBar}) {
         <CircularProgress
           variant="determinate"
           value={100}
+          size='20vw'
+          thickness='2'
           style={{
             position: 'absolute',
-            width: '20rem',
-            height: '20rem',
-            color: 'gray'
+            color: 'white',
+            opacity: '0.3'
           }}
         />
         <Box
@@ -59,7 +60,7 @@ function CircularTimer({seconds, timeForProgressBar}) {
             variant="caption"
             component="div"
             color="text.secondary"
-            style={{fontSize: '4.5rem', color: 'white', fontWeight: 'bold'}}
+            style={{fontSize: '4.5vw', color: 'white', fontWeight: 'bold'}}
           >
             {dayjs(seconds * 1000).format('mm:ss')}
           </Typography>
