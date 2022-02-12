@@ -2,7 +2,7 @@
 
 // Styles
 const styles = {
-  grid: { display: 'grid', placeItems: 'center', mb: '30px' },
+  grid: { display: 'grid', placeItems: 'center', mb: '30px', mt: "1.5rem" },
   title: { fontWeight: 600 },
   icon: { color: 'black', width: '32px', height: '32px' },
   button: {

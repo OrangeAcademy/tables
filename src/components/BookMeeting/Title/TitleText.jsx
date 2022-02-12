@@ -5,6 +5,7 @@ const textStyle = {
   color: 'white',
   fontSize: '5rem',
   backgroundColor: '#50bf8a',
+  letterSpacing: '0.2rem',
 };
 
 const TitleText = ({ children }) => (

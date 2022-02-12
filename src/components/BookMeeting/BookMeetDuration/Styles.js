@@ -14,15 +14,18 @@ export const buttonStyles = {
   height: 155,
   backgroundColor: ' #a6dab3',
   fontSize: '1.6rem',
-  boxShadow: 1,
+
+  boxShadow: '6px 10px 37px -7px rgba(0,0,0,0.41)',
   border: 0,
   borderRadius: 2,
   flexShrink: 1,
   mb: 8.5,
+
   '&:hover': {
     backgroundColor: "#fef9e5",
     opacity: [0.4, 0.4, 0.9],
-    borderColor: grey[500]
+    borderColor: grey[500],
+    boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.96)',
   },
   '&:hover > *': {
     color: "#75726c"
@@ -31,7 +34,8 @@ export const buttonStyles = {
   '&:active': {
     backgroundColor: "#fef9e5",
     opacity: [0.4, 0.4, 0.9],
-    borderColor: grey[500]
+    borderColor: grey[500],
+    boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.96)',
   },
   '&:active > *': {
     color: "#75726c"
@@ -40,7 +44,8 @@ export const buttonStyles = {
   '&:target': {
     backgroundColor: "#fef9e5",
     opacity: [0.4, 0.4, 0.9],
-    borderColor: grey[500]
+    borderColor: grey[500],
+    boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.96)',
   },
   '&:target > *': {
     color: "#75726c"
@@ -50,7 +55,8 @@ export const buttonStyles = {
   '&:focus': {
     backgroundColor: "#fef9e5",
     opacity: [0.4, 0.4, 0.9],
-    borderColor: grey[500]
+    borderColor: grey[500],
+    boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.96)',
   },
   '&:focus > *': {
     color: "#75726c"
