@@ -27,7 +27,7 @@ function CircularTimer({seconds, timeForProgressBar}) {
           variant="determinate"
           value={normalise(seconds)}
           size='20vw'
-          thickness='2'
+          thickness={2}
           style={{
             zIndex: '50',
             color: 'white'
@@ -37,7 +37,7 @@ function CircularTimer({seconds, timeForProgressBar}) {
           variant="determinate"
           value={100}
           size='20vw'
-          thickness='2'
+          thickness={2}
           style={{
             position: 'absolute',
             color: 'white',
