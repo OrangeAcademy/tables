@@ -27,4 +27,4 @@ const AddAttendeesAgendaButtons = () => {
     );
 }
 
-export default AddAttendeesAgendaButtons();
+export default AddAttendeesAgendaButtons;

@@ -45,4 +45,4 @@ const DateTimeValidation = () => {
     );
 }
 
-export default DateTimeValidation();
+export default DateTimeValidation;
