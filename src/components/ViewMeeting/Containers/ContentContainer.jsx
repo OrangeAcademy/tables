@@ -8,8 +8,9 @@ const ContentContainer = ({ children }) => {
       flexDirection='column'
       width='60%'
       height='100vh'
-      justifyContent='center'
+      justifyContent='space-between'
       alignItems='center'
+      padding='20px'
     >
       {children}
     </Grid>
