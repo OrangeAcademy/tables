@@ -1,18 +1,18 @@
-import { Route, Routes } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import BookMeeting from "./pages/BookMeeting";
-import DateTimeValidation from "./components/CreateNewReservation/DateTimePicker/DateTimePickerRange";
-import AddAttendeesAgendaButtons from "./components/CreateNewReservation/AddElementButtons/AddAttendeesAgendaButtons";
-import Inputs from "./pages/Inputs";
+import PopUpMeeting from "./pages/PopUpMeeting";
+
 
 function App() {
-  return (
-    <div className="App">
-      <Inputs />
-      {/*<Routes >*/}
-      {/*  <Route path="/" element={<BookMeeting />} exact />*/}
-      {/*</Routes>*/}
-    </div>
-  );
+
+    return (
+        <div className="App">
+            <Routes>
+                <Route path="/" element={<BookMeeting/>} exact/>
+                <Route path="/meeting" element={<PopUpMeeting/>} exact/>
+            </Routes>
+        </div>
+    );
 }
 
 export default App;
