@@ -1,4 +1,4 @@
-import { Button, Container, Typography, styled } from '@mui/material';
+import { Container, Typography, styled } from '@mui/material';
 
 export const MainContainer = styled(Container)({
   display: 'grid',
