@@ -8,6 +8,8 @@ import { useState } from "react";
 import { makeStyles } from "@mui/styles";
 import DateTimeValidation from "../CreateNewReservation/DateTimePicker/DateTimePickerRange";
 import AddAttendeesAgendaButtons from "../CreateNewReservation/AddElementButtons/AddAttendeesAgendaButtons";
+import ButtonComponent from "../ButtonComponent";
+import Stack from "@mui/material/Stack";
 const useStyles = makeStyles({
   container: {
     display: "flex",
@@ -39,6 +41,11 @@ const Inputs = () => {
         <MeetingInput text="Meeting Subject" icon={<SubjectRoundedIcon />} />
         <DateTimeValidation />
         <AddAttendeesAgendaButtons />
+        <Stack direction="row" spacing={2}>
+            <ButtonComponent variant="contained" content="Cancel" color="error"/>
+            <ButtonComponent  variant="outlined" content="Confirm" disabled/>
+
+        </Stack>
       </div>
     </div>
   );
