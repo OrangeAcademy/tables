@@ -10,7 +10,6 @@ export const SHORT = "short";
 export const NUMERIC = "numeric";
 export const TWO_DIGIT = "2-digit";
 export const LOWERCASE = "lowercase";
-export const Events = [{date: new Date()}];
 export const DAY_DATE_FORMAT = "EEEE, d MMM, yyyy";
 export const businessHours = {
     daysOfWeek: [1, 2, 3, 4, 5, 6, 7],
