@@ -1,24 +1,28 @@
-// MUI Imports
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-
 // Local imports
-import { boxStyles, buttonStyles, textStyles } from './Styles';
-import { Typography } from '@mui/material';
+import { useRef } from 'react';
+import BookMeetingBtn from './Button';
+import StyledBox from './Containers/Box';
 
 // This array defines the time duration of a meeting user wants to book
 const MEETING_DURATION = [15, 30, 45, 60];
 
 // Based on Meeting Duration -> Returns MEETING_DURATION.length number of buttons for booking a meeting
 const MeetingDurationButtons = () => {
+  const selectedDuration = useRef(MEETING_DURATION[0]);
+  const setDuration = (index) =>
+    (selectedDuration.current = MEETING_DURATION[index]);
+
   return (
-    <Box sx={{ ...boxStyles }}>
-      {MEETING_DURATION.map((e, i) => (
-        <Button sx={{ ...buttonStyles }} key={i}>
-          <Typography sx={{ ...textStyles }}>{e} min</Typography>
-        </Button>
+    <StyledBox>
+      {MEETING_DURATION.map((duration, index) => (
+        <BookMeetingBtn
+          setDuration={setDuration}
+          index={index}
+          duration={duration}
+          key={index}
+        />
       ))}
-    </Box>
+    </StyledBox>
   );
 };
 

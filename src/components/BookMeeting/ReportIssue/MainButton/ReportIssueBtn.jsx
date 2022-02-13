@@ -1,6 +1,6 @@
-// Styles
-export const iconStyles = { color: 'black', width: '32px', height: '32px' };
-export const buttonStyles = {
+import { Button, styled } from '@mui/material';
+
+const StyledReportIssueButton = styled(Button)({
   backgroundColor: '#fef9e5',
   marginLeft: 'auto',
   '&:hover': {
@@ -9,4 +9,6 @@ export const buttonStyles = {
   '&:active': {
     backgroundColor: 'white',
   },
-};
+});
+
+export default StyledReportIssueButton;

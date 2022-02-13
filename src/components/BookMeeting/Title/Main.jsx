@@ -5,13 +5,13 @@ import TitleText from './TitleText';
 const Title = ({
   location = 'Orange {kITchen}',
   meetingRoom = 'Agora',
-  meetinRoomStatus = true,
+  isRoomAvailable = true,
 }) => {
   return (
     <>
       <Container sx={{ mb: 10 }}>
         <TitleText>{`${location} - ${meetingRoom}`}</TitleText>
-        <TitleText>{meetinRoomStatus ? `Free until 10:50` : `Busy`}</TitleText>
+        <TitleText>{isRoomAvailable ? `Free until 10:50` : `Busy`}</TitleText>
       </Container>
     </>
   );
