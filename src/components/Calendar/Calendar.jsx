@@ -3,6 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import {calendarProps,DAY_DATE_FORMAT} from "./options/hourly";
 import {format} from "date-fns";
 
+
 const Calendar = () => {
     const validTime = () => {
         return {start: new Date()};
@@ -15,7 +16,6 @@ const Calendar = () => {
                 }}
                 validRange={validTime}
                 {...calendarProps}/>
-
         </div>
     );
 };
