@@ -37,9 +37,7 @@ const DateTimeValidation = () => {
                     />
                 </LocalizationProvider>
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={ru}>
-
                 </LocalizationProvider>
-
             </Stack>
         </>
     );

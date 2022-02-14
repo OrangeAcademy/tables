@@ -9,23 +9,25 @@
   background: rgba(0, 0, 0, 0.7);
   transition: opacity 500ms;
 }
+
 .popup {
   margin: 70px auto;
-  padding: 20px;
+  padding: 10px;
   background: #fff;
   border-radius: 5px;
-  width: 70%;
+  width: 60%;
   height: auto;
   position: relative;
   transition: all 1s ease-in-out;
 }
 
 .popup h2 {
-    text-align: center;
+  text-align: center;
   margin-top: 0;
   color: #333;
   font-family: Tahoma, Arial, sans-serif;
 }
+
 .popup .close {
   position: absolute;
   top: 20px;
@@ -36,10 +38,12 @@
   text-decoration: none;
   color: #333;
 }
+
 .popup .close:hover {
   cursor: pointer;
   color: #000;
 }
+
 .popup .content {
   max-height: 30%;
   overflow: auto;
@@ -51,8 +55,8 @@
   }
 }
 
-.reservationTitle{
-    display: flex;
-    text-align: center;
-    padding: 20;
+.reservationTitle {
+  display: flex;
+  text-align: center;
+  padding: 20px;
 }
