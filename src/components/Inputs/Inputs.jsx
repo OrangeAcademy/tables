@@ -9,18 +9,19 @@ import { makeStyles } from "@mui/styles";
 import DateTimeValidation from "../CreateNewReservation/DateTimePicker/DateTimePickerRange";
 import AddAttendeesAgendaButtons from "../CreateNewReservation/AddElementButtons/AddAttendeesAgendaButtons";
 import ButtonComponent from "../ButtonComponent";
-import Stack from "@mui/material/Stack";
 const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-evenly",
     alignItems: "center",
-    height: "50vh",
+    height: "40vh",
   },
   layout: {
     display: "flex",
     flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
   },
   avatar: {
     display: "flex",
@@ -41,11 +42,10 @@ const Inputs = () => {
         <MeetingInput text="Meeting Subject" icon={<SubjectRoundedIcon />} />
         <DateTimeValidation />
         <AddAttendeesAgendaButtons />
-        <Stack direction="row" spacing={2}>
-            <ButtonComponent variant="contained" content="Cancel" color="error"/>
-            <ButtonComponent  variant="outlined" content="Confirm" disabled/>
-
-        </Stack>
+        <div className={classes.layout}>
+          <ButtonComponent variant="contained" content="Cancel" color="error" style={{ padding: ".5rem 6.2rem" }} />
+          <ButtonComponent variant="outlined" content="Confirm" disabled style={{ padding: ".5rem 6rem" }} />
+        </div>
       </div>
     </div>
   );
