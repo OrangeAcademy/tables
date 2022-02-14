@@ -3,7 +3,16 @@ import { MainContainer, StyledSubtitle } from './Partials/Main';
 import { Button } from '@mui/material';
 
 const PageNotFound = () => {
-  const redirectBack = () => window.history.back();
+  const { history, location } = window;
+
+  // if user first-entered the website with a broken link, then
+  // onClick redirect user to homepage
+  // -----------------else--------------------
+  // if user navigated through other pages before
+  // redirect user to the link one step back
+  const redirectBack = () =>
+    history.length <= 2 ? location.replace('/') : history.back();
+
   return (
     <MainContainer>
       <StyledSubtitle component="h3">oops! page not found</StyledSubtitle>
