@@ -7,7 +7,8 @@ const buttonStyles = {
   report: { color: '#c8c8c8' },
 };
 
-// Buttons for closing the popup
+// Buttons at the bottom of the Report issue popup card
+// Btns: cancel, report
 // P.S. The report button should eventually process the form data and send it to the server
 const PopupButtons = ({ handleClose }) => {
   return (

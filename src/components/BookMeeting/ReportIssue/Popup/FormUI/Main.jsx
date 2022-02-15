@@ -7,6 +7,7 @@ import { OutlinedTextField } from './OutlinedTextField';
 import IssueTypeField from './IssueTypeDropdown';
 
 // Component containg the form fields for Reporting an Issue popup
+// Form Fields: email, description, issue type [select options: app, meeting]
 const PopupFormFields = () => {
   return (
     <>

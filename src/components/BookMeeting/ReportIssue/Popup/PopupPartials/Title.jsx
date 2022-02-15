@@ -2,12 +2,16 @@
 import { DialogTitle, Typography } from '@mui/material';
 import ReportIssuePopupIcon from './Icon';
 
-// Header of the popup card
+// Styles
+const dialogStyles = { display: 'flex', justifyContent: 'center' };
+
+// Header of the report issue popup card;
+// Contains: shield icon + 'Report an issue' text
 const PopupTitle = () => {
   return (
-    <DialogTitle sx={{ display: 'flex', justifyContent: 'center' }}>
+    <DialogTitle sx={{ ...dialogStyles }}>
       <ReportIssuePopupIcon />
-      <Typography component="span">Report an issue</Typography>
+      <Typography fontSize="1.5rem">Report an issue</Typography>
     </DialogTitle>
   );
 };

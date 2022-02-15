@@ -1,6 +1,7 @@
 import { Typography, styled } from '@mui/material';
 
-const StyledTitle = styled(Typography)({
+// Typography for the main page title (route path: "/") 
+const TitleText = styled(Typography)({
   mt: '-0.4rem;',
   color: 'white',
   fontSize: '5rem',
@@ -9,9 +10,5 @@ const StyledTitle = styled(Typography)({
   textAlign: 'center',
   lineHeight: 1.4,
 });
-
-const TitleText = ({ children }) => {
-  return <StyledTitle component="h2">{children}</StyledTitle>;
-};
 
 export default TitleText;

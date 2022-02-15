@@ -1,5 +1,5 @@
 import { LettersContainer, StyledLetters } from './Partials/Main';
-const Letters = () => {
+const Letters404 = () => {
   return (
     <LettersContainer>
       <StyledLetters>4</StyledLetters>
@@ -9,4 +9,4 @@ const Letters = () => {
   );
 };
 
-export default Letters;
+export default Letters404;

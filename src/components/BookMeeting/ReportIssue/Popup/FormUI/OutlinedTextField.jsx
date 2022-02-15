@@ -15,7 +15,7 @@ const formControlStyles = { m: 1, width: '100%' };
 
 // Key differences compared to the default MUI Component:
 // 1. This one has icon
-// 2. label is fixed to the top
+// 2. label is fixed to top-left
 
 export const OutlinedTextField = ({ inputType, label, icon, multiline }) => {
   const [text, setText] = useState('');

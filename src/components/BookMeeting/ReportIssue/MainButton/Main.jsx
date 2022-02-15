@@ -2,15 +2,19 @@
 import { Typography } from '@mui/material';
 
 // Local imports
-import Button from './ReportIssueBtn';
-import Icon from './ReportIssueBtnIcon';
+import StyledButton from './ReportIssueBtn';
+import StyledIcon from './ReportIssueBtnIcon';
 
 // Button that triggers the popup for Reporting an Issue
 const ReportIssueButton = ({ handleClickOpen }) => {
   return (
-    <Button variant="contained" startIcon={<Icon />} onClick={handleClickOpen}>
+    <StyledButton
+      variant="contained"
+      startIcon={<StyledIcon />}
+      onClick={handleClickOpen}
+    >
       <Typography color="black">Report an issue</Typography>
-    </Button>
+    </StyledButton>
   );
 };
 
