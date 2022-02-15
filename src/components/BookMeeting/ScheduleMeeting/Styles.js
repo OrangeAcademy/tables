@@ -15,7 +15,7 @@ const styles = {
   btnText: {
     fontSize: '1.2rem',
     fontWeight: 400,
-    p: '5px 0',
+    lineHeight: '2rem',
     color: 'black',
   },
 }
