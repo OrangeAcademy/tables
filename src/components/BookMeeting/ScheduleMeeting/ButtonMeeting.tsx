@@ -10,7 +10,7 @@ import styles from './Styles';
 const ButtonMeeting = () => {
   return (
     <Grid sx={{ ...styles.grid }}>
-      <Typography variant="h4" color="white" sx={{ ...styles.title }}>
+      <Typography variant="h4" sx={{ ...styles.title }}>
         Next Meeting - Test
       </Typography>
       <Button
