@@ -3,7 +3,7 @@ import { Typography, styled } from '@mui/material';
 // Typography for the main page title (route path: "/") 
 const TitleText = styled(Typography)({
   mt: '-0.4rem;',
-  color: 'white',
+  color: '#fef9e7',
   fontSize: '5rem',
   backgroundColor: '#50bf8a',
   letterSpacing: '0.2rem',

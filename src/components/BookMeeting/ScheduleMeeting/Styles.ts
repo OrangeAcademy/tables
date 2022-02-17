@@ -1,11 +1,11 @@
 // Styles
 const styles = {
   grid: { display: 'grid', placeItems: 'center', mb: '2rem', mt: "5.5rem" },
-  title: { fontWeight: 600 },
+  title: { fontWeight: 600, color:'#fef9e7' },
   icon: { color: 'black', width: '32px', height: '32px' },
   button: {
     mt: '1.5rem',
-    backgroundColor: '#fef9e5',
+    backgroundColor: '#fef9e7',
     '&:hover': {
       backgroundColor: 'white',
     },

@@ -4,6 +4,7 @@ import { useState } from 'react';
 // MUI Imports
 import { FormControl, InputAdornment, OutlinedInput } from '@mui/material';
 
+
 // Local imports
 import Label from '../FormPartials/InputLabel';
 
@@ -28,25 +29,25 @@ interface props {
 
 export const OutlinedTextField = ({ inputType, label, icon, multiline }: props) => {
   const [text, setText] = useState('');
-  const handleChange = (e: React.ChangeEvent<{value: any}>):void => setText(e.target.value);
+  const handleChange = (e: React.ChangeEvent<{value: string}>):void => setText(e.target.value);
 
   return (
     <FormControl sx={{ ...formControlStyles }} variant="outlined">
       <Label inputLabel={label} />
       <OutlinedInput
+        color="primary"
+        id="outlined-adornment"
+        label={inputType}
         multiline={multiline}
         notched={true}
-        color="secondary"
-        id="outlined-adornment"
+        onChange={(e) => handleChange(e)}
         type={inputType}
         value={text}
-        onChange={(e) => handleChange(e)}
         startAdornment={
           <InputAdornment position="start" sx={{ ...InputAdornmentStyles }}>
             {icon}
           </InputAdornment>
         }
-        label={inputType}
       />
     </FormControl>
   );

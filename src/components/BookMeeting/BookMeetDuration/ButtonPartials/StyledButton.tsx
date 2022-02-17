@@ -12,11 +12,14 @@ const StyledButton = styled(Button)({
   borderRadius: 2,
   flexShrink: 1,
   mb: 8.5,
+  "&:hover": {
+    backgroundColor: '#a6dab3'
+  },
   '&:focus': {
     backgroundColor: '#fef9e5',
     opacity: [0.4, 0.4, 0.9],
     borderColor: grey[500],
-    boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.96)',
+    boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.95)',
   },
   '&:focus > *': {
     color: '#75726c',

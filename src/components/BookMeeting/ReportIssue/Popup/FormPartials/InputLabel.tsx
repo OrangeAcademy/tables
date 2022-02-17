@@ -14,7 +14,7 @@ interface props {
 const Label = ({ inputLabel }: props) => {
   return (
     <InputLabel
-      color="secondary"
+      color="primary"
       margin="dense"
       variant="outlined"
       htmlFor="outlined-adornment"
