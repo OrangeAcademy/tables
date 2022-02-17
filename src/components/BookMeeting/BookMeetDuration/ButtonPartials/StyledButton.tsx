@@ -9,7 +9,7 @@ const StyledButton = styled(Button)({
   fontSize: '1.6rem',
   boxShadow: '6px 10px 37px -7px rgba(0,0,0,0.41)',
   border: 0,
-  borderRadius: 2,
+  borderRadius: 5,
   flexShrink: 1,
   mb: 8.5,
   "&:hover": {

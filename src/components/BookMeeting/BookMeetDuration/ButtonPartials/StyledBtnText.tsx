@@ -3,7 +3,9 @@ import { Typography, styled } from '@mui/material';
 
 const StyledBtnText = styled(Typography)({
   fontSize: '2.5rem',
-  color: '#5e9073',
+  textTransform: 'lowercase',
+  fontWeight: 900,
+  color: '#6f6b68',
 });
 
 export default StyledBtnText;
