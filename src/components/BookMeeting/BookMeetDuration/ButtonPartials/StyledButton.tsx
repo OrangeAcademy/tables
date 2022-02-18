@@ -3,8 +3,8 @@ import { Button, styled } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
 const StyledButton = styled(Button)({
-  width: "clamp(110px, 30vw, 245px)",
-  height: "clamp(90px, 15vh, 155px)",
+  width: "clamp(100px, 255px, 30vw)",
+  height: "clamp(67px, 155px, 15vw)",
   backgroundColor: ' #a6dab3',
   fontSize: '1.6rem',
   boxShadow: '6px 10px 37px -7px rgba(0,0,0,0.41)',

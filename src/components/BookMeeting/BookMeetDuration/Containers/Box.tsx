@@ -4,7 +4,7 @@ const StyledBox = styled(Box)({
   display: 'flex',
   justifyContent: 'center',
   flexWrap: 'wrap',
-  gap: 'clamp(3vw, 20% ,25px)',
+  gap: 'clamp(5px, 25px, 10vw)',
 });
 
 export default StyledBox;

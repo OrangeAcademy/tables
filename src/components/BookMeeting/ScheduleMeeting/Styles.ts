@@ -11,7 +11,7 @@ const styles = {
     },
   },
   btnText: {
-    fontSize: 'clamp(12px, 1rem, 1.2rem)',
+    fontSize: 'clamp(5px, 1rem, 2.135rem)',
     fontWeight: 400,
     lineHeight: '2rem',
     color: 'black',
