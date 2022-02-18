@@ -20,8 +20,8 @@ const ReportIssueButton = ({ handleClickOpen }: props) => {
       variant="contained"
       startIcon={<StyledIcon />}
       onClick={() => handleClickOpen()}
-    >
-      <Typography color="black" fontSize="clamp(12px, 1rem, 1.2rem)">Report an issue</Typography>
+    >  
+      <Typography color="black" fontSize="clamp(12px, 1rem, 1.2rem) ">Report an issue</Typography>
     </StyledButton>
   );
 };
