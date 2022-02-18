@@ -19,7 +19,7 @@ const BackgroundContainer = ({ children }: props): JSX.Element => {
       container
       direction="column"
       wrap="wrap"
-      padding="1rem 2rem"
+      padding="clamp(3px, 5vw , 1rem) clamp(6px, 10vw , 2rem)"
       maxWidth="100%"
       maxHeight="100%"
       minHeight="100vh"

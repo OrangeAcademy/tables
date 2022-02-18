@@ -7,7 +7,7 @@ import { Container } from '@mui/material';
 import TitleText from './TitleText';
 
 // Styles
-const containerStyles = { mb: 10 };
+const containerStyles = {mb: "clamp(5vh, 50px, 80px)", p: 0 };
 
 // Props validation
 interface props {

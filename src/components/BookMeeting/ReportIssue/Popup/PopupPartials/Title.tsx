@@ -12,7 +12,7 @@ const PopupTitle = () => {
   return (
     <DialogTitle sx={{ ...dialogStyles }}>
       <ReportIssuePopupIcon />
-      <Typography fontSize="1.5rem">Report an issue</Typography>
+      <Typography fontSize="clamp(1rem, 10%, 1.5rem)">Report an issue</Typography>
     </DialogTitle>
   );
 };

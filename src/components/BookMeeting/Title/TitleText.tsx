@@ -4,9 +4,9 @@ import { Typography, styled } from '@mui/material';
 const TitleText = styled(Typography)({
   mt: '-0.4rem;',
   color: '#fef9e7',
-  fontSize: '5rem',
+  fontSize: 'clamp(1rem, 7vw, 80px)',
   backgroundColor: '#50bf8a',
-  letterSpacing: '0.2rem',
+  letterSpacing:  0,
   textAlign: 'center',
   lineHeight: 1.4,
 });

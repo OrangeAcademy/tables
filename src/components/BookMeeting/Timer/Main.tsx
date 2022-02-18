@@ -8,7 +8,7 @@ import { Typography, Container } from '@mui/material';
 
 // Styles
 const containerStyles = { display: 'grid', minWidth: '100%' };
-const textStyles = { justifySelf: 'right' };
+const textStyles = { justifySelf: 'right', fontSize: "clamp(16px, 4vw, 40px)" };
 
 //Initiating the variable that holds the current local time
 const currentTimeFormatted = () => dayjs().format('HH:mm:ss');
