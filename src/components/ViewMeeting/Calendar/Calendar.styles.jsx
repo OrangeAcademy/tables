@@ -24,7 +24,6 @@ const CalendarStyle = styled('div')(() => ({
   },
 
   height: '100vh',
-  width: '40%',
   backgroundColor: '#f8e8d0'
 }));
 
