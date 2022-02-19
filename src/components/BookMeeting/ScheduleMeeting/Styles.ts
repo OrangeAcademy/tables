@@ -1,7 +1,7 @@
 // Styles
 const styles = {
   grid: { display: 'grid', placeItems: 'center', mb: '2rem', mt: "clamp(10px, 10vh, 5.5rem)" },
-  title: { fontWeight: 600, color:'#fef9e7', fontSize: "clamp(1rem, 2.125rem, 4vw)" },
+  title: { fontWeight: 600, color:'#fef9e7', fontSize: "clamp(1rem, 2.125rem, 7vw)" },
   icon: { color: 'black', width: '32px', height: '32px' },
   button: {
     mt: '1.5rem',
