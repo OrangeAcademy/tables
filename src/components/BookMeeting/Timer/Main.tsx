@@ -1,5 +1,3 @@
-import React from "react";
-
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 
@@ -13,9 +11,15 @@ const textStyles = { justifySelf: 'right', fontSize: "clamp(16px, 4vw, 40px)" };
 //Initiating the variable that holds the current local time
 const currentTimeFormatted = () => dayjs().format('HH:mm:ss');
 
-// Component that show the current local time
-// Time is updated each and every second
+
+/* -------------------  Component  ---------------- */
+/*
+  Component that show the current local time
+  Time is updated each and every second
+*/
+
 const Timer = () => {
+  // Stores current time in format (HH:mm:ss) // 23:59:59
   const [currentTime, setCurrentTime] = useState(currentTimeFormatted);
 
   useEffect(() => {
@@ -25,7 +29,7 @@ const Timer = () => {
       1000
     );
 
-    // Cleanup
+    // Cleanup for setInterval
     return () => clearInterval(updateTime);
   }, []);
 

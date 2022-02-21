@@ -4,12 +4,18 @@ import React from "react";
 import StyledBtnText from './ButtonPartials/StyledBtnText';
 import StyledButton from './ButtonPartials/StyledButton';
 
-// Hard-typed props
+// Props validation
 interface props { 
   duration: number,
   setDuration: Function,
   index: number
 }
+
+
+/* ------------------ Component -------------- */
+/*
+  Building block for creating the 'XYZ min' meeting duration button(s)
+*/
 
 const BookMeetingBtn = ({ duration, setDuration, index }: props) => {
   return (
