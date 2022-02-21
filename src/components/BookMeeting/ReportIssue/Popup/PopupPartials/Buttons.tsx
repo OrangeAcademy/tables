@@ -1,11 +1,12 @@
 import React from "react";
 // MUI Imports
 import { DialogActions, Button, Typography } from '@mui/material';
+import ResponsiveDialog from "./MY_COMPONENT";
 
 // Styles
 const buttonStyles = {
   cancel: { color: '#e91e63' },
-  report: { color: '#c8c8c8' },
+  report: { color: '#000080' },
 };
 
 // Hard-typed props
@@ -24,11 +25,11 @@ const PopupButtons = ({ handleClose }: props) => {
           Cancel
         </Typography>
       </Button>
-      <Button >
-        <Typography color={buttonStyles.report} component="span">
-          Report
-        </Typography>
-      </Button>
+
+
+     <  ResponsiveDialog />
+
+
     </DialogActions>
   );
 };

@@ -19,7 +19,7 @@ const formControlStyles = { m: 1, width: '100%' };
 
 // Create an outlined SELECT field. Could be refactored to receive dropdown items as props
 // Current dropdown options: app, meeting
-const IssueTypeDropdown = () => {
+  const IssueTypeDropdown = () => {
   const [issueType, setIssueType] = useState('App');
   const [open, setOpen] = useState(false);
 
