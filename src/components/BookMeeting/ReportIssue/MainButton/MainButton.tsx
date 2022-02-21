@@ -14,12 +14,14 @@ interface props {
 /* ------------------ Main Component -------------------- */
 /*
 
- Button that triggers the popup for Reporting an Issue
+ Button that triggers the popup for Reporting an Issue.
 
 */
 
 const ReportIssueButton = ({ handleClickOpen }: props) => {
   const theme = useTheme();
+
+  // Checks If vw is less than md: 900px
   const showText = useMediaQuery(theme.breakpoints.up('md'));
   return (
     <>

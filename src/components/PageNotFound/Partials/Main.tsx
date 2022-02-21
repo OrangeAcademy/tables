@@ -24,7 +24,7 @@ export const LettersContainer = styled(Container)({
 export const StyledSubtitle = styled(Typography)({
   textTransform: 'uppercase',
   textAlign: 'center',
-  fontSize: '20px',
+  fontSize: 'clamp(1rem, 0.8125rem + 0.8333vw, 1.25rem)',
   fontWeight: 400,
   color: '#000',
 });
@@ -34,7 +34,7 @@ export const StyledSubtitle = styled(Typography)({
 export const StyledLetters = styled(Typography)({
   display: 'inline-block',
   fontFamily: "'Montserrat', sans-serif",
-  fontSize: '252px',
+  fontSize: 'clamp(10rem, 8.8000rem + 6.0000vw, 16rem)',
   fontWeight: 900,
   color: '#262626',
   textTransform: 'uppercase',
