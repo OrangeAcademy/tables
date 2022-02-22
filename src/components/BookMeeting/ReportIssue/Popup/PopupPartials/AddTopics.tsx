@@ -3,21 +3,14 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import { Divider, Grid, IconButton, Input, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
-import { AddCircleOutline, Close, Done } from "@mui/icons-material";
+import { Divider, IconButton, Input, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { Close, Done } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { createTheme } from "@mui/material";
 
-// Styles
-const buttonStyles = {
-    cancel: { color: '#e91e63' },
-    report: { color: '#c8c8c8' },
-  };
 
 export default function ResponsiveDialog() {
   const [open, setOpen] = React.useState(false);
