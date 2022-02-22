@@ -1,5 +1,4 @@
 
-
 // MUI Imports
 import { Dialog, useTheme } from '@mui/material';
 import { useMediaQuery } from "@mui/material";
@@ -10,6 +9,8 @@ import PopupButtons from './PopupPartials/Buttons';
 import PopupFormFields from './Form/Form';
 import {ContentContainer} from "./PopupPartials/ContentContainer";
 
+// MUST BE A PART OF DIFFERENT COMPONENT.
+import AddTopic from "./PopupPartials/AddTopics";
 
 // Props validation
 interface IProps {
@@ -40,6 +41,9 @@ const ReportIssuePopup = ({ open, handleClose }: IProps) => {
 
       {/* ---- Popup buttons / footer  ---- */}
       <PopupButtons handleClose={handleClose} />
+
+      {/* ---- TO BE REMOVED FROM HERE ---- */}
+      <AddTopic />
     </Dialog>
 
   );
