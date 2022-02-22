@@ -1,37 +1,43 @@
-import React from "react";
 // MUI Imports
-import { DialogActions, Button, Typography } from '@mui/material';
-import ResponsiveDialog from "./MY_COMPONENT";
+import { DialogActions, Button, styled, Typography } from '@mui/material';
 
-// Styles
-const buttonStyles = {
-  cancel: { color: '#e91e63' },
-  report: { color: '#000080' },
-};
 
-// Hard-typed props
-interface props {
+// Props validation
+interface IPopupProps {
   handleClose: Function
 }
 
-// Buttons at the bottom of the Report issue popup card
-// Btns: cancel, report
-// P.S. The report button should eventually process the form data and send it to the server
-const PopupButtons = ({ handleClose }: props) => {
+/* ---- Styled Component(s) ---- */
+
+// Button style for 'Cancel' and 'Report' buttons
+const StyledBtn = styled(Button)(({theme}) => ({
+  width: "auto",
+  [theme.breakpoints.down('tablet')]: {
+    width: "50%"
+  }
+}))
+
+
+/* ------------------------ Component ------------------------ */
+/* 
+ Contains 'Report' and 'Cancel' buttons for the Report Issue Popup. 
+*/
+const PopupButtons = ({ handleClose }: IPopupProps) => {
   return (
     <DialogActions>
-      <Button onClick={() => handleClose()}>
-        <Typography color={buttonStyles.cancel} component="span">
-          Cancel
-        </Typography>
-      </Button>
 
+      <StyledBtn onClick={() => handleClose()}>
+        <Typography color="#e91e63">Cancel</Typography>
+      </StyledBtn>
 
-     <  ResponsiveDialog />
-
+      <StyledBtn >
+        <Typography color="#c8c8c8">Report</Typography>
+      </StyledBtn>
 
     </DialogActions>
   );
 };
+
+
 
 export default PopupButtons;

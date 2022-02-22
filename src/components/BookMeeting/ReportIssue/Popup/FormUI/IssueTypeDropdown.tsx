@@ -8,8 +8,8 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import { SelectChangeEvent } from "@mui/material";
 
 //Local imports
-import Label from '../FormPartials/InputLabel';
-import InputTextContainer from '../FormPartials/InputTextContainer';
+import Label from "../Form/FormPartials/InputLabel";
+import InputTextContainer from '../Form/FormPartials/InputTextContainer';
 
 // Styles
 const iconStyles = { color: ' #3d50af' };
