@@ -9,8 +9,22 @@ import EndButton from "../components/ViewMeeting/EndButton/EndButton";
 import createTheme from "@mui/material/styles/createTheme";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 
+declare module '@mui/material/styles' {
+  interface BreakpointOverrides {
+    xs: false;
+    sm: false;
+    md: false;
+    lg: false;
+    xl: false;
+    mobile: true;
+    tablet: true;
+    laptop: true;
+    desktop: true;
+  }
+}
+
 const ViewMeeting = () => {
-  let isBusy = true;
+  let isBusy = false;
 
   const theme = createTheme({
     breakpoints: {
