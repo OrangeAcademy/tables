@@ -2,9 +2,12 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-const StateInfo = (props) => {
-  const {isBusy} = props;
-  let stat = '';
+interface IsBusy {
+  isBusy: boolean
+}
+
+const StateInfo = ({isBusy}: IsBusy) => {
+  let stat: string = '';
 
   if (isBusy) {
     stat = 'Busy'

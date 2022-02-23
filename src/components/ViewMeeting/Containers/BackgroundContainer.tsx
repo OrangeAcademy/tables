@@ -1,7 +1,10 @@
 import {Grid} from '@mui/material';
 import React from "react";
 
-const BackgroundContainer = ({children}) => {
+type Props = {
+  children?: JSX.Element | JSX.Element[];
+};
+const BackgroundContainer = ({ children }: Props) => {
 
   return (
     <Grid
