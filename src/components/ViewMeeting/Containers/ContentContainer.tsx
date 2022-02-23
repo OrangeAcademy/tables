@@ -1,7 +1,12 @@
 import React from "react";
 import {Grid} from '@mui/material';
 
-const ContentContainer = ({children}) => {
+type Props = {
+  children?: JSX.Element | JSX.Element[];
+};
+
+const ContentContainer = ({ children }: Props) => {
+
   return (
     <Grid
       display='flex'

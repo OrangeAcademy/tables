@@ -6,36 +6,11 @@ import ContentContainer from "../components/ViewMeeting/Containers/ContentContai
 import StateInfo from "../components/ViewMeeting/StateInfo/StateInfo";
 import Details from "../components/ViewMeeting/Details/Details";
 import EndButton from "../components/ViewMeeting/EndButton/EndButton";
-import createTheme from "@mui/material/styles/createTheme";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
-
-declare module '@mui/material/styles' {
-  interface BreakpointOverrides {
-    xs: false;
-    sm: false;
-    md: false;
-    lg: false;
-    xl: false;
-    mobile: true;
-    tablet: true;
-    laptop: true;
-    desktop: true;
-  }
-}
+import theme from "../components/ViewMeeting/theme/Theme"
 
 const ViewMeeting = () => {
-  let isBusy = false;
-
-  const theme = createTheme({
-    breakpoints: {
-      values: {
-        mobile: 0,
-        tablet: 640,
-        laptop: 1024,
-        desktop: 1200,
-      },
-    },
-  });
+  let isBusy:boolean = true;
 
   return (
     <ThemeProvider theme={theme}>
@@ -51,5 +26,4 @@ const ViewMeeting = () => {
     </ThemeProvider>
   );
 };
-
 export default ViewMeeting;

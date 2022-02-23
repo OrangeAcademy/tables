@@ -15,8 +15,11 @@ const MeetingEndButton = styled(Button)({
   },
 })
 
-const EndButton = (props) => {
-  const {isBusy} = props
+interface IsBusy {
+  isBusy: boolean
+}
+
+const EndButton = ({ isBusy }: IsBusy) => {
 
   if (isBusy) {
     return (<MeetingEndButton>End Now</MeetingEndButton>)

@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import BookMeeting from "./pages/BookMeeting";
-import ViewMeeting from "./pages/ViewMeeting.jsx";
+import ViewMeeting from "./pages/ViewMeeting";
 import PageNotFound from "./pages/404";
 import PopUpMeeting from "./pages/PopUpMeeting";
 

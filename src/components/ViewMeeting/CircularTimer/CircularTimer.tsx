@@ -5,10 +5,15 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-function CircularTimer({seconds, timeForProgressBar}) {
+interface Timer {
+  seconds: number,
+  timeForProgressBar: number
+}
 
-  const normalise = (value) => value * 100 / timeForProgressBar;
-  const largeScreen = useMediaQuery(theme => theme.breakpoints.down('tablet'));
+function CircularTimer({ timeForProgressBar, seconds }:Timer) {
+
+  const normalise = (value:any) => value * 100 / timeForProgressBar;
+  const largeScreen = useMediaQuery((theme:any) => theme.breakpoints.down('tablet'));
   return (
     <div
       style={{
