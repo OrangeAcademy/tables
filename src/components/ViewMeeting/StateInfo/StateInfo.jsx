@@ -14,9 +14,19 @@ const StateInfo = (props) => {
     document.body.style.backgroundColor = "#50bf8a";
   }
   return (
-    <Box className='header' sx={{textAlign:'center', fontWeight:'bold', color:'white'}}>
-      <Typography variant='h1' fontWeight='600' fontSize='3.5vw'>Orange {"{kITchen}"} - Salt</Typography>
-      <Typography variant='h1' fontWeight='600' fontSize='3.5vw'>{stat}</Typography>
+    <Box className='header' sx={{textAlign: 'center', fontWeight: 'bold', color: 'white'}}>
+      <Typography variant='h1' fontWeight='600' sx={{
+        fontSize: {
+          mobile: '7.5vw',
+          tablet: '3.5vw'
+        }
+      }}>Orange {"{kITchen}"} - Salt</Typography>
+      <Typography variant='h1' fontWeight='600' sx={{
+        fontSize: {
+          mobile: '7.5vw',
+          tablet: '3.5vw'
+        }
+      }}>{stat}</Typography>
     </Box>
   )
 

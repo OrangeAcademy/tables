@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 import React from "react";
 import Button from "@mui/material/Button";
 import {styled} from "@mui/material";
@@ -10,7 +9,7 @@ const MeetingEndButton = styled(Button)({
   height: '4rem',
   color: 'black',
   textTransform: 'none',
-  fontSize: '1.5vw',
+  fontSize: '20px',
   '&:hover': {
    background: '#d4d1d1'
   },

@@ -1,16 +1,18 @@
 import React from "react";
-import { Grid } from '@mui/material';
+import {Grid} from '@mui/material';
 
-const ContentContainer = ({ children }) => {
+const ContentContainer = ({children}) => {
   return (
     <Grid
       display='flex'
       flexDirection='column'
-      width='60%'
       height='100vh'
       justifyContent='space-between'
       alignItems='center'
-      padding='20px'
+      sx={{
+        width: {mobile: '100%', tablet: '60%'},
+        padding: {mobile: '10px', tablet: '20px'}
+      }}
     >
       {children}
     </Grid>
