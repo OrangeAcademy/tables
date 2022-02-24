@@ -1,7 +1,7 @@
 import {useState} from 'react';
 
 // MUI Imports
-import { SelectChangeEvent } from "@mui/material";
+import { Box, SelectChangeEvent } from "@mui/material";
 
 
 //Local imports
@@ -49,12 +49,12 @@ const PopupFormFields = ({handleClose} : IFormProps) => {
 
 
   return (
-    <>
+    <Box component="form">
       <EmailField userEmail={userEmail} handleEmail={handleEmail}/>
       <IssueDescriptionField issueDescription={issueDescription} handleIssueDescription={handleIssueDescription}  />
       <IssueTypeField issueType={issueType} handleIssueType={handleIssueType} />
       <PopupButtons submitReport={submitReport} handleClose={handleClose} />
-    </>
+    </Box>
   );
 };
 

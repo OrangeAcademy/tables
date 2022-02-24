@@ -5,13 +5,9 @@ import { useMediaQuery } from "@mui/material";
 
 //Local Imports
 import PopupTitle from './PopupPartials/Title';
-import PopupButtons from './Form/Buttons';
 import PopupFormFields from './Form/Form';
 import {ContentContainer} from "./PopupPartials/ContentContainer";
 
-// Redux
-import { store } from "../../../../pages/store/store";
-import { addReport } from "../../../../pages/store/slices/reportIssueSlice";
 
 // MUST BE A PART OF DIFFERENT COMPONENT.
 import AddTopic from "./PopupPartials/AddTopics";
