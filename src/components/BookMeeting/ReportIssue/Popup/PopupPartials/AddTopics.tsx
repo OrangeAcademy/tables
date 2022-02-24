@@ -29,7 +29,7 @@ export default function ResponsiveDialog() {
   return (
     <div >
       <Button variant="outlined" onClick={handleClickOpen}>
-         Report
+         Add topics
       </Button>
       <Dialog
         fullScreen={fullScreen}

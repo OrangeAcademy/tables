@@ -5,9 +5,13 @@ import { useMediaQuery } from "@mui/material";
 
 //Local Imports
 import PopupTitle from './PopupPartials/Title';
-import PopupButtons from './PopupPartials/Buttons';
+import PopupButtons from './Form/Buttons';
 import PopupFormFields from './Form/Form';
 import {ContentContainer} from "./PopupPartials/ContentContainer";
+
+// Redux
+import { store } from "../../../../pages/store/store";
+import { addReport } from "../../../../pages/store/slices/reportIssueSlice";
 
 // MUST BE A PART OF DIFFERENT COMPONENT.
 import AddTopic from "./PopupPartials/AddTopics";
@@ -28,22 +32,19 @@ interface IProps {
 */
 
 const ReportIssuePopup = ({ open, handleClose }: IProps) => {
+  // Theme settings
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm')); // popup full screen = true when vw < 600px
 
+
   return (
     <Dialog open={open} fullScreen={fullScreen} onClose={handleClose} >
-      {/* ---- Popup main body ---- */}
       <ContentContainer>
         <PopupTitle />
-        <PopupFormFields />
+        <PopupFormFields handleClose={handleClose} />
       </ContentContainer>
 
-      {/* ---- Popup buttons / footer  ---- */}
-      <PopupButtons handleClose={handleClose} />
-
-      {/* ---- TO BE REMOVED FROM HERE ---- */}
-      <AddTopic />
+<AddTopic />
     </Dialog>
 
   );

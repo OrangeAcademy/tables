@@ -1,10 +1,22 @@
-//MUI Imports - Icons
-import { EmailRounded, Edit, MeetingRoom, Category } from '@mui/icons-material';
+import {useState} from 'react';
 
-// Local imports
-import  OutlinedTextField from './FormPartials/OutlinedTextField'; // Creates input field(s)
-import IssueTypeField from './FormPartials/IssueTypeDropdown'; // Creates dropdown
+// MUI Imports
+import { SelectChangeEvent } from "@mui/material";
 
+
+//Local imports
+import IssueTypeField from "./FormFields/IssueTypeField";
+import EmailField from "./FormFields/EmailField";
+import IssueDescriptionField from "./FormFields/IssueDescriptionField";
+import PopupButtons from "./Buttons";
+
+// Redux
+import {addReport} from "../../../../../pages/store/slices/reportIssueSlice";
+import {store} from "../../../../../pages/store/store";
+
+interface IFormProps {
+  handleClose: () => void
+}
 
 /* ------------------------ Main Component ------------------------ */
 /* 
@@ -12,17 +24,39 @@ import IssueTypeField from './FormPartials/IssueTypeDropdown'; // Creates dropdo
   Current form fields: email [input], description [input], issue type [select/dropdown]
 */
 
-const PopupFormFields = () => {
-  // Used for generating options in 'Issue Type' dropdown
-  const issueOptions = [{ category: "app", icon: <Category />}, {category: "meeting", icon: <MeetingRoom />}];
+const PopupFormFields = ({handleClose} : IFormProps) => {
+  const [userEmail, setUserEmail] = useState('');
+  const [issueDescription, setIssueDescription] = useState('');
+  const [issueType, setIssueType] = useState('');
+
+  const handleEmail = (e: React.ChangeEvent<{value: string}>) => setUserEmail(e.target.value);
+  const handleIssueDescription = (e: React.ChangeEvent<{value: string}>) => setIssueDescription(e.target.value);
+  const handleIssueType = (e: SelectChangeEvent) => setIssueType(e.target.value);
+
+  const submitReport = () => {
+    if(userEmail && issueDescription && issueType) {
+      store.dispatch(addReport({type: 'addReport', payload: {
+        userId: 2,
+        email: userEmail,
+        description: issueDescription,
+        issueType: issueType
+      }
+      }))
+  
+      handleClose();
+    }
+  }
+
 
   return (
     <>
-      <OutlinedTextField inputType="email" label="Your email" icon={<EmailRounded />} multiline={false} />
-      <OutlinedTextField inputType="text" label="Description" icon={<Edit />} multiline={true} />
-      <IssueTypeField {...issueOptions} />
+      <EmailField userEmail={userEmail} handleEmail={handleEmail}/>
+      <IssueDescriptionField issueDescription={issueDescription} handleIssueDescription={handleIssueDescription}  />
+      <IssueTypeField issueType={issueType} handleIssueType={handleIssueType} />
+      <PopupButtons submitReport={submitReport} handleClose={handleClose} />
     </>
   );
 };
+
 
 export default PopupFormFields;
