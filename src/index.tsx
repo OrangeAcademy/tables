@@ -5,12 +5,16 @@ import { BrowserRouter as Router } from 'react-router-dom';
 // Local imports
 import App from './App';
 import './global.css';
+import {Provider} from "react-redux";
+import {store} from "./app/store/store";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <App/>
+      </Router>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
