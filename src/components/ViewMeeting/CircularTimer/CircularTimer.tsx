@@ -6,14 +6,15 @@ import CircularProgress from '@mui/material/CircularProgress';
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 interface Timer {
-  seconds: number,
-  timeForProgressBar: number
+  timeForProgressBar: number,
+  seconds: number
 }
 
-function CircularTimer({ timeForProgressBar, seconds }:Timer) {
+function CircularTimer({timeForProgressBar, seconds}: Timer) {
 
-  const normalise = (value:any) => value * 100 / timeForProgressBar;
-  const largeScreen = useMediaQuery((theme:any) => theme.breakpoints.down('tablet'));
+  const normalise = (value: any) => value * 100 / timeForProgressBar;
+  const largeScreen = useMediaQuery((theme: any) => theme.breakpoints.down('tablet'));
+
   return (
     <div
       style={{

@@ -1,11 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import CircularTimer from './CircularTimer';
+import {ITime} from "../../../interfaces/Time";
 
-interface Time {
-  time: number
-}
-
-function CircularTimerFunction({ time }: Time) {
+function CircularTimerFunction({ time }: ITime) {
   const [progress, setProgress] = useState(time * 60);
   let timeForProgressBar = time * 60;
 

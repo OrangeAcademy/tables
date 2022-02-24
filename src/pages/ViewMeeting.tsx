@@ -17,7 +17,7 @@ const ViewMeeting = () => {
       <BackgroundContainer>
         <ContentContainer>
           <StateInfo isBusy={isBusy}/>
-          <CircularTimerFunction time={5}/>
+          <CircularTimerFunction time={15}/>
           <Details isBusy={isBusy}/>
           <EndButton isBusy={isBusy}/>
         </ContentContainer>
