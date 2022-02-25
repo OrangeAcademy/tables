@@ -8,10 +8,6 @@ import PopupTitle from './PopupPartials/Title';
 import PopupFormFields from './Form/Form';
 import {ContentContainer} from "./PopupPartials/ContentContainer";
 
-
-// MUST BE A PART OF DIFFERENT COMPONENT.
-import AddTopic from "./PopupPartials/AddTopics";
-
 // Props validation
 interface IProps {
   open: boolean,
@@ -39,8 +35,6 @@ const ReportIssuePopup = ({ open, handleClose }: IProps) => {
         <PopupTitle />
         <PopupFormFields handleClose={handleClose} />
       </ContentContainer>
-
-<AddTopic />
     </Dialog>
 
   );

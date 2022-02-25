@@ -11,30 +11,24 @@ import { Close, Done } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
+interface IProps {
+  showAgenda: boolean;
+  setShowAgenda: (val: boolean) => void;
+}
 
-export default function ResponsiveDialog() {
-  const [open, setOpen] = React.useState(false);
+
+export default function AddTopic({ showAgenda, setShowAgenda  }: IProps) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
- // const mediaScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  
+  const handleClose = () => setShowAgenda(false);
 
   return (
-    <div >
-      <Button variant="outlined" onClick={handleClickOpen}>
-         Add topics
-      </Button>
+
       <Dialog
         fullScreen={fullScreen}
        
-        open={open}
+        open={showAgenda}
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
@@ -124,6 +118,6 @@ export default function ResponsiveDialog() {
         </DialogActions>
       </Dialog>
     
-    </div>
+
   );
 }
