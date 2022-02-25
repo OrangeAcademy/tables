@@ -1,21 +1,21 @@
-import React from 'react';
+import React from "react";
 //MUI Imports
-import TextField from '@mui/material/TextField';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import Stack from '@mui/material/Stack';
+import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateTimePicker from "@mui/lab/DateTimePicker";
+import Stack from "@mui/material/Stack";
 //date-fns Import
-import { ru } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 
 const DateTimeValidation = () => {
-    const [startDateValue, setStartDateValue] = React.useState(new Date());
-    const [endDateValue, setEndDateValue] = React.useState(new Date());
+    const [startDateValue, setStartDateValue] = React.useState<Date | null>(null);
+    const [endDateValue, setEndDateValue] = React.useState<Date | null>(null);
 
     return (
         <>
             <Stack direction="row" spacing={2}>
-                <LocalizationProvider dateAdapter={AdapterDateFns} locale={ru}>
+                <LocalizationProvider dateAdapter={AdapterDateFns} locale={enUS}>
                     <DateTimePicker
                         renderInput={(params) => <TextField {...params} />}
                         label="Start time"
@@ -36,7 +36,7 @@ const DateTimeValidation = () => {
                         minDateTime={startDateValue}
                     />
                 </LocalizationProvider>
-                <LocalizationProvider dateAdapter={AdapterDateFns} locale={ru}>
+                <LocalizationProvider dateAdapter={AdapterDateFns} locale={enUS}>
                 </LocalizationProvider>
             </Stack>
         </>
