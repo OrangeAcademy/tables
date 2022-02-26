@@ -1,21 +1,11 @@
 import React from "react";
 import FullCalendar from "@fullcalendar/react";
-import { calendarProps, DAY_DATE_FORMAT } from "./options/hourly";
-import { format } from "date-fns";
 import timeGridDay from '@fullcalendar/timegrid';
 
 const Calendar = () => {
   const validTime = () => ({ start: new Date() });
 
   return (
-
-    // <FullCalendar
-    //   titleFormat={({ date }) => {
-    //     return format(date.marker, DAY_DATE_FORMAT);
-    //   }}
-    //   validRange={validTime}
-    //   {...calendarProps}
-    // />
     <FullCalendar
     plugins={[timeGridDay]}
     initialView="timeGridDay"

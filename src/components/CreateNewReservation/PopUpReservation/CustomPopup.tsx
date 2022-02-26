@@ -4,7 +4,7 @@ import './custom-popup-module.css';
 
 
 interface IProps {
-  title: string;
+  title?: string;
   show: boolean;
   onClose: Function;
   children: JSX.Element;

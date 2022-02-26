@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { InputAdornment, TextField } from "@mui/material";
+import {IInputs} from "../../../types/TypeComponents";
 
-const MeetingInput = (props) => {
+const MeetingInput = (props:IInputs) => {
   const [subject, setSubject] = useState("");
   console.log(subject);
   return (

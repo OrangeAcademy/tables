@@ -46,7 +46,7 @@ const ButtonMeeting = () => {
     </Grid>
     {visibility && 
     
-    <CustomPopup title="Book a meeting" onClose={setVisibility} show={visibility} > 
+    <CustomPopup  onClose={setVisibility} show={visibility} >
       <Grid container spacing={2}>
           <Grid item xs={12} md={7} lg={7}>
             <Inputs />

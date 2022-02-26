@@ -1,8 +1,9 @@
-import React from "react";
+import React,{FC} from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
+import {IButton} from "../../types/TypeComponents";
 
-const ButtonComponent = ({ variant, disabled, content, color, startIcon, onClick, sx }) => {
+const ButtonComponent:FC<IButton> = ({ variant, disabled, content, color, startIcon, onClick, sx }) => {
   return (
     <>
       <Stack direction="row" spacing={2}>
