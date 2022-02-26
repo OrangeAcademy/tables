@@ -6,19 +6,20 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.7);
-  transition: opacity 500ms;
+  background: rgba(0, 0, 0, 0.8);
+  transition: opacity 600ms;
 }
 
 .popup {
-  margin: 70px auto;
-  padding: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%; 
+ padding: 1em;
   background: #fff;
   border-radius: 5px;
-  width: 90%;
-  height: auto;
-  position: relative;
-  transition: all 1s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 
 .popup h2 {
@@ -32,8 +33,8 @@
   position: absolute;
   top: 20px;
   right: 30px;
-  transition: all 200ms;
-  font-size: 30px;
+  transition: all 500ms;
+  font-size: 20px;
   font-weight: bold;
   text-decoration: none;
   color: #333;
@@ -58,5 +59,5 @@
 .reservationTitle {
   display: flex;
   text-align: center;
-  padding: 20px;
+  padding: 30px;
 }
