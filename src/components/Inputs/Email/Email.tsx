@@ -1,7 +1,8 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { makeStyles } from "@mui/styles";
+import { IPropsEmail } from "../../../Types/Inputs/IEmail";
 
 const useStyles = makeStyles({
   rightStyles: {
@@ -17,9 +18,18 @@ const useStyles = makeStyles({
   },
 });
 
-const Email = (props) => {
-  const [email, setEmail] = useState("");
+const Email = (props: IPropsEmail): JSX.Element => {
+  // const [email, setEmail] = useState<string>("");
   const classes = useStyles();
+
+  const validateEmail = (e: { target: { value: string } }): void => {
+    const emailValue = e.target.value;
+    let regEmail =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!regEmail.test(emailValue)) {
+      alert("Invalid Email Address");
+    }
+  };
 
   return (
     <div className={classes.inputWidth}>
@@ -27,7 +37,11 @@ const Email = (props) => {
         options={props.options}
         renderInput={(params) => (
           <TextField
-            onChange={(e) => setEmail(e.target.value)}
+            error={props.error}
+            onChange={(e) => {
+              validateEmail(e);
+              console.log(e);
+            }}
             {...params}
             variant="outlined"
             InputProps={{

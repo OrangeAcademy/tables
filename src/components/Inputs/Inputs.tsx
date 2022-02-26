@@ -22,7 +22,12 @@ const useStyles = makeStyles({
 
 const Inputs = () => {
   const classes = useStyles();
-  const [emails] = useState([{ label: "firstUser@mail.com" }, { label: "secondUser@mail.com" }, { label: "thirdUser@mail.com" }]);
+  const [emails] = useState<
+    {
+      label: string;
+    }[]
+  >([{ label: "firstUser@mail.com" }, { label: "secondUser@mail.com" }, { label: "thirdUser@mail.com" }]);
+
   return (
     <>
       <Stack className={classes.avatar}>

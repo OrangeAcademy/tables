@@ -1,4 +1,6 @@
+import { ClassNameMap } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { IPropsInputs } from "../../../Types/IGlobal";
 
 const useStyles = makeStyles({
   avatar: {
@@ -14,8 +16,8 @@ const useStyles = makeStyles({
     fontSize: "25px",
   },
 });
-const Avatar = (props) => {
-  const classes = useStyles();
+const Avatar = (props: IPropsInputs): JSX.Element => {
+  const classes: ClassNameMap<"avatar" | "text"> = useStyles();
   return (
     <>
       <div className={classes.avatar}>{props.icon}</div>
