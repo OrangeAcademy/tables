@@ -12,6 +12,10 @@ const useStyles = makeStyles({
     display: "flex",
     width: "100%",
   },
+  space: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
 });
 
 const AddAttendeesAgendaButtons = () => {
@@ -22,6 +26,7 @@ const AddAttendeesAgendaButtons = () => {
     display: "flex",
     justifyContent: "space-between",
     padding: "5px 2rem",
+    fontSize: '12px',
   });
   const classes = useStyles();
   return (
