@@ -5,7 +5,14 @@ import FullCalendar from '@fullcalendar/react';
 import timeGridDay from '@fullcalendar/timegrid';
 import CalendarStyle from "./Calendar.styles";
 
-const eventsCalendar = [
+export interface IEvent {
+  title: string,
+  start: string,
+  end: string,
+  author: string
+}
+
+const eventsCalendar: IEvent[] = [
   {
     title: 'Event 1',
     start: dayjs().hour(14).minute(30).second(0).format(),
@@ -22,11 +29,11 @@ const eventsCalendar = [
 
 const Calendar = () => {
 
-  const calculateDateDiff = (event) => {
+  const calculateDateDiff = (event: any) => {
     return dayjs(event.end).diff(dayjs(event.start), 'minutes')
   }
 
-  const renderEventContent = (arg) => {
+  const renderEventContent = (arg: any) => {
     let direction = calculateDateDiff(arg.event) <= 30 ? 'row' : 'column';
     return (
       <Box sx={{flexDirection: direction}}>
@@ -37,7 +44,7 @@ const Calendar = () => {
   };
 
   return (
-    <CalendarStyle>
+    <CalendarStyle sx={{width: {mobile: '100%', tablet: '40%'}}}>
       <FullCalendar
         plugins={[timeGridDay]}
         initialView="timeGridDay"
@@ -46,7 +53,7 @@ const Calendar = () => {
         height={'100vh'}
         allDaySlot={false}
         slotMinTime={"08:00"}
-        slotMaxTime={"18:00:01"}
+        slotMaxTime={"20:00:01"}
         dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}
         slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
         events={eventsCalendar}

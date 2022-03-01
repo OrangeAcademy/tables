@@ -3,19 +3,23 @@ import dayjs from "dayjs";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
+import useMediaQuery from "@mui/material/useMediaQuery";
 
-function CircularTimer({seconds, timeForProgressBar}) {
+interface Timer {
+  seconds: number,
+  timeForProgressBar: number
+}
 
-  const normalise = (value) => value * 100 / timeForProgressBar;
+function CircularTimer({ timeForProgressBar, seconds }:Timer) {
 
+  const normalise = (value:any) => value * 100 / timeForProgressBar;
+  const largeScreen = useMediaQuery((theme:any) => theme.breakpoints.down('tablet'));
   return (
     <div
       style={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '50vw',
-        height: '50vh'
       }}>
       <Box
         sx={{
@@ -26,7 +30,7 @@ function CircularTimer({seconds, timeForProgressBar}) {
         <CircularProgress
           variant="determinate"
           value={normalise(seconds)}
-          size='20vw'
+          size={largeScreen ? '200px' : '250px'}
           thickness={2}
           style={{
             zIndex: '50',
@@ -36,7 +40,7 @@ function CircularTimer({seconds, timeForProgressBar}) {
         <CircularProgress
           variant="determinate"
           value={100}
-          size='20vw'
+          size={largeScreen ? '200px' : '250px'}
           thickness={2}
           style={{
             position: 'absolute',
@@ -60,7 +64,7 @@ function CircularTimer({seconds, timeForProgressBar}) {
             variant="caption"
             component="div"
             color="text.secondary"
-            style={{fontSize: '4.5vw', color: 'white', fontWeight: 'bold'}}
+            style={{fontSize: '30px', color: 'white', fontWeight: 'bold'}}
           >
             {dayjs(seconds * 1000).format('mm:ss')}
           </Typography>
