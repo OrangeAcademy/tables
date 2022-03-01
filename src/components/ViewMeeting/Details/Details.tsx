@@ -2,7 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import PersonIcon from '@mui/icons-material/Person';
 
-const main = {
+const main: any = {
   div: {
     display: 'flex',
     flexDirection: 'column',
@@ -12,13 +12,13 @@ const main = {
   }
 }
 
-const titleMeeting = {
+const titleMeeting: any = {
   div: {
     color: 'white',
   }
 }
 
-const authorMeeting = {
+const authorMeeting: any = {
   div: {
     color: 'white',
     display: 'flex',
@@ -26,23 +26,22 @@ const authorMeeting = {
   }
 }
 
-const userNameAuthor = {
+const userNameAuthor: any = {
   div: {
     marginLeft: '0.3rem',
   }
 }
 
-const userIcon = {
+const userIcon: any = {
   fontSize: '20px',
   paddingTop: '0.5vw'
 }
 
-export default function Details(props) {
-  const {isBusy} = props;
+export default function Details(props: any) {
 
   return (
     <>
-      {isBusy ?
+      {props.isBusy ?
         (<Box style={main.div}>
           <Box style={titleMeeting.div}> Meeting <strong><i>Evaluation: Vasile</i></strong></Box>
           <Box style={authorMeeting.div}>
