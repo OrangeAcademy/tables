@@ -2,8 +2,8 @@
 import { DialogActions, Button, styled, Typography } from '@mui/material';
 
 // Redux imports
-import { store } from "../../../../../pages/store/store";
-import { addReport } from "../../../../../pages/store/slices/reportIssueSlice";
+// import { store } from "../../../../../pages/store/store";
+// import { addReport } from "../../../../../pages/store/slices/reportIssueSlice";
 
 
 // Props validation
