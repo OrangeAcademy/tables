@@ -11,9 +11,12 @@ import { Box } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useState } from "react";
 
+import _ from 'lodash';
+
 // Redux Imports
 import { store } from '../../app/store/store';
 import { addMeetings } from "../../app/slices/meetingTopicsSlice";
+import { nanoid } from "@reduxjs/toolkit";
 
 interface IProps {
   showAgenda: boolean;
@@ -135,7 +138,8 @@ const Topic = ({topic, presenter, removeTopic}: any) => {
 
 interface ITopic {
   presenter: string,
-  topic: string
+  topic: string,
+  topicID: string
 }
 
 type MeetingTopics = ITopic[] | [];
@@ -143,22 +147,15 @@ type MeetingTopics = ITopic[] | [];
 export default function AddTopic({ showAgenda, setShowAgenda }: IProps) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const topicsStoredRedux = store.getState().meetingTopics.presenters;
   const [topic, setTopic] = useState('');
   const [presenter, setPresenter] = useState('');
-  const [allTopics, setAllTopics] = useState<MeetingTopics>([]);
-
+  const [allTopics, setAllTopics] = useState<MeetingTopics>(_.uniqBy([...topicsStoredRedux ], "topicID"));
+  
   const handleClose = () => setShowAgenda(false);
 
   const handleTopic = (event: React.ChangeEvent<{value: string}>) => setTopic(event.target.value);
   const handlePresenter = (event: React.ChangeEvent<{value: string}>) => setPresenter(event.target.value);
-  const addTopic = () => {
-    if(topic && presenter) {
-      setAllTopics([...allTopics, { topic , presenter }]);
-      setTopic('');
-      setPresenter('');
-    }
-  }
 
   const handleClearFields = () => {
     setTopic('');
@@ -170,14 +167,22 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IProps) {
     setAllTopics(newTopicsArr);
   }
 
+  const addTopic = () => {
+    if(topic && presenter) {
+      setAllTopics([...allTopics, { topic , presenter, topicID: nanoid() }]);
+      setTopic('');
+      setPresenter('');
+    }
+
+  }
+
   const storeTopics = (event: React.MouseEvent) => {
     if(allTopics.length) {
       store.dispatch(addMeetings({
-        // type: 'addMeetings',
-        payload: {
-          allTopics
-        }
+        payload: allTopics
       }))
+
+      handleClose();
     } else {
       event.preventDefault();
     }
@@ -213,7 +218,7 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IProps) {
 
             {!allTopics.length && <NoAgenda />}
 
-            {allTopics && allTopics.map((topic, topicIndex) => (
+            {allTopics.length && allTopics.map((topic, topicIndex) => (
               <Topic topic={topic.topic} presenter={topic.presenter} addTopic={addTopic} removeTopic={() => removeTopic(topicIndex)} ></Topic>
             ))}
           
@@ -227,9 +232,12 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IProps) {
         <ActionButton color="error" onClick={handleClose} variant="contained">
           Cancel
         </ActionButton>
-        <Button  onClick={storeTopics} variant="contained">
+        <ActionButton  onClick={(e) => {
+          storeTopics(e); 
+          handleClose();
+        }} variant="contained">
           Confirm
-        </Button>
+        </ActionButton>
       </DialogActions>
     </Dialog>
   );

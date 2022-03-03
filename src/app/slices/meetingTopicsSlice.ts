@@ -19,19 +19,18 @@ const meetingTopicsSlice = createSlice({
   initialState,
   reducers: {
     addMeetings: {
-      reducer: (state, action: PayloadAction<ITopic>) => {
-        state.presenters.push({
-          ...action.payload,
-          topicID: nanoid()
-        })
+      reducer: (state, action: PayloadAction<ITopic[]>) => {
+          state.presenters.push(...action.payload);
       },
-      prepare: (topic) => ({...topic})
+      prepare: (topic) => ({...topic, topicID: nanoid()})
     },
     removeMeeting: {
       reducer: (state, action: PayloadAction<ITopic>) => {
         state.presenters.filter(topic => topic.topicID !== action.payload.topicID)
       },
-      prepare: (topic) => ({...topic})
+      prepare: (topic) => {
+        return ({...topic})
+      }
     }
   }
 })
