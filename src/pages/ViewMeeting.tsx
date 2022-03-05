@@ -8,9 +8,14 @@ import Details from "../components/ViewMeeting/Details/Details";
 import EndButton from "../components/ViewMeeting/EndButton/EndButton";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import theme from "../components/ViewMeeting/theme/Theme"
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "../redux/hooks/hooks";
+import {getUsers} from "../redux/slices/userSlice";
 
 const ViewMeeting = () => {
   let isBusy: boolean = true;
+  const dispatch = useDispatch();
+  const users = useAppSelector((state => state.users.users))
 
   return (
     <ThemeProvider theme={theme}>

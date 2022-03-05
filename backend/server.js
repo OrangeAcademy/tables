@@ -5,7 +5,7 @@ let express = require('express'),
   cors = require('cors'),
 
 mongoose.Promise = global.Promise;
-  mongoose.Promise = global.Promise;
+
 mongoose.connect(dbConfig.db).then(() => {
     console.log('Database sucessfully connected')
   },
@@ -19,7 +19,10 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const eventsRoute = require('./routes/event.route');
-app.use('/api', eventsRoute)
+app.use('/api', eventsRoute);
+
+const usersRoute = require('./routes/user.route');
+app.use('/api', usersRoute)
 
 const port = process.env.PORT || 4000;
 const server = app.listen(port, () => {
