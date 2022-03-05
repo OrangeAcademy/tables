@@ -11,8 +11,8 @@ import IssueDescriptionField from "./FormFields/IssueDescriptionField";
 import PopupButtons from "./Buttons";
 
 // Redux
-import {addReport} from "../../../../../pages/store/slices/reportIssueSlice";
-import {store} from "../../../../../pages/store/store";
+import {addReport} from "../../../../../redux/slices/reportIssueSlice";
+import {store} from "../../../../../redux/store/store";
 
 interface IFormProps {
   handleClose: () => void

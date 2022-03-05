@@ -7,7 +7,7 @@ import App from './App';
 import './global.css';
 
 // Redux store
-import {store} from "./pages/store/store";
+import {store} from "./redux/store/store";
 import { Provider } from "react-redux";
 
 ReactDOM.render(

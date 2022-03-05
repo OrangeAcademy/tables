@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Calendar from "../components/ViewMeeting/Calendar/Calendar";
 import BackgroundContainer from "../components/ViewMeeting/Containers/BackgroundContainer";
 import CircularTimerFunction from "../components/ViewMeeting/CircularTimer/CircularTimerFunction";
@@ -10,7 +10,7 @@ import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import theme from "../components/ViewMeeting/theme/Theme"
 
 const ViewMeeting = () => {
-  let isBusy:boolean = true;
+  let isBusy: boolean = true;
 
   return (
     <ThemeProvider theme={theme}>
