@@ -1,9 +1,10 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/dist/query/react";
 import {Event} from "models/Event";
+import {MONGO_DB_PATH} from "../constants/paths";
 
 export const eventAPI = createApi({
     reducerPath: 'eventAPI',
-    baseQuery: fetchBaseQuery({baseUrl: 'http://localhost:5000'}),
+    baseQuery: fetchBaseQuery({baseUrl: MONGO_DB_PATH}),
     tagTypes: ['Post'],
     endpoints: (build) => ({
         fetchAllPosts: build.query<Event[], number>({
@@ -17,7 +18,7 @@ export const eventAPI = createApi({
         }),
         createPost: build.mutation<Event, Event>({
             query: (post) => ({
-                url: `/posts`,
+                url: `/data/beta`,
                 method: 'POST',
                 body: post
             }),

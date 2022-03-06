@@ -1,27 +1,25 @@
-import { useState } from "react";
-import { Autocomplete, TextField } from "@mui/material";
+import React, {useState} from "react";
+import {Autocomplete, TextField} from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { makeStyles } from "@mui/styles";
+import {makeStyles} from "@mui/styles";
 import {IEmail} from "../../../types/TypeComponents";
 
 const useStyles = makeStyles({
-  rightStyles: {
-    paddingRight: "15px!important",
-  },
-  inputWidth: {
-    width: "100%",
-  },
-  arrowBorder: {
-    borderLeft: "2px solid #EDEDED",
-    color: "#D4D4D4",
-    paddingLeft: "10px",
-  },
+    rightStyles: {
+        paddingRight: "15px!important",
+    },
+    inputWidth: {
+        width: "100%",
+    },
+    arrowBorder: {
+        borderLeft: "2px solid #EDEDED",
+        color: "#D4D4D4",
+        paddingLeft: "10px",
+    },
 });
 
-const Email = (props:IEmail) => {
-  const [email, setEmail] = useState<string>("");
-  const classes = useStyles();
-
+const Email = (props: IEmail) => {
+    const classes = useStyles();
     const validateEmail = (e: { target: { value: string } }): void => {
         const emailValue = e.target.value;
         let regEmail =
@@ -32,38 +30,38 @@ const Email = (props:IEmail) => {
     };
 
 
-  return (
-    <div className={classes.inputWidth}>
-      <Autocomplete
-        options={props.options}
-        renderInput={(params) => (
-          <TextField
-            onChange={(e) => setEmail(e.target.value)}
-            {...params}
-            variant="outlined"
-            InputProps={{
-              ...params.InputProps,
-              placeholder: props.text,
-              className: classes.rightStyles,
+    return (
+        <div className={classes.inputWidth}>
+            <Autocomplete
+                options={props.options}
+                renderInput={(params) => (
+                    <TextField
+                        onChange={props.onChange}
+                        {...params}
+                        variant="outlined"
+                        InputProps={{
+                            ...params.InputProps,
+                            placeholder: props.text,
+                            className: classes.rightStyles,
 
-              startAdornment: (
-                <>
-                  {props.icon}
-                  {params.InputProps.startAdornment}
-                </>
-              ),
-              endAdornment: (
-                <>
-                  <KeyboardArrowDownIcon className={classes.arrowBorder} />
-                  {params.InputProps.startAdornment}
-                </>
-              ),
-            }}
-          />
-        )}
-      />
-    </div>
-  );
+                            startAdornment: (
+                                <>
+                                    {props.icon}
+                                    {params.InputProps.startAdornment}
+                                </>
+                            ),
+                            endAdornment: (
+                                <>
+                                    <KeyboardArrowDownIcon className={classes.arrowBorder}/>
+                                    {params.InputProps.startAdornment}
+                                </>
+                            ),
+                        }}
+                    />
+                )}
+            />
+        </div>
+    );
 };
 
 export default Email;

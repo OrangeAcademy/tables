@@ -1,10 +1,12 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import eventReducer from './Event/eventSlice'
 import reportReducer from './Report/reportSlice'
+import newMeetingReducer from './NewMeeting/newMeeting'
 import {eventAPI} from "../services/EventServices";
 
 const rootReducer = combineReducers({
     event:eventReducer,report:reportReducer,
+    newMeeting: newMeetingReducer,
     [eventAPI.reducerPath]: eventAPI.reducer
 })
 
