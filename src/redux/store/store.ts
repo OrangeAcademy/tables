@@ -3,8 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import eventReducer from "../slices/eventSlice";
 import userReducer from "../slices/userSlice";
 import reportIssueReducer from "../slices/reportIssueSlice";
-import stateRoomReducer from "../slices/stateRoom";
-import timeReducer from "../slices/timeSlices"
+import stateRoomReducer from "../slices/stateRoomSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,7 +11,6 @@ export const store = configureStore({
     users: userReducer,
     reports: reportIssueReducer,
     stateRoom: stateRoomReducer,
-    time: timeReducer
   },
 })
 

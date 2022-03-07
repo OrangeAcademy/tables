@@ -9,37 +9,12 @@ import CustomPopup from "../../CreateNewReservation/PopUpReservation/CustomPopup
 import {Grid} from "@mui/material";
 import Inputs from "../../Inputs/Inputs";
 import PopupCalendar from "../../Calendar/Calendar";
-import {useAppSelector, useAppDispatch} from "../../../redux/hooks/hooks";
-import {setBusy, setFree} from "../../../redux/slices/stateRoom";
-import {batch} from "react-redux";
-import {IEvent} from "../../../interfaces/Event";
+import {useAppSelector} from "../../../redux/hooks/hooks";
 import isBetween from "dayjs/plugin/isBetween"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
 
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrBefore);
-
-// export interface IEvent {
-//   title: string,
-//   start: string,
-//   end: string,
-//   author: string
-// }
-
-// const eventsCalendar: IEvent[] = [
-//   {
-//     title: 'Event 1',
-//     start: dayjs().hour(14).minute(30).second(0).format(),
-//     end: dayjs().hour(15).minute(30).second(0).format(),
-//     author: 'Natalia Melciciuc'
-//   },
-//   {
-//     title: 'Event 2',
-//     start: dayjs().hour(16).minute(30).second(0).format(),
-//     end: dayjs().hour(16).minute(45).second(0).format(),
-//     author: 'Natalia Melciciuc'
-//   }
-// ];
 
 const Calendar = () => {
 
@@ -54,8 +29,8 @@ const Calendar = () => {
     let direction = calculateDateDiff(arg.event) <= 30 ? 'row' : 'column';
     return (
       <Box sx={{flexDirection: direction}}>
-        <b>{arg.event.title}</b>
-        <span>{arg.event.extendedProps.author}</span>
+        <b>{arg.event.extendedProps.subject}</b>
+        <span>{arg.event.extendedProps.attendees[0]}</span>
       </Box>
     )
   };
