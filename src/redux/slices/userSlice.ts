@@ -1,6 +1,5 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {IUsers} from "../../interfaces/Users";
-import {IUser} from "../../interfaces/User";
 
 const initialState: IUsers = {
   users: []

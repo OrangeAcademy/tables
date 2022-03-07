@@ -1,10 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import CircularTimer from './CircularTimer';
 import {ITime} from "../../../interfaces/Time";
+import {useAppSelector} from "../../../redux/hooks/hooks";
 
-function CircularTimerFunction({ time }: ITime) {
-  const [progress, setProgress] = useState(time * 60);
-  let timeForProgressBar = time * 60;
+function CircularTimerFunction({time}: ITime) {
+  const [progress, setProgress] = useState(time);
+  let timeForProgressBar = time;
+
+  useEffect(() => {
+    setProgress(time)
+  }, [time])
 
   useEffect(() => {
     if (!progress) return;
@@ -16,8 +21,8 @@ function CircularTimerFunction({ time }: ITime) {
       clearInterval(timer);
     };
   }, [progress]);
-
   return <CircularTimer seconds={progress} timeForProgressBar={timeForProgressBar}/>;
 };
+
 
 export default CircularTimerFunction;
