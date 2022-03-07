@@ -3,13 +3,15 @@ import eventReducer from "../slices/eventSlice";
 import userReducer from "../slices/usersSlice";
 import reportIssueReducer from "../slices/reportIssueSlice";
 import meetingTopicsReducer from "../slices/meetingTopicsSlice";
+import meetingAttendeeReducer from "../slices/meetingAttendeesSlice";
 
 export const store = configureStore({
   reducer: {
     events: eventReducer,
     users: userReducer,
     reports: reportIssueReducer,
-    meetingTopics: meetingTopicsReducer
+    meetingTopics: meetingTopicsReducer,
+    meetingAttendees: meetingAttendeeReducer
   },
 })
 

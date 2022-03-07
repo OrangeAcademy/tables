@@ -13,29 +13,29 @@ import { useState } from "react";
 
 // Redux Imports
 import { store, RootState } from '../../app/store/store';
-import { addMeetingTopic, ITopic, removeMeetingTopic } from "../../app/slices/meetingTopicsSlice";
+import { addMeetingAttendee, IAttendee, removeMeetingAttendee } from "../../app/slices/meetingAttendeesSlice";
 import { nanoid } from '@reduxjs/toolkit';
 import {useSelector} from "react-redux";
 
 
 interface IProps {
-  showAgenda: boolean;
-  setShowAgenda: (val: boolean) => void;
+  showAttendees: boolean;
+  setShowAttendees: (val: boolean) => void;
 }
 
-const AddTopicBtn = ({ addTopic }: any) => {
+const AddAttendeeBtn = ({ addAttendee }: any) => {
   const AddButton = styled(IconButton)({
     color: '#000099',
   });
 
   return (
-    <AddButton onClick={addTopic}>
+    <AddButton onClick={addAttendee}>
       <Done />
     </AddButton>
   );
 };
 
-const RemoveTopicBtn = ({handleClearFields}: any) => {
+const RemoveAttendeeBtn = ({handleClearFields}: any) => {
   const RemoveButton = styled(IconButton)({
     color: '#cd3a12',
   });
@@ -82,16 +82,15 @@ const TableHeadStyled = () => {
     <TableHead>
       <TableRow>
 
-        <TableCell>Edit/Remove</TableCell>
-        <TableCell>Topic</TableCell>
-        <TableCell>Presenter</TableCell>
+        <TableCell>Add/Remove</TableCell>
+        <TableCell>Attendee</TableCell>
 
       </TableRow>
     </TableHead>
   );
 };
 
-const NoAgenda = () => {
+const NoAttendees = () => {
 
   const Text = styled(Typography)({
     display: 'flex',
@@ -106,78 +105,68 @@ const NoAgenda = () => {
     
   <TableRow >
     <TableCell variant='footer' >
-      <Text>No agenda yet.</Text>
+      <Text>No attendees yet.</Text>
     </TableCell>
   </TableRow>
   );
 }
 
-const Topic = ({topic, presenter, removeTopic}: any) => {
+const AttendeesList = ({attendee,removeAttendee}: any) => {
   return (
     <TableRow>
       <TableCell>
-        <RemoveTopicBtn handleClearFields={removeTopic} />
+        <RemoveAttendeeBtn handleClearFields={removeAttendee} />
       </TableCell>
 
       <TableCell>
-        <Typography>{topic}</Typography>
+        <Typography>{attendee}</Typography>
       </TableCell>
 
-      <TableCell>
-      <Typography>{presenter}</Typography>
-      </TableCell>
   </TableRow>
   )
 }
 
 
 
-export default function AddTopic({ showAgenda, setShowAgenda }: IProps) {
+export default function AddAttendees({ showAttendees, setShowAttendees }: IProps) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const topicsStoredRedux = useSelector( (state: RootState) => state.meetingTopics.presenters)
-  const [topic, setTopic] = useState('');
-  const [presenter, setPresenter] = useState('');
+  const attendeesStoredRedux = useSelector( (state: RootState) => state.meetingAttendees.attendees)
+  const [attendee, setAttendee] = useState('');
   
-  const handleClose = () => setShowAgenda(false);
+  const handleClose = () => setShowAttendees(false);
 
-  const handleTopic = (event: React.ChangeEvent<{value: string}>) => setTopic(event.target.value);
-  const handlePresenter = (event: React.ChangeEvent<{value: string}>) => setPresenter(event.target.value);
+  const handleAttendee = (event: React.ChangeEvent<{value: string}>) => setAttendee(event.target.value);
 
-  const handleClearFields = () => {
-    setTopic('');
-    setPresenter('');
-  }
+  const handleClearFields = () => setAttendee('');
 
-  const removeTopic = (topicID: string) => {
-    store.dispatch(removeMeetingTopic({
+  const removeAttendee = (r_id: string) => {
+    store.dispatch(removeMeetingAttendee({
       payload: {
-        topicID
+        r_id
       }
     }))
   }
 
-  const addTopic = () => {
-    if(topic && presenter) {
-      store.dispatch(addMeetingTopic({
+  const addAttendee = () => {
+    if(attendee) {
+      store.dispatch(addMeetingAttendee({
         payload: {
-          topic,
-          presenter,
-          topicID: nanoid()
+          attendee,
+          r_id: nanoid()
         }
       }))
 
-      setTopic('');
-      setPresenter('');
+      setAttendee('');
     }
 
   }
 
 
   return (
-    <Dialog fullScreen={fullScreen} open={showAgenda} onClose={handleClose}>
+    <Dialog fullScreen={fullScreen} open={showAttendees} onClose={handleClose}>
       <HeaderContainer>
-        <Title>Add topics</Title>
+        <Title>Add attendees</Title>
         <CircleButton />
       </HeaderContainer>
 
@@ -187,23 +176,20 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IProps) {
           <TableBody>
             <TableRow>
               <TableCell>
-                <AddTopicBtn addTopic={addTopic}  />
-                <RemoveTopicBtn handleClearFields={handleClearFields} />
+                <AddAttendeeBtn addAttendee={addAttendee}  />
+                <RemoveAttendeeBtn handleClearFields={handleClearFields} />
               </TableCell>
 
               <TableCell>
-                <Input value={topic} onChange={handleTopic} placeholder="Topic" />
+                <Input value={attendee} onChange={handleAttendee} placeholder="Attendee" />
               </TableCell>
 
-              <TableCell>
-                <Input value={presenter} onChange={handlePresenter} placeholder="Presenter" />
-              </TableCell>
             </TableRow>
 
-            {!topicsStoredRedux.length && <NoAgenda />}
+            {!attendeesStoredRedux.length && <NoAttendees />}
 
-            {!!topicsStoredRedux.length && topicsStoredRedux.map( (topicStored: ITopic, topicIndex) => (
-              <Topic topic={topicStored.topic} key={topicIndex} presenter={topicStored.presenter} addTopic={addTopic} removeTopic={() => removeTopic(topicStored.topicID)} ></Topic>
+            {!!attendeesStoredRedux.length && attendeesStoredRedux.map( (attendeeStored: IAttendee, attendeeIndex) => (
+              <AttendeesList attendee={attendeeStored.attendee} key={attendeeIndex} addAttendee={addAttendee} removeAttendee={() => removeAttendee(attendeeStored.r_id)} ></ AttendeesList>
             ))}
           
           </TableBody>
@@ -216,7 +202,7 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IProps) {
         <ActionButton color="error" onClick={handleClose} variant="contained">
           Cancel
         </ActionButton>
-        <ActionButton  onClick={() => handleClose()} variant="contained">
+        <ActionButton  onClick={handleClose} variant="contained">
           Confirm
         </ActionButton>
       </DialogActions>

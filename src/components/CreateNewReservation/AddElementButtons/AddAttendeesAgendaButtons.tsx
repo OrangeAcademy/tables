@@ -7,6 +7,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { styled } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import AddTopic from '../../AddTopics/AddTopics';
+import AddAttendees from "../../AddAttendees/AddAttendees";
 
 const useStyles = makeStyles({
   container: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles({
 
 const AddAttendeesAgendaButtons = () => {
   const [showAgenda, setShowAgenda] = useState(false);
+  const [showAttendees, setShowAttendees] = useState(false);
   const StyledButton = styled(Button)({
     fontWeight: 'bold',
     color: 'black',
@@ -36,12 +38,18 @@ const AddAttendeesAgendaButtons = () => {
       <Stack direction="row" spacing={2} className={classes.container}>
         <StyledButton
           className={classes.space}
+          onClick={() => setShowAttendees(!showAttendees)}
           fullWidth
           variant="outlined"
           endIcon={<AddCircleOutlineIcon />}
         >
           Add <br></br> Attendees
         </StyledButton>
+
+        {showAttendees && (
+        <AddAttendees showAttendees={showAttendees} setShowAttendees={setShowAttendees} />
+      )}
+
         <StyledButton
           onClick={() => setShowAgenda(!showAgenda)}
           className={classes.space}

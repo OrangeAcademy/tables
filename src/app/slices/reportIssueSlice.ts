@@ -9,12 +9,12 @@ export interface IReportIssue {
   issueType: string
 }
 
-export interface ReportIssueSliceState {
+export interface IReportIssueState {
   reports: IReportIssue[];
 }
 
 
-const initialState: ReportIssueSliceState  = {
+const initialState: IReportIssueState  = {
   reports: []
 };
 
@@ -30,9 +30,7 @@ const reportIssueSlice = createSlice({
           issueId: nanoid()
         })
       },
-      prepare: (reportIssue) => {
-        return {...reportIssue}
-      }
+      prepare: reportIssue => reportIssue
       }
     }
 })
