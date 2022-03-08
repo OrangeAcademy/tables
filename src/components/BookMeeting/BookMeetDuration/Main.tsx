@@ -23,6 +23,7 @@ const MEETING_DURATIONS: number[] = [15, 30, 45, 60];
 
 const MeetingDurationButtons = () => {
 
+
   // Storing the user-selected meeting duration
   const selectedDuration = useRef(MEETING_DURATIONS[0]);
 

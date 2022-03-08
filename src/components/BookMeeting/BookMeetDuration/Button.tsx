@@ -1,4 +1,6 @@
-import React from "react";
+import dayjs from "dayjs";
+import { useCallback, useEffect } from "react";
+import { useAppSelector } from "../../../redux/hooks/hooks";
 
 // Local Imports
 import StyledBtnText from './ButtonPartials/StyledBtnText';
@@ -18,8 +20,16 @@ interface props {
 */
 
 const BookMeetingBtn = ({ duration, setDuration, index }: props) => {
+    // Get time till next meeting
+    const nextMeetingStart = dayjs(useAppSelector(state => state.upcomingEvent.start));
+    const minutesTillNextMeeting = useCallback(() => nextMeetingStart.diff(dayjs(), 'minutes'), []);
+    
+    // If current duration is less than time till next meeting -> set button as disabled
+    const isDisabled = +duration > +minutesTillNextMeeting;
+  
+    useEffect(() => {}, [minutesTillNextMeeting])
   return (
-    <StyledButton onClick={() => setDuration(index)}>
+    <StyledButton disabled={isDisabled} onClick={() => setDuration(index)}>
       <StyledBtnText>{duration} min</StyledBtnText>
     </StyledButton>
   );

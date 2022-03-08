@@ -1,10 +1,15 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
+import dayjs from "dayjs";
 
 // MUI Imports
 import {ThemeProvider} from "@emotion/react";
 
 // Style - breakpoints
 import {bookMeetBreakpoints} from "./BookMeeting.bp";
+
+// REDUX
+import { useAppSelector } from "../redux/hooks/hooks";
+
 
 // Local imports
 import BackgroundContainer from '../components/BookMeeting/BackgroundContainer/Main';
@@ -13,28 +18,26 @@ import MeetingDurationButtons from '../components/BookMeeting/BookMeetDuration/M
 import ReportIssue from '../components/BookMeeting/ReportIssue/Main';
 import Timer from '../components/BookMeeting/Timer/Main';
 import Title from '../components/BookMeeting/Title/Main';
-import {MeetingDetails} from "../interfaces/MeetingDetails";
-import {Navigate} from "react-router";
 
-const BookMeeting = ({isBusy, upcomingEvent, seconds, timeFunction}: MeetingDetails) => {
-  let [localSeconds, setLocalSeconds] = useState(seconds)
+
+const BookMeeting = () => {
+  const nextMeetingStart = useAppSelector(state => state.upcomingEvent.start);
+  const [ timeToNextMeeting, setTimeToNextMeeting ] = useState(dayjs().diff(nextMeetingStart) || 0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLocalSeconds(localSeconds - 1);
-    }, 1000);
-    return () => clearInterval(interval)
-  }, [localSeconds])
+    const timeTillNextMeeting = setInterval(() => {
+      if(timeToNextMeeting > 0) setTimeToNextMeeting(timeToNextMeeting - 1);
+    }, 1000)
 
-  if (upcomingEvent && (isBusy || localSeconds < 15 * 60)) {
-    timeFunction(isBusy);
-    return <Navigate to={"/view"}/>
-  }
+    return () => clearInterval(timeTillNextMeeting);
+  }, [])
+
+
   return (
     <ThemeProvider theme={bookMeetBreakpoints}>
       <BackgroundContainer>
         <Timer/>
-        <Title location={"Orange {kITchen}"} meetingRoom={"Agora"} isRoomAvailable={true}/>
+        <Title location="Orange {kITchen}" meetingRoom="Agora"/>
         <MeetingDurationButtons/>
         <ButtonMeeting/>
         <ReportIssue/>

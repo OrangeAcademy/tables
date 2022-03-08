@@ -13,9 +13,9 @@ import {MeetingDetails} from "../interfaces/MeetingDetails"
 
 const ViewMeeting = ({isBusy, upcomingEvent, seconds}: MeetingDetails) => {
 
-  if (!upcomingEvent || (!isBusy && seconds >= 15 * 60)) {
-    return <Navigate to={"/"}/>
-  }
+  // if (!upcomingEvent || (!isBusy && seconds >= 15 * 60)) {
+  //   return <Navigate to={"/"}/>
+  // }
 
   return (
     <ThemeProvider theme={theme}>

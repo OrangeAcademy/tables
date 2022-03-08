@@ -53,7 +53,7 @@ export default function Details(props: any) {
         :
         (<Box style={main.div}>
           <Box style={titleMeeting.div}>
-            Meeting <strong><i>{upcomingEvent.subject}</i></strong> will start soon
+            Meeting <strong><i>{upcomingEvent?.subject || 'Unknown'}</i></strong> will start soon
           </Box>
         </Box>)
       }

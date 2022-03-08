@@ -1,10 +1,10 @@
 import {TitleContainer, TitleText} from "./Partials/StyledTitle";
+import {useAppSelector} from "../../../redux/hooks/hooks";
 
 // Props validation
-interface props {
+interface ITitleProps {
   location: string,
-  meetingRoom: string, 
-  isRoomAvailable?: boolean
+  meetingRoom: string
 }
 
 
@@ -17,11 +17,12 @@ The Book Meeting page title (route-path: "/"), containing:
 
 */
 
-const Title = ({location,meetingRoom,isRoomAvailable}: props) => {
+const Title = ({location,meetingRoom}: ITitleProps) => {
+  const meetingRoomStatus = useAppSelector(state => state.stateRoom.value);
   return (
     <TitleContainer >
       <TitleText>{`${location} - ${meetingRoom}`}</TitleText>
-      <TitleText>{isRoomAvailable ? `Free until 10:50` : `Busy`}</TitleText>
+      <TitleText>{meetingRoomStatus ? `Free until 10:50` : `Busy`}</TitleText>
     </TitleContainer>
   );
 };

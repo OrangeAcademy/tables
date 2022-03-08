@@ -9,12 +9,7 @@ const initialState: IEvents = {
 
 export const getEvents = createAsyncThunk(
   'events/fetchEvents',
-  async () => {
-    return await fetch(SERVER_EVENTS_ROUTE).then(
-      (data) => data.json()
-        .then((res) => res)
-    )
-  }
+  async () => await (await (fetch(SERVER_EVENTS_ROUTE))).json()
 )
 
 export const postEvents = createAsyncThunk(

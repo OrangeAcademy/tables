@@ -4,10 +4,12 @@ import eventReducer from "../slices/eventSlice";
 import userReducer from "../slices/userSlice";
 import reportIssueReducer from "../slices/reportIssueSlice";
 import stateRoomReducer from "../slices/stateRoomSlice";
+import upcomingEventReducer from "../slices/upcomingEventSlice";
 
 export const store = configureStore({
   reducer: {
     events: eventReducer,
+    upcomingEvent: upcomingEventReducer,
     users: userReducer,
     reports: reportIssueReducer,
     stateRoom: stateRoomReducer,
