@@ -24,7 +24,7 @@ const ViewMeeting = ({isBusy, upcomingEvent, seconds}: MeetingDetails) => {
           <StateInfo isBusy={isBusy}/>
           <CircularTimerFunction time={seconds}/>
           <Details isBusy={isBusy} upcomingEvent={upcomingEvent}/>
-          <EndButton isBusy={isBusy}/>
+          <EndButton isBusy={isBusy} upcomingEvent={upcomingEvent} />
         </ContentContainer>
         <Calendar/>
       </BackgroundContainer>

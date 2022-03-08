@@ -16,6 +16,7 @@ import {FindUpcomingEvents} from "./utils/events.utils";
 function App() {
   const dispatch = useAppDispatch();
   const isBusyRoom = useAppSelector((state) => state.stateRoom.value);
+  const events = useAppSelector((state) => state.events.events);
   const [nextUpdate, setNextUpdate] = useState<string>("");
   const [time, setTime] = useState<number>(0);
   let currentDay = dayjs();
@@ -43,7 +44,7 @@ function App() {
 
   useEffect(() => {
     GetUpcomingEvent()
-  }, [])
+  }, [events])
 
   useEffect(() => {
     if (upcomingEvent === undefined)

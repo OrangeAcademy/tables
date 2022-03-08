@@ -38,8 +38,8 @@ const userIcon: any = {
 }
 
 export default function Details(props: any) {
-  const {upcomingEvent}=props;
-  console.log(upcomingEvent);
+  const {upcomingEvent} = props;
+
   return (
     <>
       {props.isBusy ?
@@ -52,7 +52,7 @@ export default function Details(props: any) {
         </Box>)
         :
         (<Box style={main.div}>
-          <Box style={titleMeeting.div} >
+          <Box style={titleMeeting.div}>
             Meeting <strong><i>{upcomingEvent.subject}</i></strong> will start soon
           </Box>
         </Box>)

@@ -50,9 +50,9 @@ const Calendar = () => {
           nowIndicator
           height={'100vh'}
           allDaySlot={false}
-          slotMinTime={"08:00"}
+          // slotMinTime={"08:00"}
           dateClick={handleClick}
-          slotMaxTime={"20:00:01"}
+          // slotMaxTime={"20:00:01"}
           dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}
           slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
           events={eventsCalendar}

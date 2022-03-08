@@ -1,6 +1,8 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Button from "@mui/material/Button";
 import {styled} from "@mui/material";
+import {deleteEvent} from "../../../redux/slices/eventSlice";
+import {useDispatch} from "react-redux";
 
 const MeetingEndButton = styled(Button)({
   width: '100%',
@@ -11,7 +13,7 @@ const MeetingEndButton = styled(Button)({
   textTransform: 'none',
   fontSize: '20px',
   '&:hover': {
-   background: '#d4d1d1'
+    background: '#d4d1d1'
   },
 })
 
@@ -19,10 +21,14 @@ interface IsBusy {
   isBusy: boolean
 }
 
-const EndButton = ({ isBusy }: IsBusy) => {
+const EndButton = ({isBusy, upcomingEvent}: any) => {
 
+  const dispatch = useDispatch();
+  const DeleteEvent = (id: number) => {
+    dispatch(deleteEvent(id))
+  }
   if (isBusy) {
-    return (<MeetingEndButton>End Now</MeetingEndButton>)
+    return (<MeetingEndButton onClick={() => DeleteEvent(upcomingEvent.elementId)}>End Now</MeetingEndButton>)
   } else return (<></>)
 }
 
