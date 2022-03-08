@@ -1,15 +1,5 @@
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
-import { Box , Divider, IconButton, Input, Table, TableBody, TableCell, TableHead, Typography, TableRow, styled} from '@mui/material';
-import { Close, Done } from '@mui/icons-material';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+// React imports
 import { useState } from "react";
-
 
 // Redux Imports
 import { store, RootState } from '../../app/store/store';
@@ -17,12 +7,22 @@ import { addMeetingAttendee, IAttendeeRedux, removeMeetingAttendee } from "../..
 import { useSelector } from "react-redux";
 
 
-interface IProps {
-  showAttendees: boolean;
-  setShowAttendees: (val: boolean) => void;
+// MUI Imports
+import { useTheme } from '@mui/material/styles';
+import { Box , Button, Dialog,  DialogActions,  DialogContent, DialogTitle, useMediaQuery, Divider, 
+  IconButton, Input, Table, TableBody, TableCell, TableHead, Typography, TableRow, styled} from '@mui/material';
+import { Close, Done, AddCircleOutline } from '@mui/icons-material';
+
+
+
+
+
+
+interface IAddAttendeeBtn {
+  addAttendee: () => void
 }
 
-const AddAttendeeBtn = ({ addAttendee }: any) => {
+const AddAttendeeBtn = ({ addAttendee }: IAddAttendeeBtn) => {
   const AddButton = styled(IconButton)({
     color: '#000099',
   });
@@ -34,7 +34,11 @@ const AddAttendeeBtn = ({ addAttendee }: any) => {
   );
 };
 
-const RemoveAttendeeBtn = ({handleClearFields}: any) => {
+interface IRemoveAttendeeBtn {
+  handleClearFields: () => void
+}
+
+const RemoveAttendeeBtn = ({handleClearFields}: IRemoveAttendeeBtn) => {
   const RemoveButton = styled(IconButton)({
     color: '#cd3a12',
   });
@@ -53,14 +57,11 @@ const CircleButton = () => {
 
   return (
     <Btn size="large">
-      <AddCircleOutlineIcon fontSize="inherit" />
+      <AddCircleOutline fontSize="inherit" />
     </Btn>
   );
 };
 
-const ActionButton = styled(Button)({
-  width: '50%',
-});
 
 const HeaderContainer = styled(Box)({
   display: 'flex',
@@ -102,16 +103,18 @@ const NoAttendees = () => {
   });
 
   return (  
-  
     <Box>
       <Text>No attendees yet.</Text>
     </Box>
-
-
   );
 }
 
-const AttendeesList = ({attendee,removeAttendee}: any) => {
+interface IAttendeeList {
+  attendee: string,
+  removeAttendee: () => void
+}
+
+const AttendeesList = ({attendee,removeAttendee}: IAttendeeList) => {
   return (
     <TableRow>
       <TableCell>
@@ -126,9 +129,12 @@ const AttendeesList = ({attendee,removeAttendee}: any) => {
   )
 }
 
+interface IAddAttendeesProps {
+  showAttendees: boolean;
+  setShowAttendees: (val: boolean) => void;
+}
 
-
-export default function AddAttendees({ showAttendees, setShowAttendees }: IProps) {
+export default function AddAttendees({ showAttendees, setShowAttendees }: IAddAttendeesProps) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const attendeesStoredRedux = useSelector( (state: RootState) => state.meetingAttendees.attendees)
@@ -181,7 +187,7 @@ export default function AddAttendees({ showAttendees, setShowAttendees }: IProps
 
 
             {!!attendeesStoredRedux.length && attendeesStoredRedux.map( (attendeeStored: IAttendeeRedux, attendeeIndex) => (
-              <AttendeesList attendee={attendeeStored.attendee} key={attendeeIndex} addAttendee={addAttendee} removeAttendee={() => removeAttendee(attendeeStored.r_id)} ></ AttendeesList>
+              <AttendeesList attendee={attendeeStored.attendee} key={attendeeIndex} removeAttendee={() => removeAttendee(attendeeStored.r_id)} ></ AttendeesList>
               ))}
           
           </TableBody>
