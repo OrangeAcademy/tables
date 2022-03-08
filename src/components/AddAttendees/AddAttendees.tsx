@@ -13,9 +13,8 @@ import { useState } from "react";
 
 // Redux Imports
 import { store, RootState } from '../../app/store/store';
-import { addMeetingAttendee, IAttendee, removeMeetingAttendee } from "../../app/slices/meetingAttendeesSlice";
-import { nanoid } from '@reduxjs/toolkit';
-import {useSelector} from "react-redux";
+import { addMeetingAttendee, IAttendeeRedux, removeMeetingAttendee } from "../../app/slices/meetingAttendeesSlice";
+import { useSelector } from "react-redux";
 
 
 interface IProps {
@@ -90,24 +89,25 @@ const TableHeadStyled = () => {
   );
 };
 
+
 const NoAttendees = () => {
 
-  const Text = styled(Typography)({
+  const Text = styled('p')({
     display: 'flex',
-    pt: '1rem',
-    ml: '1rem',
+    margin: '1rem 0 0 0',
     alignItems: 'center',
     fontSize: '1rem',
     fontWeight: 400,
+    justifyContent: 'center'
   });
 
   return (  
-    
-  <TableRow >
-    <TableCell variant='footer' >
+  
+    <Box>
       <Text>No attendees yet.</Text>
-    </TableCell>
-  </TableRow>
+    </Box>
+
+
   );
 }
 
@@ -142,21 +142,14 @@ export default function AddAttendees({ showAttendees, setShowAttendees }: IProps
 
   const removeAttendee = (r_id: string) => {
     store.dispatch(removeMeetingAttendee({
-      payload: {
-        r_id
-      }
+      r_id,
+      attendee
     }))
   }
 
   const addAttendee = () => {
     if(attendee) {
-      store.dispatch(addMeetingAttendee({
-        payload: {
-          attendee,
-          r_id: nanoid()
-        }
-      }))
-
+      store.dispatch(addMeetingAttendee({attendee}))
       setAttendee('');
     }
 
@@ -186,25 +179,22 @@ export default function AddAttendees({ showAttendees, setShowAttendees }: IProps
 
             </TableRow>
 
-            {!attendeesStoredRedux.length && <NoAttendees />}
 
-            {!!attendeesStoredRedux.length && attendeesStoredRedux.map( (attendeeStored: IAttendee, attendeeIndex) => (
+            {!!attendeesStoredRedux.length && attendeesStoredRedux.map( (attendeeStored: IAttendeeRedux, attendeeIndex) => (
               <AttendeesList attendee={attendeeStored.attendee} key={attendeeIndex} addAttendee={addAttendee} removeAttendee={() => removeAttendee(attendeeStored.r_id)} ></ AttendeesList>
-            ))}
+              ))}
           
           </TableBody>
         </Table>
+              {!attendeesStoredRedux.length && <NoAttendees />}
       </DialogContent>
 
       <Divider />
 
       <DialogActions>
-        <ActionButton color="error" onClick={handleClose} variant="contained">
-          Cancel
-        </ActionButton>
-        <ActionButton  onClick={handleClose} variant="contained">
-          Confirm
-        </ActionButton>
+        <Button fullWidth onClick={handleClose} variant="contained">
+          Confirm and Close
+        </Button>
       </DialogActions>
     </Dialog>
   );

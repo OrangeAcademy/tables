@@ -1,12 +1,15 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 
 export interface IAttendee {
-  r_id: string,
   attendee: string
 }
 
+export interface IAttendeeRedux extends IAttendee {
+  r_id: string,
+}
+
 export interface IMeetingAttendees {
-  attendees: IAttendee[]
+  attendees: IAttendeeRedux[]
 }
 
 const initialState: IMeetingAttendees = {
@@ -18,20 +21,22 @@ const meetingAttendeesSlice = createSlice({
   initialState,
   reducers: {
     addMeetingAttendee: {
-      reducer: (state, action: PayloadAction<IAttendee>) => {
+      reducer: (state, action: PayloadAction<IAttendeeRedux>) => {
           state.attendees.push(action.payload);
       },
-      prepare: attendee => attendee  
+      prepare: payload => ({
+        payload: {
+          ...payload,
+          r_id: nanoid()
+        }
+      })  
     },
-    removeMeetingAttendee: {
-      reducer: (state, action: PayloadAction<IAttendee>) => {
+    removeMeetingAttendee:(state, action: PayloadAction<IAttendeeRedux>) => {
           return ({
             ...state,
           attendees: state.attendees.filter(attendee => attendee.r_id !== action.payload.r_id)
           })
-      },
-      prepare: attendee => attendee
-    }
+      }
   }
 })
 
