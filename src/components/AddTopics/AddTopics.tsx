@@ -2,7 +2,7 @@
 import { useState } from 'react';
 
 // Redux Imports
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 import { store, RootState } from '../../app/store/store';
 import { IMeetingTopicRedux, storeMeetingTopics } from '../../app/slices/meetingTopicsSlice';
@@ -23,7 +23,7 @@ interface IAddTopicProps {
 export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) {
   // Theme
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const hasReachedBp = useMediaQuery(theme.breakpoints.down('sm'));
 
   // State
   const topicsStoredRedux = useSelector((state: RootState) => state.meetingTopics.presenters); // Redux
@@ -56,7 +56,7 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
   }
 
   return (
-    <Dialog fullScreen={fullScreen} open={showAgenda} onClose={handleClose}>
+    <Dialog fullScreen={hasReachedBp} open={showAgenda} onClose={handleClose}>
       <HeaderContainer>
         <Title>Add topics</Title>
         <CircleButton />
@@ -64,18 +64,10 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
 
       <DialogContent>
 
-          {fullScreen ? (
+          {hasReachedBp ? (
             <>
             <Table stickyHeader={true}>
               <TableHead>
-                <TableRow>
-                  <TableCell>Edit/Remove</TableCell>
-                  <TableCell >
-                    <AddTopicBtn addTopic={addTopic} />
-                    <RemoveTopicBtn handleClearFields={handleClearFields} />
-                  </TableCell>
-                </TableRow>
-
                 <TableRow>
                   <TableCell>Topic</TableCell>
                   <TableCell >
@@ -100,6 +92,15 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
                     />
                   </TableCell>
                 </TableRow>
+
+                <TableRow>
+                  <TableCell>Edit/Remove</TableCell>
+                  <TableCell >
+                    <AddTopicBtn addTopic={addTopic} />
+                    <RemoveTopicBtn handleClearFields={handleClearFields} />
+                  </TableCell>
+                </TableRow>
+                
               </TableHead>
               </Table>
 
