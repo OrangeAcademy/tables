@@ -22,15 +22,21 @@ import Title from '../components/BookMeeting/Title/Main';
 
 const BookMeeting = () => {
   const nextMeetingStart = useAppSelector(state => state.upcomingEvent.start);
-  const [ timeToNextMeeting, setTimeToNextMeeting ] = useState(dayjs().diff(nextMeetingStart) || 0);
+  const [ timeToNextMeeting, setTimeToNextMeeting ] = useState(0);
+
+  useEffect(() => {
+    setTimeToNextMeeting(dayjs().diff(nextMeetingStart, "minutes"));
+
+  }, [nextMeetingStart]);
 
   useEffect(() => {
     const timeTillNextMeeting = setInterval(() => {
-      if(timeToNextMeeting > 0) setTimeToNextMeeting(timeToNextMeeting - 1);
+      if(timeToNextMeeting > 0) setTimeToNextMeeting(+timeToNextMeeting - 1);
+      console.log(timeToNextMeeting);
     }, 1000)
 
     return () => clearInterval(timeTillNextMeeting);
-  }, [])
+  }, [nextMeetingStart])
 
 
   return (

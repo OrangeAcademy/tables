@@ -20,7 +20,7 @@ const HomePage = () => {
 
   // Component state
   const [time, setTime] = useState<number>(0);
-  const isBusy = dayjs().isBetween(dayjs(nextEvent.start), dayjs(nextEvent.end));
+  const isRoomBusy = dayjs().isBetween(dayjs(nextEvent.start), dayjs(nextEvent.end));
 
   
   // Sets meeting room availability to false if room is occupied (busy), to true if available
@@ -31,9 +31,9 @@ const HomePage = () => {
 
   const secondsTillNextEvent = useCallback(() => {   
     if (!nextEvent.end) setTime(0);
-    if (isBusy) setTime(dayjs(nextEvent.end).diff(dayjs(), 's'));
+    if (isRoomBusy) setTime(dayjs(nextEvent.end).diff(dayjs(), 's'));
     return setTime(dayjs(nextEvent.start).diff(dayjs(), 's'))
-  }, [isBusy])
+  }, [isRoomBusy])
 
   // Get time till next meeting
   const nextMeetingStart = dayjs(useAppSelector(state => state.upcomingEvent.start));
@@ -49,14 +49,15 @@ const HomePage = () => {
 
 
 
-  
+  const isLessThan15Mins = +minutesTillNextMeeting < 15;
+  console.log(isLessThan15Mins);
 
   return (
     <>
     {
-      !isBusy 
-      ? <BookMeeting />
-      : <ViewMeeting isBusy={isBusyRoom} upcomingEvent={nextEvent} seconds={time} timeFunction={secondsTillNextEvent}/>
+      (!isRoomBusy && isLessThan15Mins)
+      ? <ViewMeeting isBusy={isBusyRoom} upcomingEvent={nextEvent} seconds={time} timeFunction={secondsTillNextEvent}/>
+      : <BookMeeting />
     }
     </>
   )
