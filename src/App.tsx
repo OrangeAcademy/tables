@@ -22,7 +22,7 @@ function App() {
   // const [time, setTime] = useState<number>(0);
   // let currentDay = dayjs();
 
-  // const [upcomingEvent, setUpcomingEvent] = useState<IEvent>({
+  // const [upcomingEvent, setUpcomingEvent] = useState<IEvent | null>({
   //   elementId: 0,
   //   end: "",
   //   occurrencesEnd: "",

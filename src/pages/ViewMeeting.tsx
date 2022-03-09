@@ -8,14 +8,10 @@ import Details from "../components/ViewMeeting/Details/Details";
 import EndButton from "../components/ViewMeeting/EndButton/EndButton";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import theme from "../components/ViewMeeting/theme/Theme"
-import {Navigate} from 'react-router';
+
 import {MeetingDetails} from "../interfaces/MeetingDetails"
 
 const ViewMeeting = ({isBusy, upcomingEvent, seconds}: MeetingDetails) => {
-
-  // if (!upcomingEvent || (!isBusy && seconds >= 15 * 60)) {
-  //   return <Navigate to={"/"}/>
-  // }
 
   return (
     <ThemeProvider theme={theme}>

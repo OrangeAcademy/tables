@@ -7,9 +7,9 @@ import StyledBtnText from './ButtonPartials/StyledBtnText';
 import StyledButton from './ButtonPartials/StyledButton';
 
 // Props validation
-interface props { 
+interface IBookMeetingBtnProps { 
   duration: number,
-  setDuration: Function,
+  setDuration: (index: number) => void,
   index: number
 }
 
@@ -19,7 +19,7 @@ interface props {
   Building block for creating the 'XYZ min' meeting duration button(s)
 */
 
-const BookMeetingBtn = ({ duration, setDuration, index }: props) => {
+const BookMeetingBtn = ({ duration, setDuration, index }: IBookMeetingBtnProps) => {
     // Get time till next meeting
     const nextMeetingStart = dayjs(useAppSelector(state => state.upcomingEvent.start));
     const minutesTillNextMeeting = dayjs(nextMeetingStart).diff(dayjs(), 'minutes');

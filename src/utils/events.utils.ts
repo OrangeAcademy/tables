@@ -1,4 +1,7 @@
 import dayjs from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime';
+import duration from "dayjs/plugin/duration.js";
+
 
 // Interfaces
 import {IEvent} from "../interfaces/Event";
@@ -7,13 +10,16 @@ import {IEvent} from "../interfaces/Event";
 import { getEvents } from "../redux/slices/eventSlice";
 import { store } from "../redux/store/store";
 import { storeUpcomingEvent } from "../redux/slices/upcomingEventSlice";
+dayjs.extend(relativeTime);
+dayjs.extend(duration);
+
 
 export const FindUpcomingEvents = (events: Array<IEvent>):IEvent => {
   let currentDay = dayjs();
   let upcomingEvents = events.filter(event =>
     dayjs(event.start).isAfter(currentDay) || dayjs(event.end).isAfter(currentDay));
   let selectedEvent = upcomingEvents[0];
-  
+
 
 
   for (let event of upcomingEvents) {
@@ -50,7 +56,17 @@ export const getClosestEvent = async (): Promise<IEvent> => {
 
 export const isEventRunningNow = async (): Promise<boolean> => {
   const events: IEvent[] = await store.dispatch(getEvents()).unwrap();
-  const isEventRunning = events.some(event => (+dayjs() >= +dayjs(event.start)) && (+dayjs <= +dayjs(event.end)));
+  const isEventRunning = events.some(event => dayjs() > dayjs(event.start) && dayjs() < dayjs(event.end));
 
   return isEventRunning;
+}
+
+export const getRunningEvent = async (): Promise<IEvent | undefined> => {
+  const events: IEvent[] = await store.dispatch(getEvents()).unwrap();
+  const eventsToday: IEvent[] = events.filter(event => dayjs(event.start).isSame(dayjs(), "date"))
+
+  const runningEvent = eventsToday.find(event => dayjs() > dayjs(event.start) && dayjs() < dayjs(event.end))
+
+
+  return runningEvent;
 }
