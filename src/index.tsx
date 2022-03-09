@@ -1,3 +1,4 @@
+
 import React from "react";
 import ReactDOM from "react-dom";
 import { setupStore } from "./store/store";
@@ -7,6 +8,7 @@ import App from "./App";
 import "./global.css";
 
 const store = setupStore();
+
 
 ReactDOM.render(
   <React.StrictMode>

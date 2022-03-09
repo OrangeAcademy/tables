@@ -22,6 +22,9 @@ const CalendarStyle = styled('div')(() => ({
   '& .css-1kro4d2': {
     height: '100vh'
   },
+  '& .fc-timegrid-slot-minor:hover, & .fc-timegrid-slot:hover': {
+    cursor: 'pointer'
+  },
 
   height: '100vh',
   backgroundColor: '#f8e8d0'

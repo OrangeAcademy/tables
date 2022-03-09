@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import Calendar from "../components/ViewMeeting/Calendar/Calendar";
 import BackgroundContainer from "../components/ViewMeeting/Containers/BackgroundContainer";
 import CircularTimerFunction from "../components/ViewMeeting/CircularTimer/CircularTimerFunction";
@@ -8,23 +8,23 @@ import Details from "../components/ViewMeeting/Details/Details";
 import EndButton from "../components/ViewMeeting/EndButton/EndButton";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import theme from "../components/ViewMeeting/theme/Theme"
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "../redux/hooks/hooks";
-import {getUsers} from "../redux/slices/userSlice";
+import {Navigate} from 'react-router';
+import {MeetingDetails} from "../interfaces/MeetingDetails"
 
-const ViewMeeting = () => {
-  let isBusy: boolean = true;
-  const dispatch = useDispatch();
-  const users = useAppSelector((state => state.users.users))
+const ViewMeeting = ({isBusy, upcomingEvent, seconds}: MeetingDetails) => {
+
+  if (!upcomingEvent || (!isBusy && seconds >= 15 * 60)) {
+    return <Navigate to={"/"}/>
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <BackgroundContainer>
         <ContentContainer>
           <StateInfo isBusy={isBusy}/>
-          <CircularTimerFunction time={15}/>
-          <Details isBusy={isBusy}/>
-          <EndButton isBusy={isBusy}/>
+          <CircularTimerFunction time={seconds}/>
+          <Details isBusy={isBusy} upcomingEvent={upcomingEvent}/>
+          <EndButton isBusy={isBusy} upcomingEvent={upcomingEvent} />
         </ContentContainer>
         <Calendar/>
       </BackgroundContainer>

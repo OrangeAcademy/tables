@@ -15,7 +15,6 @@ interface IPopupProps {
 }
 
 
-
 /* ------------------------ Component ------------------------ */
 /* 
  Contains 'Report' and 'Cancel' buttons for the Report Issue Popup. 

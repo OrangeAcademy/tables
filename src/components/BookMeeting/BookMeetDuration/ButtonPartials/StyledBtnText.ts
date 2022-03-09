@@ -11,7 +11,6 @@ const StyledBtnText = styled(Typography)(({theme}) => ({
   fontSize: 'clamp(25px, 4.5vw, 3rem)',
   textTransform: 'lowercase',
   fontWeight: 900,
-  color: '#679980',
   [theme.breakpoints.down('tablet')]: {
     fontWeight: 400
   }

@@ -5,7 +5,6 @@ let express = require('express'),
   cors = require('cors'),
 
 mongoose.Promise = global.Promise;
-
 mongoose.connect(dbConfig.db).then(() => {
     console.log('Database sucessfully connected')
   },

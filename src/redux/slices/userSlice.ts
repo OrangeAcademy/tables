@@ -1,6 +1,6 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {IUsers} from "../../interfaces/Users";
-import {IUser} from "../../interfaces/User";
+import {SERVER_USERS_ROUTE} from "../../constants/paths";
 
 const initialState: IUsers = {
   users: []
@@ -9,7 +9,7 @@ const initialState: IUsers = {
 export const getUsers = createAsyncThunk(
   'users/getUsers',
   async () => {
-    const response = await fetch('http://localhost:4000/api/users').then(
+    const response = await fetch(SERVER_USERS_ROUTE).then(
       (data) => data.json()
         .then((res) => res)
     )
