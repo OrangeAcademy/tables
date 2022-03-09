@@ -6,10 +6,10 @@ const initialState: IUsers = {
   users: []
 }
 
-export const fetchUsers = createAsyncThunk(
-  'users/fetchUsers',
+export const getUsers = createAsyncThunk(
+  'users/getUsers',
   async () => {
-    const response = await fetch('/api').then(
+    const response = await fetch('http://localhost:4000/api/users').then(
       (data) => data.json()
         .then((res) => res)
     )
@@ -22,7 +22,7 @@ export const usersSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-      builder.addCase(fetchUsers.fulfilled, (state: any, action: PayloadAction<IUser>) => {
+      builder.addCase(getUsers.fulfilled, (state, action) => {
         state.users = action.payload
       })
     },
