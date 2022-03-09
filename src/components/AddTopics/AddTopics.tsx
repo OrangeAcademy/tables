@@ -1,181 +1,160 @@
-// React imports
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import { Divider, IconButton, Input, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { Close, Done } from "@mui/icons-material";
+import { Box } from "@mui/material";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
 import { useState } from 'react';
 
-// Redux Imports
-import { useSelector } from 'react-redux';
-import { nanoid } from "@reduxjs/toolkit";
-import { store, RootState } from '../../app/store/store';
-import { IMeetingTopicRedux, storeMeetingTopics } from '../../app/slices/meetingTopicsSlice';
-
-// MUI Imports
-import { useTheme } from '@mui/material/styles';
-import { Dialog, DialogActions, DialogContent, useMediaQuery, Divider, Input, Table, TableBody, 
-  TableCell, TableHead, TableRow } from '@mui/material';
-
-import {AddTopicBtn, RemoveTopicBtn, CircleButton, ActionButton, HeaderContainer, Title, NoAgenda, Topic,} from "./AddTopics.styled";
-
-
-interface IAddTopicProps {
-  showAgenda: boolean;
-  setShowAgenda: (val: boolean) => void;
-}
-
-export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) {
-  // Theme
+  export default function ResponsiveDialog() {
+  const [open, setOpen] = React.useState(false);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const hasReachedBp = useMediaQuery(theme.breakpoints.down('sm'));
 
-  // State
-  const topicsStoredRedux = useSelector((state: RootState) => state.meetingTopics.presenters); // Redux
-  const [topic, setTopic] = useState('');
-  const [presenter, setPresenter] = useState('');
-  const [meetingTopics, setMeetingTopics] = useState<IMeetingTopicRedux[]>(topicsStoredRedux);
-
-
-  // Handlers
-  const handleClose = () => setShowAgenda(false);
-  const handleTopic = (event: React.ChangeEvent<{ value: string }>) => setTopic(event.target.value);
-  const handlePresenter = (event: React.ChangeEvent<{ value: string }>) => setPresenter(event.target.value);
-  const handleClearFields = () => { setTopic(''); setPresenter(''); };
-
-  // Adds topic to component state if topic and presenter are not empty
-  const addTopic = () => {
-    if (topic.length && presenter.length) {
-        setMeetingTopics([...meetingTopics, { presenter, topic, r_id: nanoid(), confirmationStatus: 0 }]);
-        handleClearFields();
-    }
+  const handleClickOpen = () => {
+    setOpen(true);
   };
-  
-  // Removes topic from component state, based on given topic r_id (redux id)
-  const removeTopic = (r_id: string) => setMeetingTopics(meetingTopics.filter(topic => topic.r_id !== r_id));
 
-  // Stores topics in ReduxStore and closes the popup
-  const handleConfirm = () => { 
-    store.dispatch(storeMeetingTopics({ ...meetingTopics }));
-    handleClose();
-  }
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
-    <Dialog fullScreen={fullScreen} open={showAgenda} onClose={handleClose}>
-      <HeaderContainer>
-        <Title>Add topics</Title>
-        <CircleButton />
-      </HeaderContainer>
+    < Box
+        sx={{
+            padding: '0.8rem 0.8rem',
+            [theme.breakpoints.down('sm')]: {
+                padding: "0.4rem 0.4rem",
+            },
+        }}>
 
-      <DialogContent>
+      <Button variant="outlined" onClick={handleClickOpen}>
+         Report
+      </Button>
 
-          {fullScreen ? (
-            <>
-            <Table stickyHeader={true}>
-              <TableHead>
+    <Dialog
+        fullScreen={hasReachedBp}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title">
+            <Box
+                   sx={{
+                   display: 'flex',
+                   justifyContent: 'space-between',
+                   alignItems: 'center',
+                   padding: '0.3rem',
+                    }}>
+                  <DialogTitle id="responsive-dialog-title" 
+                sx={{
+                    fontSize: '1.9rem',
+                    fontWeight: 600,
+                    }}
+                    >Add topics</DialogTitle>
+                <IconButton aria-label="delete" sx={{ color: "#000099" }} size="large"  >
+                  	<AddCircleOutlineIcon fontSize="inherit" />
+               </IconButton>
+            </Box>
+
+        <DialogContent 
+         sx={{
+            fontSize: '1rem',
+            [theme.breakpoints.down('sm')]: {
+               fontSize: '0.7rem',
+               padding: '0.2rem 0.2rem'
+            },
+        }}>
+          <Table stickyHeader={true}>
+              <TableHead >
                 <TableRow>
-                  <TableCell>Edit/Remove</TableCell>
-                  <TableCell >
-                    <AddTopicBtn addTopic={addTopic} />
-                    <RemoveTopicBtn handleClearFields={handleClearFields} />
-                  </TableCell>
-                </TableRow>
-
-                <TableRow>
-                  <TableCell>Topic</TableCell>
-                  <TableCell >
-                    <Input
-                      fullWidth
-                      value={topic}
-                      onChange={handleTopic}
-                      placeholder="Topic"
-                    />
-                  </TableCell>
-                </TableRow>
-
-                <TableRow>
-                  <TableCell>Presenter</TableCell>
-
-                  <TableCell >
-                    <Input
-                      fullWidth
-                      value={presenter}
-                      onChange={handlePresenter}
-                      placeholder="Presenter"
-                    />
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              </Table>
-
-            <Table stickyHeader={true}>
-              <TableBody>
-                {!!meetingTopics.length &&
-                  meetingTopics.map((topicStored: IMeetingTopicRedux, topicIndex) => (
-                    <Topic
-                      topic={topicStored.topic}
-                      key={topicIndex}
-                      presenter={topicStored.presenter}
-                      removeTopic={() => removeTopic(topicStored.r_id)}
-                    ></Topic>
-                  ))}
-              </TableBody>
-            </Table>
-            </>
-          ) : (
-            <Table stickyHeader={true}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Edit/Remove</TableCell>
+                  <TableCell
+                    sx={{
+                        [theme.breakpoints.down('sm')]: {
+                           fontSize: '0.9rem',
+                           pl: '0.1rem',
+                        },
+                    }}>
+                        Edit/Remove</TableCell>
                   <TableCell>Topic</TableCell>
                   <TableCell>Presenter</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+             <TableBody>
                 <TableRow>
-                  <TableCell>
-                    <AddTopicBtn addTopic={addTopic} />
-                    <RemoveTopicBtn handleClearFields={handleClearFields} />
-                  </TableCell>
-
-                  <TableCell>
-                    <Input
-                      value={topic}
-                      onChange={handleTopic}
-                      placeholder="Topic"
-                    />
-                  </TableCell>
-
-                  <TableCell>
-                    <Input
-                      value={presenter}
-                      onChange={handlePresenter}
-                      placeholder="Presenter"
-                    />
-                  </TableCell>
-                </TableRow>
-
-                {!!meetingTopics.length &&
-                  meetingTopics.map((topicStored: IMeetingTopicRedux, topicIndex) => (
-                    <Topic
-                      topic={topicStored.topic}
-                      key={topicIndex}
-                      presenter={topicStored.presenter}
-                      removeTopic={() => removeTopic(topicStored.r_id)}
-                    ></Topic>
-                  ))}
-              </TableBody>
-            </Table>
-          )}
-
-        {!meetingTopics.length && <NoAgenda />}
-      </DialogContent>
-
-      <Divider />
-
-      <DialogActions>
-        <ActionButton color="error" onClick={handleClose} variant="contained">
-          Cancel
-        </ActionButton>
-        <ActionButton onClick={handleConfirm} variant="contained">
-          Confirm
-        </ActionButton>
-      </DialogActions>
-    </Dialog>
+                    <TableCell
+                      sx={{
+                        [theme.breakpoints.down('sm')]: {
+                           fontSize: '0.9rem',
+                           pl: '0rem',
+                        },
+                    }}>
+                        <IconButton> <Done sx={{color: '#000099'}}/></IconButton>
+                        <IconButton> <Close sx={{color: '#cd3a12'}}/></IconButton>
+                    </TableCell>
+                    <TableCell 
+                         sx={{
+                            fontSize: '1rem',
+                            [theme.breakpoints.down('sm')]: {
+                            fontSize: '0.9rem',
+                                },
+                        }}>
+                        <Input placeholder="Topic"/>
+                   </TableCell>
+                   <TableCell>
+                        <Input placeholder="Presenter"/>
+                   </TableCell>
+               </TableRow>
+               <TableRow>
+                  <Typography 
+                     sx={{
+                         fontSize: '0.8rem',
+                         fontWeight: 400,
+                         pl: '0.2rem',
+                         alignSelf: 'center',
+                         [theme.breakpoints.down('sm')]: {
+                            fontSize: '0.9rem',
+                            pt: '0.6rem',
+                            pl: '0.1rem',
+                         },
+                     }}>
+                         No agenda yet.
+                    </Typography>
+              </TableRow>
+            </TableBody>
+        </Table>
+        </DialogContent>
+        <Divider />
+          <DialogActions>
+                     <Button 
+                        sx={{ 
+                             width: "50%",
+                            background: "#cd3a12",
+                    "&:hover": {
+                         background: "#cd3a12"
+                         },
+                        [theme.breakpoints.down('sm')]: {
+                         width: '50%',
+                         },
+                        }} autoFocus variant="contained" onClick={handleClose}>
+                     Cancel
+                    </Button>
+                     <Button 
+                         sx={{
+                            width: "50%",
+                             [theme.breakpoints.down('sm')]: {
+                             width: '50%',
+                            },
+                            }} onClick={handleClose} variant="contained" autoFocus>
+                             Confirm
+                     </Button>
+            </DialogActions>
+        </Dialog>    
+    </Box>
   );
 }
