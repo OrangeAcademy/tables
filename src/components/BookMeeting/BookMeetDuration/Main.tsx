@@ -4,7 +4,9 @@
 */
 
 // React imports
-import { useRef } from "react";
+import dayjs from "dayjs";
+import { useEffect, useRef, useState } from "react";
+import { useAppSelector } from "../../../redux/hooks/hooks";
 
 // Local imports
 import BookMeetingBtn from './Button';
@@ -22,6 +24,21 @@ const MEETING_DURATIONS: number[] = [15, 30, 45, 60];
 */
 
 const MeetingDurationButtons = () => {
+  const nextMeetingStart = useAppSelector(state => state.upcomingEvent.start);
+  const [ timeToNextMeeting, setTimeToNextMeeting ] = useState(0);
+
+  useEffect(() => {
+    setTimeToNextMeeting(dayjs().diff(nextMeetingStart, "minutes"));
+
+  }, [nextMeetingStart]);
+
+  useEffect(() => {
+    const timeTillNextMeeting = setInterval(() => {
+      if(timeToNextMeeting > 0) setTimeToNextMeeting(+timeToNextMeeting - 1);
+    }, 1000)
+
+    return () => clearInterval(timeTillNextMeeting);
+  }, [nextMeetingStart, timeToNextMeeting])
 
 
   // Storing the user-selected meeting duration
@@ -30,6 +47,7 @@ const MeetingDurationButtons = () => {
   // Sets the meeting duration to the value of the user-clicked button
   const setDuration = (index: number):number =>
     (selectedDuration.current = MEETING_DURATIONS[index]);
+   
 
   return (
     <StyledBox>

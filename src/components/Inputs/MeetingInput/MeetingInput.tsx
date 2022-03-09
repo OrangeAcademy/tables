@@ -4,7 +4,6 @@ import {IInputs} from "../../../types/TypeComponents";
 
 const MeetingInput = (props:IInputs) => {
   const [subject, setSubject] = useState("");
-  console.log(subject);
   return (
     <>
       <TextField

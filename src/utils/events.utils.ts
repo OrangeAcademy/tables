@@ -31,7 +31,7 @@ export const FindUpcomingEvents = (events: Array<IEvent>):IEvent => {
 
 // Gets the closest event to DATE.NOW() and stores the event in Redux Store
 // useSelector(state => state.upcomingEvent)
-const getClosestEvent = async (): Promise<IEvent> => {
+export const getClosestEvent = async (): Promise<IEvent> => {
   const timeNow = dayjs();
   const events: IEvent[] = await store.dispatch(getEvents()).unwrap();
   const upcomingEvents = events.filter(event => dayjs(event.start).isAfter(timeNow) || dayjs(event.end).isAfter(timeNow));
@@ -48,4 +48,9 @@ const getClosestEvent = async (): Promise<IEvent> => {
   return upcomingEvent[0]
 }
 
-export default getClosestEvent;
+export const isEventRunningNow = async (): Promise<boolean> => {
+  const events: IEvent[] = await store.dispatch(getEvents()).unwrap();
+  const isEventRunning = events.some(event => (+dayjs() >= +dayjs(event.start)) && (+dayjs <= +dayjs(event.end)));
+
+  return isEventRunning;
+}

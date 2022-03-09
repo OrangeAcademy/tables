@@ -17,6 +17,7 @@ const StyledButton = styled(Button)({
   border: 0,
   borderRadius: 5,
   flexShrink: 1,
+  color: '#679980',
   "&:hover": {
     backgroundColor: '#a6dab3'
   },
@@ -29,6 +30,12 @@ const StyledButton = styled(Button)({
   '&:focus > *': {
     color: '#75726c',
   },
+  '&:disabled': {
+    color: 'gray',
+    backgroundColor: 'transparent',
+    boxShadow: "none",
+    border: '1px solid gray'
+  }
 });
 
 export default StyledButton;
