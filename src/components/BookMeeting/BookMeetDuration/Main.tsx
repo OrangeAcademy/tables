@@ -9,6 +9,8 @@ import { useRef } from "react";
 // Local imports
 import BookMeetingBtn from './Button';
 import StyledBox from './Containers/Box';
+import {useDispatch} from "react-redux";
+import {setMeetingDuration} from "../../../store/NewMeeting/newMeeting";
 
 
 // This array defines the duration of a meeting user wants to book
@@ -29,10 +31,9 @@ const MeetingDurationButtons = ({localSeconds}: IMeetingDurationProps) => {
 
   // Storing the user-selected meeting duration
   const selectedDuration = useRef(MEETING_DURATIONS[0]);
-
+  const dispatch = useDispatch()
   // Sets the meeting duration to the value of the user-clicked button
-  const setDuration = (index: number):number =>
-    (selectedDuration.current = MEETING_DURATIONS[index]);
+  const setDuration = (index: number) => dispatch(setMeetingDuration(MEETING_DURATIONS[index]));
 
   return (
     <StyledBox>

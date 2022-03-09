@@ -1,3 +1,4 @@
+
 import React, {useEffect, useState} from "react";
 import {Route, Routes} from "react-router-dom";
 import dayjs from "dayjs";
@@ -7,10 +8,12 @@ import {setState} from "./redux/slices/stateRoomSlice";
 import {useAppDispatch, useAppSelector} from "./redux/hooks/hooks";
 
 // Local imports
+
 import BookMeeting from "./pages/BookMeeting";
 import ViewMeeting from "./pages/ViewMeeting";
 import PageNotFound from "./pages/404";
 import PopUpMeeting from "./pages/PopUpMeeting";
+
 import {FindUpcomingEvents} from "./utils/events.utils";
 
 function App() {
@@ -93,6 +96,7 @@ function App() {
       setTime(dayjs(upcomingEvent.start).diff(currentDay, 's'))
     }
   }
+
 
   return (
     <div className="App">

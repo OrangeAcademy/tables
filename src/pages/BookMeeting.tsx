@@ -1,3 +1,4 @@
+
 import React, {useEffect, useState} from "react";
 
 // MUI Imports
@@ -18,6 +19,7 @@ import {Navigate} from "react-router";
 
 const BookMeeting = ({isBusy, upcomingEvent, seconds, timeFunction}: MeetingDetails) => {
   let [localSeconds, setLocalSeconds] = useState(seconds)
+
 
   useEffect(() => {
     const interval = setInterval(() => {
