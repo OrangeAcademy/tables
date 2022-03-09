@@ -26,16 +26,16 @@ const BookMeeting = ({isBusy, upcomingEvent, seconds, timeFunction}: MeetingDeta
     return () => clearInterval(interval)
   }, [localSeconds])
 
-  if (upcomingEvent && (isBusy || localSeconds < 15 * 60)) {
+  if (upcomingEvent && (isBusy || localSeconds < (15 * 60))) {
     timeFunction(isBusy);
-    return <Navigate to={"/view"}/>
+    return <Navigate to="/view"/>
   }
   return (
     <ThemeProvider theme={bookMeetBreakpoints}>
       <BackgroundContainer>
         <Timer/>
         <Title location={"Orange {kITchen}"} meetingRoom={"Agora"} isRoomAvailable={true}/>
-        <MeetingDurationButtons/>
+        <MeetingDurationButtons localSeconds={localSeconds}/>
         <ButtonMeeting/>
         <ReportIssue/>
       </BackgroundContainer>

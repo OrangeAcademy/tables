@@ -21,6 +21,7 @@ function App() {
   const [time, setTime] = useState<number>(0);
   let currentDay = dayjs();
 
+
   const [upcomingEvent, setUpcomingEvent] = useState<IEvent>({
     elementId: 0,
     end: "",
@@ -44,7 +45,7 @@ function App() {
 
   useEffect(() => {
     GetUpcomingEvent()
-  }, [events])
+  }, [])
 
   useEffect(() => {
     if (upcomingEvent === undefined)
