@@ -13,6 +13,9 @@ import {Grid, Stack} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {setSubject, setUserEmail} from "../../store/NewMeeting/newMeeting";
 import {meetingsDurationSelector, meetingSelector} from "../../store/NewMeeting/selectors";
+import {postEvents} from "../../store/Event/actionCreators";
+import {IEvent} from "../../models/Event";
+import {string} from "prop-types";
 
 const useStyles = makeStyles({
     avatar: {
@@ -29,14 +32,27 @@ const Inputs = () => {
     const [emails] = useState([{label: "firstUser@mail.com"}, {label: "secondUser@mail.com"}, {label: "thirdUser@mail.com"}]);
     const dispatch = useDispatch();
     const onEmailFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        console.log(event.currentTarget.value)
         dispatch(setUserEmail(event.currentTarget.value));
     };
     const onSubjectFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         dispatch(setSubject(event.currentTarget.value));
-
     };
 
-    const {subject, userEmail, start} = useSelector(meetingSelector);
+    const {subject, userEmail, start, end} = useSelector(meetingSelector);
+
+    const SendReservation = () => {
+        const event:IEvent = {
+            attendees: [userEmail!],
+            elementId: Math.floor(Math.random() * 10000),
+            end: end!.toString(),
+            presenters: [],
+            start: start!.toString(),
+            subject: subject!
+        }
+       dispatch(postEvents(event))
+    }
+
     return (
         <>
             <Stack className={classes.avatar}>
@@ -60,7 +76,7 @@ const Inputs = () => {
                 </Grid>
                 <Grid item xs={12} md={6} lg={6}>
                     <ButtonComponent variant="outlined" content="Confirm" disabled={false}
-                                     sx={{mx: "auto", width: 400}}/>
+                                     sx={{mx: "auto", width: 400}} onClick={() => SendReservation()}/>
                 </Grid>
             </Grid>
         </>

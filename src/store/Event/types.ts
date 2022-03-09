@@ -1,7 +1,7 @@
-import {Event} from "models/Event";
+import {IEvent} from "models/Event";
 
 export interface EventState {
-    events: Event[];
+    events: IEvent[];
     isLoading: boolean;
     error: string;
 }

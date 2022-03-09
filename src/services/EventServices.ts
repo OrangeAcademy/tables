@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/dist/query/react";
-import {Event} from "models/Event";
+import {IEvent} from "models/Event";
 import {MONGO_DB_PATH} from "../constants/paths";
 
 export const eventAPI = createApi({
@@ -7,7 +7,7 @@ export const eventAPI = createApi({
     baseQuery: fetchBaseQuery({baseUrl: MONGO_DB_PATH}),
     tagTypes: ['Post'],
     endpoints: (build) => ({
-        fetchAllPosts: build.query<Event[], number>({
+        fetchAllPosts: build.query<IEvent[], number>({
             query: (limit: number = 5) => ({
                 url: `/posts`,
                 params: {
@@ -16,7 +16,7 @@ export const eventAPI = createApi({
             }),
             // providesTags: result => ['Post']
         }),
-        createPost: build.mutation<Event, Event>({
+        createPost: build.mutation<IEvent, IEvent>({
             query: (post) => ({
                 url: `/data/beta`,
                 method: 'POST',
@@ -24,7 +24,7 @@ export const eventAPI = createApi({
             }),
             invalidatesTags: ['Post']
         }),
-        updatePost: build.mutation<Event, Event>({
+        updatePost: build.mutation<IEvent, IEvent>({
             query: (post) => ({
                 url: `/posts/${post.id}`,
                 method: 'PUT',
@@ -32,7 +32,7 @@ export const eventAPI = createApi({
             }),
             invalidatesTags: ['Post']
         }),
-        deletePost: build.mutation<Event, Event>({
+        deletePost: build.mutation<IEvent, IEvent>({
             query: (post) => ({
                 url: `/posts/${post.id}`,
                 method: 'DELETE',

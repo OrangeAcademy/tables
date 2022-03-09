@@ -19,7 +19,6 @@ const Calendar = () => {
     displayEventTime={false}
     expandRows
   />
-
   );
 };
 

@@ -9,16 +9,17 @@ import CustomPopup from "../../CreateNewReservation/PopUpReservation/CustomPopup
 import {Grid} from "@mui/material";
 import Inputs from "../../Inputs/Inputs";
 import PopupCalendar from "../../Calendar/Calendar";
-import {useAppSelector} from "../../../redux/hooks/hooks";
 import isBetween from "dayjs/plugin/isBetween"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
+import {eventsSelector} from "../../../store/Event/selectors";
+import {useSelector} from "react-redux";
 
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrBefore);
 
 const Calendar = () => {
 
-  const eventsCalendar = useAppSelector((state) => state.events.events);
+  const eventsCalendar = useSelector(eventsSelector);
   const [visibility, setVisibility] = useState<boolean>(false);
 
   const calculateDateDiff = (event: any) => {
@@ -50,7 +51,7 @@ const Calendar = () => {
           nowIndicator
           height={'100vh'}
           allDaySlot={false}
-          // slotMinTime={"08:00"}
+          slotMinTime={"08:00"}
           dateClick={handleClick}
           // slotMaxTime={"20:00:01"}
           dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}

@@ -45,20 +45,19 @@ const DateTimeValidation = () => {
                         value={startDateValue}
                         renderInput={(params) => <TextField {...params} />}
                         label="Start time"
-                        ampm={false}
                         inputFormat={formatDate}
                         onChange={handleTime}
                         minDateTime={new Date()}
                     />
-                    {/*<DateTimePicker*/}
-                    {/*    renderInput={(params) => <TextField {...params} />}*/}
-                    {/*    label="End time"*/}
-                    {/*    value={endDateValue}*/}
-                    {/*    onChange={(endDateValue) => {*/}
-                    {/*        setEndDateValue(endDateValue);*/}
-                    {/*    }}*/}
-                    {/*    minDateTime={startDateValue}*/}
-                    {/*/>*/}
+                    <DateTimePicker
+                        renderInput={(params) => <TextField {...params} />}
+                        label="End time"
+                        value={endDateValue}
+                        onChange={(endDateValue) => {
+                            setEndDateValue(endDateValue);
+                        }}
+                        minDateTime={startDateValue}
+                    />
                 </LocalizationProvider>
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={enUS}>
                 </LocalizationProvider>

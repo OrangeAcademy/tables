@@ -2,10 +2,10 @@
 import React, {useEffect, useState} from "react";
 import {Route, Routes} from "react-router-dom";
 import dayjs from "dayjs";
-import {IEvent, IPresenters} from "./interfaces/Event";
-import {getEvents} from "./redux/slices/eventSlice";
-import {setState} from "./redux/slices/stateRoomSlice";
-import {useAppDispatch, useAppSelector} from "./redux/hooks/hooks";
+import {IEvent, IPresenters} from "./models/Event";
+import {getEvents} from "./store/Event/actionCreators";
+import {setState} from "./store/StateRoom/stateRoomSlice";
+import {useAppDispatch, useAppSelector} from "./hooks/redux";
 
 // Local imports
 
@@ -15,15 +15,16 @@ import PageNotFound from "./pages/404";
 import PopUpMeeting from "./pages/PopUpMeeting";
 
 import {FindUpcomingEvents} from "./utils/events.utils";
+import {eventsSelector} from "./store/Event/selectors";
+import {useSelector} from "react-redux";
 
 function App() {
   const dispatch = useAppDispatch();
   const isBusyRoom = useAppSelector((state) => state.stateRoom.value);
-  const events = useAppSelector((state) => state.events.events);
+  const events = useSelector(eventsSelector)
   const [nextUpdate, setNextUpdate] = useState<string>("");
   const [time, setTime] = useState<number>(0);
   let currentDay = dayjs();
-
 
   const [upcomingEvent, setUpcomingEvent] = useState<IEvent>({
     elementId: 0,
@@ -46,6 +47,8 @@ function App() {
       })
   }
 
+  console.log(events)
+
   useEffect(() => {
     GetUpcomingEvent()
   }, [])
@@ -64,8 +67,6 @@ function App() {
       if (currentHour.diff(nextUpdate, 's') >= 0) {
         GetUpcomingEvent()
       }
-      // de vazut ce de facut pentru cand raman 15 minute de verificat
-      //Time(isBusyRoom)
     }, 1000);
     return () => clearInterval(interval);
 
@@ -102,7 +103,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<BookMeeting isBusy={isBusyRoom} upcomingEvent={upcomingEvent} seconds={time} timeFunction={UpdateTime}/>}/>
-        <Route path="/view" element={<ViewMeeting isBusy={isBusyRoom} upcomingEvent={upcomingEvent} seconds={time} timeFunction={UpdateTime}/>}/>
+        <Route path="/view" element={<ViewMeeting isBusy={isBusyRoom} upcomingEvent={upcomingEvent} seconds={time} timeFunction={UpdateTime} getNextEventFunction={GetUpcomingEvent}/>}/>
         <Route path="/meeting" element={<PopUpMeeting/>}/>
         <Route path="*" element={<PageNotFound/>}/>
       </Routes>

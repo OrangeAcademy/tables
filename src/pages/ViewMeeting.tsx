@@ -11,7 +11,7 @@ import theme from "../components/ViewMeeting/theme/Theme"
 import {Navigate} from 'react-router';
 import {MeetingDetails} from "../interfaces/MeetingDetails"
 
-const ViewMeeting = ({isBusy, upcomingEvent, seconds}: MeetingDetails) => {
+const ViewMeeting = ({isBusy, upcomingEvent, seconds, getNextEventFunction}: MeetingDetails) => {
 
   if (!upcomingEvent || (!isBusy && seconds >= 15 * 60)) {
     return <Navigate to={"/"}/>
@@ -24,7 +24,7 @@ const ViewMeeting = ({isBusy, upcomingEvent, seconds}: MeetingDetails) => {
           <StateInfo isBusy={isBusy}/>
           <CircularTimerFunction time={seconds}/>
           <Details isBusy={isBusy} upcomingEvent={upcomingEvent}/>
-          <EndButton isBusy={isBusy} upcomingEvent={upcomingEvent} />
+          <EndButton isBusy={isBusy} upcomingEvent={upcomingEvent} getNextEventFunction={getNextEventFunction}/>
         </ContentContainer>
         <Calendar/>
       </BackgroundContainer>

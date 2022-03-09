@@ -10,8 +10,6 @@ interface IProps {
   children: JSX.Element;
 }
 
-
-
 const CustomPopup = (props: IProps) => {
   const [show, setShow] = useState(false);
 
