@@ -21,7 +21,11 @@ const MEETING_DURATIONS: number[] = [15, 30, 45, 60];
 
 */
 
-const MeetingDurationButtons = () => {
+interface IMeetingDurationProps {
+  localSeconds: number
+}
+
+const MeetingDurationButtons = ({localSeconds}: IMeetingDurationProps) => {
 
   // Storing the user-selected meeting duration
   const selectedDuration = useRef(MEETING_DURATIONS[0]);
@@ -34,7 +38,7 @@ const MeetingDurationButtons = () => {
     <StyledBox>
       {MEETING_DURATIONS.map((meetingDuration, index) => (
         
-        <BookMeetingBtn index={index} key={index} duration={meetingDuration} setDuration={setDuration} />
+        <BookMeetingBtn index={index} localSeconds={localSeconds} key={index} duration={meetingDuration} setDuration={setDuration} />
 
       ))}
     </StyledBox>
