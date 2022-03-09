@@ -136,7 +136,7 @@ interface IAddAttendeesProps {
 
 export default function AddAttendees({ showAttendees, setShowAttendees }: IAddAttendeesProps) {
   const theme = useTheme();
-  const hasReachedBp = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const attendeesStoredRedux = useSelector( (state: RootState) => state.meetingAttendees.attendees)
   const [attendee, setAttendee] = useState('');
   
@@ -163,7 +163,7 @@ export default function AddAttendees({ showAttendees, setShowAttendees }: IAddAt
 
 
   return (
-    <Dialog fullScreen={hasReachedBp} open={showAttendees} onClose={handleClose}>
+    <Dialog fullScreen={fullScreen} open={showAttendees} onClose={handleClose}>
       <HeaderContainer>
         <Title>Add attendees</Title>
         <CircleButton />
