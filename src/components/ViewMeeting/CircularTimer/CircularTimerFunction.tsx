@@ -6,8 +6,6 @@ function CircularTimerFunction({time}: ITime) {
   const [progress, setProgress] = useState(time);
   let timeForProgressBar = time;
 
-  console.log(time)
-
   useEffect(() => {
     setProgress(time)
   }, [time])
