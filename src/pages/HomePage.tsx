@@ -15,8 +15,8 @@ import { IEvent } from "../interfaces/Event";
 import {getClosestEvent, isEventRunningNow, getRunningEvent} from "../utils/events.utils";
 
 // Components imports
-import BookMeeting from "./BookMeeting";
-import ViewMeeting from "./ViewMeeting";
+import BookMeeting from "../components/BookMeeting/BookMeeting";
+import ViewMeeting from "../components/ViewMeeting/ViewMeeting";
 
 
 const HomePage = () => {
@@ -117,7 +117,6 @@ const HomePage = () => {
     <>
     {
       eventIsRunning || isLessThan15Mins
-      // ?  <BookMeeting />
       ? <ViewMeeting isBusy={eventIsRunning} upcomingEvent={runningEvent || nextEvent} seconds={meetingDuration} timeFunction={secondsTillNextEvent}/>
       : <BookMeeting />
     }

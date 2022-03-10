@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import CustomPopup from '../components/CreateNewReservation/PopUpReservation/CustomPopup';
-import Inputs from '../components/Inputs/Inputs';
-import Calendar from '../components/Calendar/Calendar';
+import CustomPopup from '../PopUpReservation/CustomPopup';
+import Inputs from '../../Inputs/Inputs';
+import Calendar from '../../Calendar/Calendar';
 // import ButtonComponent from '../components/ButtonComponent';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import { Grid } from '@mui/material';
@@ -10,16 +10,15 @@ import { Button } from "@mui/material";
 
 const PopUpMeeting = () => {
   const [visibility, setVisibility] = useState(false);
-  const popupCloseHandler = () => {
-    setVisibility(!visibility);
-  };
+  const popupCloseHandler = () => setVisibility(!visibility);
+
   return (
     <div>
-      <Button
+      {/* <Button
         startIcon={<DateRangeIcon />}
         variant="outlined"
-        onClick={() => setVisibility(!visibility)}
-      >Schedule a meeting</Button>
+        onClick={popupCloseHandler}
+      >Schedule a meeting</Button> */}
 
       <CustomPopup title="Book meeting" onClose={popupCloseHandler} show={visibility}>
         <Grid container spacing={2}>

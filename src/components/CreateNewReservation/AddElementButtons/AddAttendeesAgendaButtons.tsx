@@ -19,18 +19,24 @@ const useStyles = makeStyles({
   },
 });
 
+const StyledButton = styled(Button)({
+  fontWeight: 'bold',
+  color: 'black',
+  border: '1px solid rgb(211,211,211)',
+  display: 'flex',
+  justifyContent: 'space-between',
+  padding: '5px 2rem',
+  fontSize: '12px',
+});
+
+const AgendaAttendeesText = styled("p")({
+  
+})
+
 const AddAttendeesAgendaButtons = () => {
   const [showAgenda, setShowAgenda] = useState(false);
-  const StyledButton = styled(Button)({
-    fontWeight: 'bold',
-    color: 'black',
-    border: '1px solid rgb(211,211,211)',
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: '5px 2rem',
-    fontSize: '12px',
-  });
   const classes = useStyles();
+
   return (
     <>
       <Stack direction="row" spacing={2} className={classes.container}>
@@ -40,7 +46,8 @@ const AddAttendeesAgendaButtons = () => {
           variant="outlined"
           endIcon={<AddCircleOutlineIcon />}
         >
-          Add <br></br> Attendees
+          <p>Add</p>  
+          <p>Attendees</p>
         </StyledButton>
         <StyledButton
           onClick={() => setShowAgenda(!showAgenda)}
@@ -49,7 +56,8 @@ const AddAttendeesAgendaButtons = () => {
           variant="outlined"
           endIcon={<FormatListBulletedIcon />}
         >
-          Add <br></br> Agenda
+                <p>Add</p>  
+                <p>Agenda</p>
         </StyledButton>
       </Stack>
 
