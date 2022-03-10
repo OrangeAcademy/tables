@@ -1,6 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import PersonIcon from '@mui/icons-material/Person';
+import { useAppSelector } from "../../../redux/hooks/hooks";
 
 const main: any = {
   div: {
@@ -37,12 +38,12 @@ const userIcon: any = {
   paddingTop: '0.5vw'
 }
 
-export default function Details(props: any) {
-  const {upcomingEvent} = props;
+export default function Details() {
+  const {upcomingEvent, roomState: {isBusy}} = useAppSelector(state => state);
 
   return (
     <>
-      {props.isBusy ?
+      {isBusy ?
         (<Box style={main.div}>
           <Box style={titleMeeting.div}> Meeting <strong><i>{upcomingEvent.subject}</i></strong></Box>
           <Box style={authorMeeting.div}>

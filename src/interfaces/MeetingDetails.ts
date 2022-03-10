@@ -4,5 +4,5 @@ export interface MeetingDetails {
   isBusy: boolean,
   upcomingEvent: IEvent | undefined,
   seconds: number,
-  timeFunction(arg: boolean): void
+  timeFunction?: (arg: boolean) => void
 }

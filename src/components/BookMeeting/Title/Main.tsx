@@ -18,7 +18,7 @@ The Book Meeting page title (route-path: "/"), containing:
 */
 
 const Title = ({location,meetingRoom}: ITitleProps) => {
-  const meetingRoomStatus = useAppSelector(state => state.stateRoom.value);
+  const meetingRoomStatus = useAppSelector(state => state.roomState.isBusy);
   return (
     <TitleContainer >
       <TitleText>{`${location} - ${meetingRoom}`}</TitleText>

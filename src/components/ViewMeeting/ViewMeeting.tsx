@@ -11,16 +11,16 @@ import theme from "./theme/Theme"
 
 import {MeetingDetails} from "../../interfaces/MeetingDetails"
 
-const ViewMeeting = ({isBusy, upcomingEvent, seconds}: MeetingDetails) => {
+const ViewMeeting = ({isBusy}: MeetingDetails) => {
 
   return (
     <ThemeProvider theme={theme}>
       <BackgroundContainer>
         <ContentContainer>
           <StateInfo isBusy={isBusy}/>
-          <CircularTimerFunction time={seconds}/>
-          <Details isBusy={isBusy} upcomingEvent={upcomingEvent}/>
-          <EndButton isBusy={isBusy} upcomingEvent={upcomingEvent} />
+          <CircularTimerFunction />
+          <Details />
+          <EndButton />
         </ContentContainer>
         <Calendar/>
       </BackgroundContainer>

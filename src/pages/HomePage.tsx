@@ -1,127 +1,97 @@
 // React imports
-import { useState, useEffect, useCallback, useMemo } from "react";
-
+import React, { useState, useEffect, useCallback } from "react";
 
 //Dayjs imports
 import dayjs from "dayjs";
 
 // Redux Imports
-import {  useAppSelector } from "../redux/hooks/hooks";
+import {  connect } from "react-redux";
+import { RootState, store } from "../redux/store/store";
 
 //Interfaces
 import { IEvent } from "../interfaces/Event";
 
-// Utils
-import {getClosestEvent, isEventRunningNow, getRunningEvent} from "../utils/events.utils";
-
 // Components imports
 import BookMeeting from "../components/BookMeeting/BookMeeting";
 import ViewMeeting from "../components/ViewMeeting/ViewMeeting";
+import { setAvailable, setBusy, toggleState } from "../redux/slices/roomStateSlice";
+import { useAppDispatch } from "../redux/hooks/hooks";
+
+interface IMapStateToProps {
+  upcomingEvent: IEvent;
+  roomState: {
+    isBusy: boolean
+  }
+}
+
+const mapStateToProps = (state: RootState): IMapStateToProps => ({ 
+  upcomingEvent: state.upcomingEvent,
+  roomState: state.roomState
+  // any props you need else
+});
 
 
-const HomePage = () => {
-
-  // Fetch abort
-  const controller = new AbortController();
-
+const HomePage = ({upcomingEvent, roomState}: IMapStateToProps) => {
   // Redux
-  const nextEvent = useAppSelector(state => state.upcomingEvent);
-  const nextMeetingStart = dayjs(useAppSelector(state => state.upcomingEvent.start));
+  const nextEventStartTime = dayjs(upcomingEvent.start);
+  const nextEventEndTime = dayjs(upcomingEvent.end);
 
   // Component state
-  const [meetingDuration, setMeetingDuration] = useState(0);
-  const [eventIsRunning, setEventIsRunning] = useState(false);
-  const [runningEvent, setRunningEvent] = useState<IEvent | undefined>(undefined);
+  const [timeTillEvent, setTimeTillEvent ] = useState(0);
+  // const [isRoomBusy, setIsRoomBusy] = useState(false);
+  const [isLessThan15Mins, setIsLessThan15Mins] = useState(false);
 
-    // Get time till next meeting
-  const minutesTillNextMeeting = dayjs(nextMeetingStart).diff(dayjs(), 'minutes');
 
-    // Checks if there are 15 minutes left till the next meeting
-  const isLessThan15Mins = useMemo(() =>  nextEvent.start && minutesTillNextMeeting < 15 ? true : false, [minutesTillNextMeeting, nextEvent.start]);
- 
-  const secondsTillNextEvent = useCallback(async () => {   
+  const timeNow = dayjs();
+  const checkRoomStatus = useCallback(() => { 
+    const timeTillEventStart =  nextEventStartTime.diff(timeNow, "seconds");
+    const timeTillEventStartsMins =  nextEventStartTime.diff(timeNow, "minutes");
+    const timeTillEventEnd =  nextEventEndTime.diff(timeNow, "seconds");
 
-    if(nextEvent.start && nextEvent.end) {
-      if (eventIsRunning) setMeetingDuration(dayjs(nextEvent.end).diff(dayjs(), 's'));
-      if (!eventIsRunning) setMeetingDuration(dayjs(nextEvent.start).diff(dayjs(), 's'));
-    } else  {
-      setMeetingDuration(dayjs(runningEvent?.start).diff(dayjs(), 's') || 600);
+    if(timeTillEventStartsMins - 1  > 15 ) {
+        setIsLessThan15Mins(false);
+    } 
+
+    if(timeTillEventStartsMins - 1 <= 15){
+        setIsLessThan15Mins(true);
+    }
+      
+    if(timeTillEventStart >= 0 && roomState.isBusy) {
+      setTimeTillEvent(timeTillEventStart);
+      // store.dispatch(setAvailable({}))
     }
 
-  }, [])
 
-  const setRoomStatus = async() => {
-    const isEventRunning = await isEventRunningNow();
-    return isEventRunning ? setEventIsRunning(true) : setEventIsRunning(false);
-  }
+    if(timeTillEventStart < 0 && !roomState.isBusy) {
+        setTimeTillEvent(timeTillEventEnd) ;
+        // setIsRoomBusy(true);
+        // store.dispatch(setBusy({}));
 
+    };
 
+}, [nextEventEndTime, nextEventStartTime, roomState.isBusy, timeNow])
 
-  const upcomingEvent = useCallback(async () => {
-    /* If room is occupied (there's an ongoing meeting) */
-    if(eventIsRunning) {
-      try{
-        //    Set the upcoming event to the one running now
-       await getRunningEvent()
-        .then(value => setRunningEvent(value))
-    
-        
-      } catch(e){
-        console.error('ENCOUNTERED ERROR AT upcomingEvent: ', e)
-        throw Error;
-      }
-
-    } else {
-      //    Set the upcoming event to the closest event from now 
-      await getClosestEvent().then(value => setRunningEvent(value));
-    }
-  }, [])
-
-
-  /*
-  ----------------------------------------
-    Interval state triggers
-  ----------------------------------------
-
-  */
+  useEffect(() => checkRoomStatus());
 
   useEffect(() => {
-    const interval = setInterval( () => upcomingEvent(), 10000);
-    return () => {
-      controller.abort();
-      clearInterval(interval)
-    };
-  }, [])
+    const interval = setInterval(() => checkRoomStatus(), 1000);
 
+    return () => clearInterval(interval);
+  }, [checkRoomStatus, upcomingEvent]);
+  
 
-
-  /*
-  ----------------------------------------
-    Initial state triggers
-  ----------------------------------------
-
-  */
-  useEffect(() => { 
-
-    // Stores a boolean value if room is available or busy
-    upcomingEvent();
-    secondsTillNextEvent(); 
-    setRoomStatus();
-
-    return () => controller.abort();
-
-  }, []);
-
- 
   return (
     <>
     {
-      eventIsRunning || isLessThan15Mins
-      ? <ViewMeeting isBusy={eventIsRunning} upcomingEvent={runningEvent || nextEvent} seconds={meetingDuration} timeFunction={secondsTillNextEvent}/>
+      upcomingEvent.start && (roomState.isBusy || isLessThan15Mins)
+      ? <ViewMeeting isBusy={roomState.isBusy} upcomingEvent={upcomingEvent} seconds={timeTillEvent} />
       : <BookMeeting />
     }
+
     </>
   )
 }
 
-export default HomePage;
+export const Home = connect(mapStateToProps)(HomePage);
+
+// export default HomePage;

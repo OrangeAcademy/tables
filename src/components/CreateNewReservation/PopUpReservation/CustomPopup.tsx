@@ -1,4 +1,7 @@
+import { Grid } from "@mui/material";
 import { useEffect, useState } from 'react';
+import Inputs from "../../Inputs/Inputs";
+import Calendar from "../Calendar/Calendar";
 import './custom-popup-module.css';
 
 
@@ -44,5 +47,25 @@ const CustomPopup = (props: IProps) => {
   );
 };
 
+interface ICreateNewReservation {
+  setVisibility:  React.Dispatch<React.SetStateAction<boolean>>;
+  visibility: boolean;
+}
 
-export default CustomPopup;
+const CreateNewReservation = ({setVisibility, visibility}: ICreateNewReservation) => {
+  return (
+    <CustomPopup title="Book a meeting" onClose={setVisibility} show={visibility}>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={7} lg={7}>
+        <Inputs/>
+      </Grid>
+      <Grid item xs={12} md={5} lg={5}>
+        <Calendar />
+      </Grid>
+    </Grid>
+  </CustomPopup>
+  )
+}
+
+
+export default CreateNewReservation;

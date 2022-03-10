@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import {styled} from "@mui/material";
 import {deleteEvent} from "../../../redux/slices/eventSlice";
 import {useDispatch} from "react-redux";
+import { useAppSelector } from "../../../redux/hooks/hooks";
 
 const MeetingEndButton = styled(Button)({
   width: '100%',
@@ -17,11 +18,10 @@ const MeetingEndButton = styled(Button)({
   },
 })
 
-interface IsBusy {
-  isBusy: boolean
-}
 
-const EndButton = ({isBusy, upcomingEvent}: any) => {
+
+const EndButton = () => {
+  const {upcomingEvent, roomState: {isBusy}} = useAppSelector(state => state);
 
   const dispatch = useDispatch();
   const DeleteEvent = (id: number) => {

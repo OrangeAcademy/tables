@@ -19,18 +19,21 @@ const useStyles = makeStyles({
 });
 
 const Email = (props:IEmail) => {
-  const [email, setEmail] = useState<string>("");
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const classes = useStyles();
 
-    const validateEmail = (e: { target: { value: string } }): void => {
+  const validateEmail = (e: { target: { value: string } }): void => {
         const emailValue = e.target.value;
         let regEmail =
-            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!regEmail.test(emailValue)) {
-            alert("Invalid Email Address");
+          setEmailError("Invalid Email Address");
         }
-    };
+  };
 
+  
+  const handleEmailChange = (e: React.ChangeEvent<{value: string}>) => setEmail(e.target.value);
 
   return (
     <div className={classes.inputWidth}>
@@ -38,8 +41,9 @@ const Email = (props:IEmail) => {
         options={props.options}
         renderInput={(params) => (
           <TextField
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             {...params}
+            value={email}
             variant="outlined"
             InputProps={{
               ...params.InputProps,
@@ -60,8 +64,10 @@ const Email = (props:IEmail) => {
               ),
             }}
           />
+          
         )}
-      />
+        />
+        {/* {emailError.length && <p>{emailError}</p>} */}
     </div>
   );
 };

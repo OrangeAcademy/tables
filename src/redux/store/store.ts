@@ -3,8 +3,11 @@ import { configureStore } from "@reduxjs/toolkit";
 import eventReducer from "../slices/eventSlice";
 import userReducer from "../slices/userSlice";
 import reportIssueReducer from "../slices/reportIssueSlice";
-import stateRoomReducer from "../slices/stateRoomSlice";
+// import stateRoomReducer from "../slices/stateRoomSlice";
 import upcomingEventReducer from "../slices/upcomingEventSlice";
+import meetingAttendeesReducer from "../slices/meetingAttendeesSlice";
+import meetingTopicsReducer from "../slices/meetingTopicsSlice";
+import roomStateReducer from "../slices/roomStateSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,7 +15,10 @@ export const store = configureStore({
     upcomingEvent: upcomingEventReducer,
     users: userReducer,
     reports: reportIssueReducer,
-    stateRoom: stateRoomReducer,
+    // stateRoom: stateRoomReducer,
+    meetingTopics: meetingTopicsReducer,
+    meetingAttendees: meetingAttendeesReducer,
+    roomState: roomStateReducer
   },
 })
 
@@ -20,3 +26,4 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
+ 

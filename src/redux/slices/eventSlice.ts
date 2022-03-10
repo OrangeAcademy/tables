@@ -3,17 +3,9 @@ import {IEvent} from "../../interfaces/Event";
 import {IEvents} from "../../interfaces/Events";
 import {SERVER_EVENTS_ROUTE} from "../../constants/paths";
 
-
-const controller = new AbortController();
-
 const initialState: IEvents = {
   events: []
 }
-
-// export const getEvents = createAsyncThunk(
-//   'events/fetchEvents',
-//   async () => await (await (fetch(SERVER_EVENTS_ROUTE))).json()
-// )
 
 export const getEvents = createAsyncThunk(
   'events/fetchEvents',
@@ -24,9 +16,7 @@ export const getEvents = createAsyncThunk(
     } catch(e) {
       console.error("Redux (events/fetchEvents) failed with ", e);
       throw Error;
-    } finally {
-
-    }
+    } 
   }
 )
 
@@ -66,7 +56,10 @@ export const eventSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getEvents.fulfilled, (state, action) => {
-        state.events = action.payload;
+        return ({
+          ...state,
+          events: action.payload
+        })
       })
       .addCase(postEvents.fulfilled, (state, action) => {
         state.events.push(action.payload)
