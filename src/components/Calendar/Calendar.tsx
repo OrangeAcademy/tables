@@ -7,6 +7,7 @@ const Calendar = () => {
 
   return (
     <FullCalendar
+
     plugins={[timeGridDay]}
     initialView="timeGridDay"
     headerToolbar={false}

@@ -1,26 +1,15 @@
-import React, {useEffect, useState} from "react";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
 import FullCalendar from '@fullcalendar/react';
 import timeGridDay from '@fullcalendar/timegrid';
 import interactionPlugin from "@fullcalendar/interaction";
 import CalendarStyle from "./Calendar.styles";
-import CreateNewReservation from "../../CreateNewReservation/PopUpReservation/CustomPopup";
-import {Grid} from "@mui/material";
-import Inputs from "../../Inputs/Inputs";
-import PopupCalendar from "../../CreateNewReservation/Calendar/Calendar";
 import {useAppSelector} from "../../../redux/hooks/hooks";
-import isBetween from "dayjs/plugin/isBetween"
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
-import CreateMeetingReservation from "../../CreateMeetingReservation/Main";
 
-dayjs.extend(isBetween);
-dayjs.extend(isSameOrBefore);
 
 const Calendar = () => {
 
   const eventsCalendar = useAppSelector((state) => state.events.events);
-  const [visibility, setVisibility] = useState<boolean>(false);
 
   const calculateDateDiff = (event: any) => {
     return dayjs(event.end).diff(dayjs(event.start), 'minutes')
@@ -28,6 +17,7 @@ const Calendar = () => {
 
   const renderEventContent = (arg: any) => {
     let direction = calculateDateDiff(arg.event) <= 30 ? 'row' : 'column';
+
     return (
       <Box sx={{flexDirection: direction}}>
         <b>{arg.event.extendedProps.subject}</b>
@@ -36,36 +26,36 @@ const Calendar = () => {
     )
   };
 
-  const handleClick = () => {
-    setVisibility(!visibility);
-  }
+
 
   return (
-    <>
-      <CalendarStyle sx={{width: {mobile: '100%', tablet: '40%'}}}>
+
+    <CalendarStyle>
         <FullCalendar
-          selectable
+          selectable={false}
+          eventOverlap={false}
           plugins={[timeGridDay, interactionPlugin]}
           initialView="timeGridDay"
-          headerToolbar={false}
+          slotDuration="00:15:00"
+          weekends={false}
+          headerToolbar={{"end": 'prev,next'}}
+          handleWindowResize={true}
+          dayHeaders={true}
           nowIndicator
-          height='100vh'
+          height={"100%"}
           allDaySlot={false}
+          displayEventTime={false}
           slotMinTime="08:00"
-          dateClick={handleClick}
           slotMaxTime="18:00:01"
           dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}
           slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
           events={eventsCalendar}
-          displayEventTime={false}
           eventContent={renderEventContent}
-          expandRows
+          expandRows={false}
         />
-      </CalendarStyle>
 
-      {/* {visibility && <CreateNewReservation setVisibility={setVisibility} visibility={visibility} /> } */}
-      {visibility && <CreateMeetingReservation setVisibility={setVisibility} visibility={visibility} /> }
-    </>
+    </CalendarStyle>
+
   );
 }
 

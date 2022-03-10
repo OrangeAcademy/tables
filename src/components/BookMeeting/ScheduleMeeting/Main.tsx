@@ -10,7 +10,7 @@ import Calendar from "../../Calendar/Calendar";
 
 import CreateNewReservation from "../../CreateNewReservation/PopUpReservation/CustomPopup";
 import { useState } from "react";
-
+import CreateMeetingReservation from "../../CreateMeetingReservation/Main";
 
 
 /* -------------------  Component  ---------------- */
@@ -45,7 +45,8 @@ const ButtonMeeting = () => {
       </Button>
     </Grid>
 
-    {visibility && <CreateNewReservation setVisibility={setVisibility} visibility={visibility} /> }
+    {/* {visibility && <CreateNewReservation setVisibility={setVisibility} visibility={visibility} /> } */}
+    {visibility && <CreateMeetingReservation setVisibility={setVisibility} visibility={visibility} /> }
     
     </>
   );

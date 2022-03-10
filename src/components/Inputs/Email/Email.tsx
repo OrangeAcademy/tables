@@ -20,15 +20,17 @@ const useStyles = makeStyles({
 
 const Email = (props:IEmail) => {
   const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [emailError, setEmailError] = useState(false);
   const classes = useStyles();
 
   const validateEmail = (e: { target: { value: string } }): void => {
-        const emailValue = e.target.value;
+        setEmail(e.target.value);
         let regEmail =
             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!regEmail.test(emailValue)) {
-          setEmailError("Invalid Email Address");
+        if (!regEmail.test(email)) {
+          setEmailError(true);
+        } else {
+          setEmailError(false);
         }
   };
 
@@ -41,7 +43,8 @@ const Email = (props:IEmail) => {
         options={props.options}
         renderInput={(params) => (
           <TextField
-            onChange={handleEmailChange}
+            error={emailError}
+            onChange={validateEmail}
             {...params}
             value={email}
             variant="outlined"
@@ -67,7 +70,7 @@ const Email = (props:IEmail) => {
           
         )}
         />
-        {/* {emailError.length && <p>{emailError}</p>} */}
+       
     </div>
   );
 };
