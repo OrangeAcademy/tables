@@ -7,3 +7,7 @@ export interface MeetingDetails {
   timeFunction(arg: boolean): void,
   getNextEventFunction?:() => void
 }
+
+export interface INextEvent {
+  getNextEventFunction?:() => void
+}

@@ -27,7 +27,7 @@ const Calendar = () => {
   }
 
   const renderEventContent = (arg: any) => {
-    let direction = calculateDateDiff(arg.event) <= 30 ? 'row' : 'column';
+    let direction = calculateDateDiff(arg.event) <= 35 ? 'row' : 'column';
     return (
       <Box sx={{flexDirection: direction}}>
         <b>{arg.event.extendedProps.subject}</b>
@@ -51,7 +51,7 @@ const Calendar = () => {
           nowIndicator
           height={'100vh'}
           allDaySlot={false}
-          slotMinTime={"08:00"}
+          // slotMinTime={"08:00"}
           dateClick={handleClick}
           // slotMaxTime={"20:00:01"}
           dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}

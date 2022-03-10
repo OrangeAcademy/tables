@@ -10,12 +10,12 @@ import DateTimeValidation from "../CreateNewReservation/DateTimePicker/DateTimeP
 import AddAttendeesAgendaButtons from "../CreateNewReservation/AddElementButtons/AddAttendeesAgendaButtons";
 import ButtonComponent from "../ButtonComponent";
 import {Grid, Stack} from "@mui/material";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {setSubject, setUserEmail} from "../../store/NewMeeting/newMeeting";
 import {meetingsDurationSelector, meetingSelector} from "../../store/NewMeeting/selectors";
 import {postEvents} from "../../store/Event/actionCreators";
 import {IEvent} from "../../models/Event";
-import {string} from "prop-types";
+import {useAppDispatch} from "../../hooks/redux";
 
 const useStyles = makeStyles({
     avatar: {
@@ -27,12 +27,11 @@ const useStyles = makeStyles({
     },
 });
 
-const Inputs = () => {
+const Inputs = ({onClose}: any) => {
     const classes = useStyles();
     const [emails] = useState([{label: "firstUser@mail.com"}, {label: "secondUser@mail.com"}, {label: "thirdUser@mail.com"}]);
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const onEmailFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        console.log(event.currentTarget.value)
         dispatch(setUserEmail(event.currentTarget.value));
     };
     const onSubjectFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -50,7 +49,12 @@ const Inputs = () => {
             start: start!.toString(),
             subject: subject!
         }
-       dispatch(postEvents(event))
+        dispatch(postEvents(event))
+          .unwrap()
+          .then(() => {
+              onClose(false);
+              window.location.reload();
+          })
     }
 
     return (
@@ -60,7 +64,7 @@ const Inputs = () => {
             </Stack>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={12} lg={12}>
-                    <Email onChange={onEmailFieldChange} text="Email" icon={<MailIcon/>} options={emails}/>
+                    <Email onChange={onEmailFieldChange} text="Email" icon={<MailIcon/>} options={emails} />
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                     <MeetingInput onChange={onSubjectFieldChange} text="Meeting Subject" icon={<SubjectRoundedIcon/>}/>
