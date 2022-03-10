@@ -95,7 +95,7 @@ function App() {
       setTime(dayjs(upcomingEvent.start).diff(currentDay, 's'))
     }
   }
-  
+
   return (
     <div className="App">
       <Routes>

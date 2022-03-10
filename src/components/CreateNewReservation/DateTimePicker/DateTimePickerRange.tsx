@@ -12,8 +12,6 @@ import {setEndTime, setStartTime} from "../../../store/NewMeeting/newMeeting";
 import {format, add} from 'date-fns';
 import {addMinutes} from "date-fns";
 import {meetingsDurationSelector, meetingSelector} from "../../../store/NewMeeting/selectors";
-import dayjs from "dayjs";
-
 
 const DateTimeValidation = () => {
   const formatDate = format(new Date(), 'yyyy-MM-dd\'T\'HH:mm:ss');
@@ -24,7 +22,6 @@ const DateTimeValidation = () => {
   const dispatch = useDispatch();
 
   const handleTime = (newValue: Date | null) => {
-
     // console.log('newValue', newValue && format(newValue, 'dd/MM/yyyy HH:mm'));
     // console.log('start', start, 'duration', duration);
     newValue && dispatch(setStartTime(format(newValue, 'yyyy-MM-dd\'T\'HH:mm:ss')));
@@ -56,7 +53,7 @@ const DateTimeValidation = () => {
             renderInput={(params) => <TextField {...params} />}
             label="Start time"
             onChange={handleTime}
-            // minDateTime={new Date()}
+            minDateTime={new Date()}
           />
           {!duration
             ? <DateTimePicker
@@ -64,7 +61,7 @@ const DateTimeValidation = () => {
               label="End time"
               value={endDateValue}
               onChange={handleTimeEnd}
-              // minDateTime={new Date()}
+              minDateTime={new Date()}
             />
             : <DateTimePicker
               renderInput={(params) => <TextField {...params} />}
@@ -73,7 +70,7 @@ const DateTimeValidation = () => {
               onChange={(endDateValue) => {
                 setEndDateValue(endDateValue);
               }}
-              // minDateTime={startDateValue}
+              minDateTime={startDateValue}
             />
           }
 

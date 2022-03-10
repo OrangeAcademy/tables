@@ -19,12 +19,9 @@ const CustomPopup = (props: any) => {
     props.onClose(false);
   };
 
-
   useEffect(() => {
     setShow(props.show);
   }, [props.show]);
-
-  const test = "test"
 
   return (
     <div
