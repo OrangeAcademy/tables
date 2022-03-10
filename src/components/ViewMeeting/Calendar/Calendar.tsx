@@ -50,6 +50,9 @@ const Calendar = () => {
           headerToolbar={false}
           nowIndicator
           height={'100vh'}
+          eventMinHeight={30}
+          eventShortHeight={30}
+          eventOverlap={false}
           allDaySlot={false}
           // slotMinTime={"08:00"}
           dateClick={handleClick}
