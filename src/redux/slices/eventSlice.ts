@@ -3,13 +3,31 @@ import {IEvent} from "../../interfaces/Event";
 import {IEvents} from "../../interfaces/Events";
 import {SERVER_EVENTS_ROUTE} from "../../constants/paths";
 
+
+const controller = new AbortController();
+
 const initialState: IEvents = {
   events: []
 }
 
+// export const getEvents = createAsyncThunk(
+//   'events/fetchEvents',
+//   async () => await (await (fetch(SERVER_EVENTS_ROUTE))).json()
+// )
+
 export const getEvents = createAsyncThunk(
   'events/fetchEvents',
-  async () => await (await (fetch(SERVER_EVENTS_ROUTE))).json()
+  async () => {
+    try{
+      const response = await fetch(SERVER_EVENTS_ROUTE);
+      return response.json();
+    } catch(e) {
+      console.error("Redux (events/fetchEvents) failed with ", e);
+      throw Error;
+    } finally {
+
+    }
+  }
 )
 
 export const postEvents = createAsyncThunk(

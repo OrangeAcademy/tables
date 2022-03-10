@@ -21,12 +21,12 @@ interface IBookMeetingBtnProps {
 
 const BookMeetingBtn = ({ duration, setDuration, index }: IBookMeetingBtnProps) => {
     // Get time till next meeting
-    const nextMeetingStart = dayjs(useAppSelector(state => state.upcomingEvent.start));
+    const nextMeetingStart = useAppSelector(state => state.upcomingEvent.start);
     const minutesTillNextMeeting = dayjs(nextMeetingStart).diff(dayjs(), 'minutes');
-    
+
     // If current duration is less than time till next meeting -> set button as disabled
-    const isDisabled = duration >= minutesTillNextMeeting;
-  
+    const isDisabled = nextMeetingStart ?  duration > minutesTillNextMeeting : false; 
+
     useEffect(() => {}, [minutesTillNextMeeting])
 
   return (
