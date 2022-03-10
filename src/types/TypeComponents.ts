@@ -25,4 +25,5 @@ export interface IInputs {
     text: string;
     icon: JSX.Element;
     onChange?:any;
+    value?:string
 }

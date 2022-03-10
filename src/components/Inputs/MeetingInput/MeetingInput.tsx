@@ -9,6 +9,7 @@ const MeetingInput = (props: IInputs) => {
         <>
             <TextField
                 onChange={props.onChange}
+                value={props.value}
                 fullWidth
                 InputProps={{
                     placeholder: props.text,

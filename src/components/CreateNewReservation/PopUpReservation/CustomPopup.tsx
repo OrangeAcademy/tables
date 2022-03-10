@@ -7,14 +7,15 @@ import Calendar from "../../Calendar/Calendar";
 interface IProps {
   title?: string;
   show: boolean;
-  onClose: Function;
+  onClose?: Function;
   children: JSX.Element;
-  getNextEventFunction?:() => void
+
 }
 
 const CustomPopup = (props: any) => {
   const [show, setShow] = useState(false);
   const closeHandler = () => {
+    window.location.reload()
     setShow(false);
     props.onClose(false);
   };
@@ -32,14 +33,14 @@ const CustomPopup = (props: any) => {
       className="overlay"
     >
       <div className="popup">
-        <h2 className="reservationTitle">{props.title}</h2>
-        <span className="close" onClick={closeHandler}>
+        {/*<h2 className="reservationTitle">{props.title}</h2>*/}
+        <span style={{top:-6, right:2}}  className="close" onClick={closeHandler}>
           &times;
         </span>
         <div className="content">
           <Grid container spacing={2}>
             <Grid item xs={12} md={7} lg={7}>
-              <Inputs onClose={props.onClose} getNextEventFunction={props.getNextEventFunction}/>
+              <Inputs  />
             </Grid>
             <Grid item xs={12} md={5} lg={5}>
               <Calendar/>
