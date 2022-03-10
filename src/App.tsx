@@ -47,8 +47,6 @@ function App() {
       })
   }
 
-  console.log(events)
-
   useEffect(() => {
     GetUpcomingEvent()
   }, [])
@@ -97,14 +95,13 @@ function App() {
       setTime(dayjs(upcomingEvent.start).diff(currentDay, 's'))
     }
   }
-
-
+  
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<BookMeeting isBusy={isBusyRoom} upcomingEvent={upcomingEvent} seconds={time} timeFunction={UpdateTime}/>}/>
         <Route path="/view" element={<ViewMeeting isBusy={isBusyRoom} upcomingEvent={upcomingEvent} seconds={time} timeFunction={UpdateTime} getNextEventFunction={GetUpcomingEvent}/>}/>
-        <Route path="/meeting" element={<PopUpMeeting/>}/>
+        <Route path="/meeting" element={<PopUpMeeting />}/>
         <Route path="*" element={<PageNotFound/>}/>
       </Routes>
     </div>
