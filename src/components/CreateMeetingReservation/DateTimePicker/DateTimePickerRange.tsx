@@ -9,6 +9,7 @@ import Stack from "@mui/material/Stack";
 import { enUS } from 'date-fns/locale';
 import dayjs from "dayjs";
 import { useAppSelector } from "../../../redux/hooks/hooks";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 interface IChosenMeetingDateTime {
     chosenDateTime?: Date
@@ -27,6 +28,8 @@ const DateTimeValidation = ({ chosenDateTime}: IDateTimeValidation) => {
     const preferredMeetLengthMins = useAppSelector(state => state.createReservation.preferences.preferredMeetLengthMins)
     const prefferedLength = preferredMeetLengthMins || 30;
 
+    const theme = useTheme();
+    const hasReachedBp = useMediaQuery(theme.breakpoints.down('sm'));
 
     const handleEnd =  (timeValue: Date | null) =>  setEndDateValue(timeValue)
 
@@ -64,7 +67,7 @@ const DateTimeValidation = ({ chosenDateTime}: IDateTimeValidation) => {
                         <DateTimePicker
                         views={["day", "hours", "minutes"]}
                         inputFormat="MMMM dd, hh:mm"
-                        renderInput={(props) => <TextField {...props}/>}
+                        renderInput={(props) => <TextField fullWidth {...props}/>}
                         label="Start Time"
                         value={startDateValue}
                         onChange={handleStart }
@@ -76,9 +79,9 @@ const DateTimeValidation = ({ chosenDateTime}: IDateTimeValidation) => {
                         />
 
                         <DateTimePicker
-                        inputFormat="MMMM dd, hh:mm"
+                        inputFormat={hasReachedBp ? "MMM dd, hh:mm" : "MMMM dd, hh:mm"}
                         views={["day", "hours", "minutes"]}
-                        renderInput={(props) => <TextField {...props} />}
+                        renderInput={(props) => <TextField fullWidth {...props} />}
                         label="End Time"
                         value={endDateValue}
                         minutesStep={5}

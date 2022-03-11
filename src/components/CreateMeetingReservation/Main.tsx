@@ -1,6 +1,6 @@
 import { AddCircleOutlineOutlined, Toc } from "@mui/icons-material";
 import LockOutlined from "@mui/icons-material/LockOutlined";
-import { FormControl , Dialog, DialogTitle, Typography, styled, DialogContent, TextField, Button, DialogActions, Stack } from "@mui/material";
+import { FormControl , useTheme, useMediaQuery, Dialog, DialogTitle, Typography, styled, DialogContent, TextField, Button, DialogActions, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import Calendar from "./Calendar/Calendar";
 import DateTimeValidation from "./DateTimePicker/DateTimePickerRange";
@@ -24,27 +24,28 @@ const LockIcon = styled(LockOutlined)({
   height: "2rem"
 })
 
-const StyledDialog = styled(Dialog)({
-  minWidth: "100vw"
-})
 
 const CreateMeetingReservation = ({visibility, setVisibility, preferredMeetLengthMins}: ICreateMeetingReservation) => {
   const [showAgenda, setShowAgenda] = useState(false);
   const [showAttendees, setShowAttendees] = useState(false);
 
+  const theme = useTheme();
+  const hasReachedBp = useMediaQuery(theme.breakpoints.down('md'));
 
   const hanldeAgendaPopup = () => setShowAgenda(!showAgenda);
   const handleAttendeesPopup = () => setShowAttendees(!showAttendees)
 
   // const handleClose = () => setVisibility(false);
 
+
+
   return (
     <>
 
-    <Dialog maxWidth="xl" open={visibility} >
-      <Box sx={{display: "flex"}}>
+    <Dialog fullScreen={hasReachedBp} maxWidth="xl" open={visibility} >
+      <Box sx={hasReachedBp ? {display: "flex", flexDirection: "column", pr: "40px"} : {display: "flex", flexDirection: "row"}}>
 
-        <DialogContent sx={{width: "35%", pr: 0}}>
+        <DialogContent sx={hasReachedBp ? {width: "100%"} : {width: "35%", pr: 0}}>
         <DialogTitle sx={{display: "grid", placeItems: "center", gap: 1, pr: 0}}>
               <LockIcon />
               <Typography fontSize="1.5rem">Create New Reservation</Typography>
@@ -88,7 +89,7 @@ const CreateMeetingReservation = ({visibility, setVisibility, preferredMeetLengt
             </DialogActions>
             </Stack>
         </DialogContent>
-        <DialogContent sx={{width: "25%"}}>
+        <DialogContent sx={hasReachedBp ? {width: "100%", height: "40vh", maxHeight: "100%"} : {width: "25%"}}>
             <Calendar />
         </DialogContent>
         </Box>
