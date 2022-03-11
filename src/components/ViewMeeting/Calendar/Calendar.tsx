@@ -7,7 +7,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import CalendarStyle from "./Calendar.styles";
 import CreateNewReservationPopup from "../../CreateNewReservation/PopUpReservation/CustomPopup";
 import {Grid} from "@mui/material";
-import Inputs from "../../Inputs/Inputs";
+// import Inputs from "../../Inputs/Inputs";
 import PopupCalendar from "../../Calendar/Calendar";
 import isBetween from "dayjs/plugin/isBetween"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore"

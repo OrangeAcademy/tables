@@ -66,6 +66,12 @@ export const newMeetingSlice = createSlice({
                 ...state,
                 attendees: state.attendees.filter(atendee => atendee !== action.payload)
             })
+        },
+        clearReservation(state, _) {
+            return ({
+                ...state,
+                initialState
+            })
         }
     },
     extraReducers: {}
@@ -78,5 +84,6 @@ export const {
     setStartTime,setEndTime, setAgenda,
     setTopic,setPresenter,
     setAttendee,
-    removeAttende
+    removeAttende,
+    clearReservation
 } = newMeetingSlice.actions;

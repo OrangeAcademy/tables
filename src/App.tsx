@@ -6,6 +6,7 @@ import {IEvent, IPresenters} from "./models/Event";
 import {getEvents} from "./store/Event/actionCreators";
 import {setState} from "./store/StateRoom/stateRoomSlice";
 import {useAppDispatch, useAppSelector} from "./hooks/redux";
+import MeetingAgenda from "./store/NewMeeting/newMeeting";
 
 // Local imports
 
@@ -32,6 +33,7 @@ function App() {
     occurrencesEnd: "",
     start: "",
     subject: "",
+    agenda: [],
     presenters: Array<IPresenters>({
       presenter: "",
       topic: ""

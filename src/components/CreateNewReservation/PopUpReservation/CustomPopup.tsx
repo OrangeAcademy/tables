@@ -3,7 +3,13 @@ import { useMediaQuery, styled, useTheme, Dialog, Box, DialogContent, DialogTitl
 import AddAttendees from "components/AddAttendees/AddAttendees";
 import AddTopics from "components/AddTopics/AddTopics";
 import Calendar from "components/Calendar/Calendar";
+import { IEvent } from "models/Event";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { postEvents } from "store/Event/actionCreators";
+import { clearReservation, setSubject, setUserEmail } from "store/NewMeeting/newMeeting";
+import { meetingSelector } from "store/NewMeeting/selectors";
+
 
 import DateTimeValidation from "../DateTimePicker/DateTimePickerRange";
 
@@ -23,18 +29,62 @@ const LockIcon = styled(LockOutlined)({
 
 
 const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingReservation) => {
-  const [showAgenda, setShowAgenda] = useState(false);
-  const [showAttendees, setShowAttendees] = useState(false);
-
+  // Theme
   const theme = useTheme();
   const hasReachedBp = useMediaQuery(theme.breakpoints.down('md'));
 
+  // State
+  const [showAgenda, setShowAgenda] = useState(false);
+  const [showAttendees, setShowAttendees] = useState(false);
+
+  // Handlers
   const hanldeAgendaPopup = () => setShowAgenda(!showAgenda);
   const handleAttendeesPopup = () => setShowAttendees(!showAttendees)
 
-  // const handleClose = () => setVisibility(false);
 
 
+  // const [emails] = useState([{label: "firstUser@mail.com"}, {label: "secondUser@mail.com"}, {label: "thirdUser@mail.com"}]);
+  const [inputEmail, setInputEmail] = useState("");
+  const [inputSubject, setInputSubject] = useState("");
+
+  const dispatch = useDispatch();
+  const onEmailFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setInputEmail(event.target.value);
+    // dispatch(setUserEmail(event.target.value));
+  };
+  const onSubjectFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setInputSubject(event.target.value);
+    // dispatch(setSubject(event.target.value));
+  };
+
+  const { start, end, attendees, agenda} = useSelector(meetingSelector);
+
+  const handleSubmit = () => {
+
+    if(!inputEmail && !inputSubject ) return;
+    if(!start && !end) return;
+
+
+
+    const newReservation: IEvent = {
+      userEmail: inputEmail,
+      subject: inputSubject,
+      start: start!.toString(),
+      end: end!.toString(),
+      attendees,
+      agenda,
+      presenters: [],
+      elementId: +new Date()
+  };
+
+    // These 2 dispatches might be unecessary 
+    dispatch(setUserEmail(inputEmail));
+    dispatch(setSubject(inputSubject));
+
+    dispatch(postEvents(newReservation));
+    dispatch(clearReservation);
+    setVisibility(false);
+  }
 
   return (
     <>
@@ -50,8 +100,8 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
             <Stack>
             <Box sx={{display: "flex", flexDirection: "column", mb: "0.5rem"}} >
               <FormControl >
-              <TextField label="Email" margin="dense" />
-              <TextField label="Meeting Subject" margin="dense"/>
+              <TextField value={inputEmail} onChange={onEmailFieldChange} label="Email" margin="dense" />
+              <TextField value={inputSubject} onChange={onSubjectFieldChange} label="Meeting Subject" margin="dense"/>
               </FormControl>
               <DateTimeValidation  />
             </Box>
@@ -82,7 +132,7 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
 
             <DialogActions  sx={{p: 0, mt:"1.5rem"}}>
               <Button variant="contained" color="error" fullWidth onClick={() => setVisibility(false)}>Cancel</Button>
-              <Button variant="contained" color="primary" fullWidth>Confirm</Button>
+              <Button variant="contained" color="primary" fullWidth onClick={() => handleSubmit()}>Confirm</Button>
             </DialogActions>
             </Stack>
         </DialogContent>
