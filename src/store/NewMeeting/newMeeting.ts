@@ -24,7 +24,7 @@ const initialState: NewMeeting = {
     attendees: [],
     topic: '',
     presenter: '',
-    duration: null
+    duration: 15
 };
 
 export const newMeetingSlice = createSlice({

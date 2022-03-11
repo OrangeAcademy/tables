@@ -7,11 +7,11 @@ import DateTimePicker from "@mui/lab/DateTimePicker";
 import Stack from "@mui/material/Stack";
 //date-fns Import
 import { enUS } from 'date-fns/locale';
-import dayjs from "dayjs";
-// import { useAppSelector } from "../../../redux/hooks/hooks";
-import { useDispatch } from "react-redux";
+
+import { useDispatch, useSelector } from "react-redux";
 import {setStartTime, setEndTime} from "store/NewMeeting/newMeeting";
 import { format } from "date-fns";
+import { meetingsDurationSelector } from "store/NewMeeting/selectors";
 
 
 
@@ -29,8 +29,7 @@ export interface IDateTimeValidation extends IChosenMeetingDateTime, IChosenMeet
 const DateTimeValidation = () => {
     const [startDateValue, setStartDateValue] = React.useState<Date | null>(null);
     const [endDateValue, setEndDateValue] = React.useState<Date| null>(null);
-    // const preferredMeetLengthMins = useAppSelector(state => state.createReservation.preferences.preferredMeetLengthMins)
-    const prefferedLength = 30;
+    const prefferedLength = useSelector(meetingsDurationSelector) || 30;
     const dispatch = useDispatch();
 
     const handleEnd =  (timeValue: Date | null) =>  setEndDateValue(timeValue)
