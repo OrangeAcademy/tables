@@ -64,7 +64,7 @@ const DateTimeValidation = ({ preferredMeetLengthMins, chosenDateTime}: IDateTim
                         <DateTimePicker
                         views={["day", "hours", "minutes"]}
                         inputFormat="MMMM dd, hh:mm"
-                        renderInput={(props) => <TextField {...props}/>}
+                        renderInput={(props) => <TextField fullWidth {...props}/>}
                         label="Start Time"
                         value={startDateValue}
                         onChange={handleStart }
@@ -72,13 +72,13 @@ const DateTimeValidation = ({ preferredMeetLengthMins, chosenDateTime}: IDateTim
                         minDate={new Date(new Date().getTime() + 15*60000)}
                         minTime={new Date(0, 0, 0, 8)}
                         maxTime={new Date(0, 0, 0, 18, 45)}
-
+                        
                         />
 
                         <DateTimePicker
                         inputFormat="MMMM dd, hh:mm"
                         views={["day", "hours", "minutes"]}
-                        renderInput={(props) => <TextField {...props} />}
+                        renderInput={(props) => <TextField fullWidth {...props} />}
                         label="End Time"
                         value={endDateValue}
                         minutesStep={5}
