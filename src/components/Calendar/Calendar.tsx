@@ -6,7 +6,7 @@ import {eventsSelector} from "../../store/Event/selectors";
 import Box from "@mui/material/Box";
 import dayjs from "dayjs";
 import interactionPlugin from "@fullcalendar/interaction";
-
+import CalendarStyle from "./Calendar.styles";
 
 
 
@@ -62,7 +62,7 @@ export default Calendar;
 
 // const Calendar = () => {
 //     const validTime = () => ({start: new Date()});
-
+//     const eventsCalendar = useSelector(eventsSelector);
 
 //     const calculateDateDiff = (event: any) => {
 //         return dayjs(event.end).diff(dayjs(event.start), 'minutes')
