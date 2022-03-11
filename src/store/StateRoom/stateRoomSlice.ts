@@ -1,10 +1,10 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-interface StateRoomSlice {
+interface IStateRoom {
   value: boolean
 }
 
-const initialState: StateRoomSlice = {
+const initialState: IStateRoom = {
   value: false
 }
 
@@ -12,7 +12,7 @@ export const stateRoomSlice = createSlice({
   name: 'stateRoom',
   initialState,
   reducers: {
-    setState: (state, action) => {
+    setState: (state, action: PayloadAction<boolean>) => {
       state.value = action.payload
     }
   }
@@ -20,4 +20,3 @@ export const stateRoomSlice = createSlice({
 
 export const { setState } = stateRoomSlice.actions;
 export default stateRoomSlice.reducer
-

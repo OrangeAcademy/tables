@@ -1,8 +1,13 @@
-import {IEvent} from "./Event";
+import {IEvent} from "../models/Event";
 
 export interface MeetingDetails {
   isBusy: boolean,
-  upcomingEvent: IEvent,
+  upcomingEvent?: IEvent,
   seconds: number,
-  timeFunction(arg: boolean): void
+  timeFunction(arg: boolean): void,
+  getNextEventFunction?:() => void
+}
+
+export interface INextEvent {
+  getNextEventFunction?:() => void
 }

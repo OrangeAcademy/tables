@@ -1,4 +1,4 @@
-import {IEvent} from "../interfaces/Event";
+import {IEvent} from "../models/Event";
 import dayjs from "dayjs";
 
 export const FindUpcomingEvents = (events: Array<IEvent>) => {

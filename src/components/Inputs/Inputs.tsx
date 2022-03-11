@@ -10,9 +10,12 @@ import DateTimeValidation from "../CreateNewReservation/DateTimePicker/DateTimeP
 import AddAttendeesAgendaButtons from "../CreateNewReservation/AddElementButtons/AddAttendeesAgendaButtons";
 import ButtonComponent from "../ButtonComponent";
 import {Grid, Stack} from "@mui/material";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {setSubject, setUserEmail} from "../../store/NewMeeting/newMeeting";
 import {meetingsDurationSelector, meetingSelector} from "../../store/NewMeeting/selectors";
+import {postEvents} from "../../store/Event/actionCreators";
+import {IEvent} from "../../models/Event";
+import {useAppDispatch} from "../../hooks/redux";
 
 const useStyles = makeStyles({
     avatar: {
@@ -24,19 +27,45 @@ const useStyles = makeStyles({
     },
 });
 
+// was removed on close
+//{onClose}: any
 const Inputs = () => {
     const classes = useStyles();
     const [emails] = useState([{label: "firstUser@mail.com"}, {label: "secondUser@mail.com"}, {label: "thirdUser@mail.com"}]);
-    const dispatch = useDispatch();
+    const [inputEmail, setInputEmail] = useState("");
+    const [inputSubject, setInputSubject] = useState("");
+
+    const dispatch = useAppDispatch();
     const onEmailFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         dispatch(setUserEmail(event.currentTarget.value));
+        setInputEmail(event.currentTarget.value);
     };
     const onSubjectFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         dispatch(setSubject(event.currentTarget.value));
-
     };
 
-    const {subject, userEmail, start} = useSelector(meetingSelector);
+    const {subject, userEmail, start, end} = useSelector(meetingSelector);
+
+    const SendReservation = () => {
+        const event: IEvent = {
+            attendees: [userEmail!],
+            elementId: Math.floor(Math.random() * 10000),
+            end: end!.toString(),
+            presenters: [],
+            start: start!.toString(),
+            subject: subject!
+        };
+        dispatch(postEvents(event))
+
+            .unwrap()
+            .then(() => {
+                // onClose(false);
+                // window.location.reload();
+                setInputEmail("");
+                setInputSubject("");
+            });
+    };
+
     return (
         <>
             <Stack className={classes.avatar}>
@@ -44,10 +73,10 @@ const Inputs = () => {
             </Stack>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={12} lg={12}>
-                    <Email onChange={onEmailFieldChange} text="Email" icon={<MailIcon/>} options={emails}/>
+                    <MeetingInput value={inputEmail} onChange={onEmailFieldChange} text="Email" icon={<MailIcon/>}/>
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
-                    <MeetingInput onChange={onSubjectFieldChange} text="Meeting Subject" icon={<SubjectRoundedIcon/>}/>
+                    <MeetingInput value={inputSubject} onChange={onSubjectFieldChange} text="Meeting Subject" icon={<SubjectRoundedIcon/>}/>
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                     <DateTimeValidation/>
@@ -60,7 +89,7 @@ const Inputs = () => {
                 </Grid>
                 <Grid item xs={12} md={6} lg={6}>
                     <ButtonComponent variant="outlined" content="Confirm" disabled={false}
-                                     sx={{mx: "auto", width: 400}}/>
+                                     sx={{mx: "auto", width: 400}} onClick={() => SendReservation()}/>
                 </Grid>
             </Grid>
         </>

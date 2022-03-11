@@ -9,16 +9,17 @@ import CustomPopup from "../../CreateNewReservation/PopUpReservation/CustomPopup
 import {Grid} from "@mui/material";
 import Inputs from "../../Inputs/Inputs";
 import PopupCalendar from "../../Calendar/Calendar";
-import {useAppSelector} from "../../../redux/hooks/hooks";
 import isBetween from "dayjs/plugin/isBetween"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
+import {eventsSelector} from "../../../store/Event/selectors";
+import {useSelector} from "react-redux";
 
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrBefore);
 
 const Calendar = () => {
 
-  const eventsCalendar = useAppSelector((state) => state.events.events);
+  const eventsCalendar = useSelector(eventsSelector);
   const [visibility, setVisibility] = useState<boolean>(false);
 
   const calculateDateDiff = (event: any) => {
@@ -26,7 +27,7 @@ const Calendar = () => {
   }
 
   const renderEventContent = (arg: any) => {
-    let direction = calculateDateDiff(arg.event) <= 30 ? 'row' : 'column';
+    let direction = calculateDateDiff(arg.event) <= 35 ? 'row' : 'column';
     return (
       <Box sx={{flexDirection: direction}}>
         <b>{arg.event.extendedProps.subject}</b>
@@ -49,6 +50,9 @@ const Calendar = () => {
           headerToolbar={false}
           nowIndicator
           height={'100vh'}
+          eventMinHeight={30}
+          eventShortHeight={30}
+          eventOverlap={false}
           allDaySlot={false}
           // slotMinTime={"08:00"}
           dateClick={handleClick}
