@@ -41,9 +41,15 @@ export const newMeetingSlice = createSlice({
             state.subject = action.payload;
         },
         setStartTime(state, action) {
-            state.start = action.payload;
+           return({
+               ...state,
+               start: action.payload
+           })
         },setEndTime(state, action) {
-            state.end = action.payload;
+            return({
+                ...state,
+                end: action.payload
+            })
         },
         setAgenda(state, action) {
             return ({
@@ -70,7 +76,7 @@ export const newMeetingSlice = createSlice({
         clearReservation(state, _) {
             return ({
                 ...state,
-                initialState
+                ...initialState
             })
         }
     },

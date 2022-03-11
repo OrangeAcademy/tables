@@ -82,7 +82,7 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
     dispatch(setSubject(inputSubject));
 
     dispatch(postEvents(newReservation));
-    dispatch(clearReservation);
+    dispatch(clearReservation({}));
     setVisibility(false);
   }
 
