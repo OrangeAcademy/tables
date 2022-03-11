@@ -1,4 +1,3 @@
-import FullCalendar from "@fullcalendar/react";
 import {Box, styled} from "@mui/material";
 
 const CalendarStyle = styled(Box)(() => ({
