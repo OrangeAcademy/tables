@@ -5,7 +5,7 @@ import FullCalendar from '@fullcalendar/react';
 import timeGridDay from '@fullcalendar/timegrid';
 import interactionPlugin from "@fullcalendar/interaction";
 import CalendarStyle from "./Calendar.styles";
-import CustomPopup from "../../CreateNewReservation/PopUpReservation/CustomPopup";
+import CreateNewReservationPopup from "../../CreateNewReservation/PopUpReservation/CustomPopup";
 import {Grid} from "@mui/material";
 import Inputs from "../../Inputs/Inputs";
 import PopupCalendar from "../../Calendar/Calendar";
@@ -66,17 +66,7 @@ const Calendar = () => {
         />
       </CalendarStyle>
 
-      {visibility &&
-      <CustomPopup title="Book a meeting" onClose={setVisibility} show={visibility}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={7} lg={7}>
-            <Inputs/>
-          </Grid>
-          <Grid item xs={12} md={5} lg={5}>
-            <PopupCalendar/>
-          </Grid>
-        </Grid>
-      </CustomPopup>}
+      {visibility && <CreateNewReservationPopup setVisibility={setVisibility} visibility={visibility}/>}
     </>
   );
 }

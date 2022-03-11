@@ -17,7 +17,7 @@ const PopUpMeeting = () => {
                 onClick={() => setVisibility(!visibility)}
             >Schedule a meeting</Button>
 
-            <CustomPopup onClose={popupCloseHandler} show={visibility}/>
+            <CustomPopup setVisibility={popupCloseHandler} visibility={visibility}/>
         </div>
     );
 };

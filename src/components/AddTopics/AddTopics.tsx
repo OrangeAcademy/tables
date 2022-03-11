@@ -2,10 +2,9 @@
 import { useState } from 'react';
 
 // Redux Imports
-import { useSelector } from "react-redux";
-import { nanoid } from "@reduxjs/toolkit";
-import { store, RootState } from '../../redux/store/store';
-import { IMeetingTopicRedux, storeMeetingTopics } from '../../redux/slices/meetingTopicsSlice';
+import { setAgenda } from "store/NewMeeting/newMeeting";
+import { useSelector, useDispatch } from "react-redux";
+import { meetingsAgendaSelector } from "store/NewMeeting/selectors";
 
 // MUI Imports
 import { useTheme } from '@mui/material/styles';
@@ -13,11 +12,16 @@ import { Dialog, DialogActions, DialogContent, useMediaQuery, Divider, Input, Ta
   TableCell, TableHead, TableRow } from '@mui/material';
 
 import {AddTopicBtn, RemoveTopicBtn, CircleButton, ActionButton, HeaderContainer, Title, NoAgenda, Topic,} from "./AddTopics.styled";
-
+import ErrorSnackbar from "./ErrorSnackbar";
 
 interface IAddTopicProps {
   showAgenda: boolean;
   setShowAgenda: (val: boolean) => void;
+}
+
+const errorMessages = {
+  emptyField: "Please make sure all fields are completed!",
+  duplicate: "We already have this topic registered!"
 }
 
 export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) {
@@ -25,11 +29,20 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
   const theme = useTheme();
   const hasReachedBp = useMediaQuery(theme.breakpoints.down('sm'));
 
+  // Redux
+  const dispatch = useDispatch()
+
   // State
-  const topicsStoredRedux = useSelector((state: RootState) => state.meetingTopics.presenters); // Redux
+  const topicsStoredRedux = useSelector(meetingsAgendaSelector);
   const [topic, setTopic] = useState('');
   const [presenter, setPresenter] = useState('');
-  const [meetingTopics, setMeetingTopics] = useState<IMeetingTopicRedux[]>(topicsStoredRedux);
+  const [meetingTopics, setMeetingTopics] = useState(topicsStoredRedux);
+
+  // Errors
+  const [emptyFieldsError, setEmptyFieldsError] = useState(false);
+  const [duplicateError, setDuplicateError] = useState(false);
+  const closeEmptyFieldsError = () => setEmptyFieldsError(false);
+  const closeDuplicateError = () => setDuplicateError(false);
 
 
   // Handlers
@@ -38,30 +51,43 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
   const handlePresenter = (event: React.ChangeEvent<{ value: string }>) => setPresenter(event.target.value);
   const handleClearFields = () => { setTopic(''); setPresenter(''); };
 
-  // Adds topic to component state if topic and presenter are not empty
+  // // Adds topic to component state if topic and presenter are not empty
   const addTopic = () => {
-    if (topic.length && presenter.length) {
-        setMeetingTopics([...meetingTopics, { presenter, topic, r_id: nanoid(), confirmationStatus: 0 }]);
-        handleClearFields();
+    const isDupeTopic = !!meetingTopics.filter(meetingTopic => topic === meetingTopic.topic).length;
+    const isDupePresenter = !!meetingTopics.filter(meetingTopic => presenter === meetingTopic.presenter).length;
+
+    if(isDupeTopic && isDupePresenter) {
+      setDuplicateError(true);
+      return;
     }
+
+    if(!topic || !presenter) {
+      setEmptyFieldsError(true);
+      return;
+    }
+
+    setMeetingTopics([...meetingTopics, {topic, presenter}]);
+    handleClearFields();
+
   };
   
-  // Removes topic from component state, based on given topic r_id (redux id)
-  const removeTopic = (r_id: string) => setMeetingTopics(meetingTopics.filter(topic => topic.r_id !== r_id));
+  // // Removes topic from component state, based on given topic r_id (redux id)
+  const removeTopic = (topic: string, presenter: string) => setMeetingTopics(meetingTopics.filter(meetingTopic => meetingTopic.topic !== topic && meetingTopic.presenter !== presenter ));
 
   // Stores topics in ReduxStore and closes the popup
   const handleConfirm = () => { 
-    store.dispatch(storeMeetingTopics({ ...meetingTopics }));
+    dispatch(setAgenda(meetingTopics));
     handleClose();
   }
 
   return (
+    <>
     <Dialog fullScreen={hasReachedBp} open={showAgenda} onClose={handleClose}>
       <HeaderContainer>
         <Title>Add topics</Title>
         <CircleButton />
       </HeaderContainer>
-
+ 
       <DialogContent>
 
           {hasReachedBp ? (
@@ -107,12 +133,12 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
             <Table stickyHeader={true}>
               <TableBody>
                 {!!meetingTopics.length &&
-                  meetingTopics.map((topicStored: IMeetingTopicRedux, topicIndex) => (
+                  meetingTopics.map((topicStored, topicIndex) => (
                     <Topic
                       topic={topicStored.topic}
                       key={topicIndex}
                       presenter={topicStored.presenter}
-                      removeTopic={() => removeTopic(topicStored.r_id)}
+                      removeTopic={() => removeTopic(topicStored.topic, topicStored.presenter)}
                     ></Topic>
                   ))}
               </TableBody>
@@ -152,12 +178,12 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
                 </TableRow>
 
                 {!!meetingTopics.length &&
-                  meetingTopics.map((topicStored: IMeetingTopicRedux, topicIndex) => (
+                  meetingTopics.map((topicStored, topicIndex) => (
                     <Topic
                       topic={topicStored.topic}
                       key={topicIndex}
                       presenter={topicStored.presenter}
-                      removeTopic={() => removeTopic(topicStored.r_id)}
+                      removeTopic={() => removeTopic(topicStored.topic,topicStored.presenter )}
                     ></Topic>
                   ))}
               </TableBody>
@@ -178,5 +204,11 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
         </ActionButton>
       </DialogActions>
     </Dialog>
+
+    <ErrorSnackbar 
+    visibility={duplicateError || emptyFieldsError} 
+    setVisibility={emptyFieldsError ? closeEmptyFieldsError : closeDuplicateError} 
+    message={emptyFieldsError ? errorMessages.emptyField: errorMessages.duplicate} />
+  </>
   );
 }

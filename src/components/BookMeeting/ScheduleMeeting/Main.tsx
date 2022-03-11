@@ -5,10 +5,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 // Styles
 import { styles } from './Styles';
 
-import Inputs from "../../Inputs/Inputs";
-import Calendar from "../../Calendar/Calendar";
-
-import CustomPopup from "../../CreateNewReservation/PopUpReservation/CustomPopup";
+import CreateNewReservationPopup from "../../CreateNewReservation/PopUpReservation/CustomPopup";
 import { useState } from "react";
 
 
@@ -44,18 +41,8 @@ const ButtonMeeting = () => {
         </Typography>
       </Button>
     </Grid>
-    {visibility && 
-    
-    <CustomPopup  onClose={setVisibility} show={visibility} >
-      <Grid container spacing={2}>
-          <Grid item xs={12} md={7} lg={7}>
-            <Inputs />
-          </Grid>
-          <Grid item xs={12} md={5} lg={5}>
-            <Calendar />
-        </Grid>
-        </Grid>
-    </CustomPopup>}
+
+      {visibility && <CreateNewReservationPopup setVisibility={setVisibility} visibility={visibility}/>}
     </>
   );
 };
