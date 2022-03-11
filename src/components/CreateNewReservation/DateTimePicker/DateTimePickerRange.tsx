@@ -74,7 +74,7 @@ const DateTimeValidation = () => {
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={enUS}>
                         <DateTimePicker
                         views={["day", "hours", "minutes"]}
-                        inputFormat={hasReachedBp ? "MMM dd, hh:mm" : "MMMM dd, hh:mm"}
+                        inputFormat={hasReachedBp ? "MMM dd, H:mm" : "MMMM dd, H:mm"}
                         renderInput={(props) => <TextField fullWidth {...props}/>}
                         label="Start Time"
                         value={startDateValue}
@@ -87,7 +87,7 @@ const DateTimeValidation = () => {
                         />
 
                         <DateTimePicker
-                        inputFormat={hasReachedBp ? "MMM dd, hh:mm" : "MMMM dd, hh:mm"}
+                        inputFormat={hasReachedBp ? "MMM dd, H:mm" : "MMMM dd, H:mm"}
                         views={["day", "hours", "minutes"]}
                         renderInput={(props) => <TextField fullWidth {...props} />}
                         label="End Time"
