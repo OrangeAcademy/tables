@@ -8,10 +8,11 @@ import Stack from "@mui/material/Stack";
 //date-fns Import
 import { enUS } from 'date-fns/locale';
 import dayjs from "dayjs";
-import {format} from 'date-fns';
-
+// import { useAppSelector } from "../../../redux/hooks/hooks";
 import { useDispatch } from "react-redux";
 import {setStartTime, setEndTime} from "store/NewMeeting/newMeeting";
+import { format } from "date-fns";
+
 
 
 interface IChosenMeetingDateTime {
@@ -25,22 +26,22 @@ export interface IDateTimeValidation extends IChosenMeetingDateTime, IChosenMeet
   
 }
 
-const DateTimeValidation = ({ preferredMeetLengthMins, chosenDateTime}: IDateTimeValidation) => {
+const DateTimeValidation = () => {
     const [startDateValue, setStartDateValue] = React.useState<Date | null>(null);
     const [endDateValue, setEndDateValue] = React.useState<Date| null>(null);
-    const prefferedLength = preferredMeetLengthMins || 30;
+    // const preferredMeetLengthMins = useAppSelector(state => state.createReservation.preferences.preferredMeetLengthMins)
+    const prefferedLength = 30;
     const dispatch = useDispatch();
 
-    const handleEnd =  (timeValue: Date | null) =>  setEndDateValue(timeValue);
- 
+    const handleEnd =  (timeValue: Date | null) =>  setEndDateValue(timeValue)
 
     const handleStart = (timeValue: Date | null) => {
         if(timeValue !== null) {
             const addMinutes = new Date(timeValue.getTime() + prefferedLength*60000);
             setEndDateValue(addMinutes);
-         
         }
-        setStartDateValue(timeValue);
+
+        setStartDateValue(timeValue)
     }
 
     const roundStart = () => {
@@ -52,17 +53,14 @@ const DateTimeValidation = ({ preferredMeetLengthMins, chosenDateTime}: IDateTim
         setStartDateValue(addMinutesStart);
         setEndDateValue(addMinutesEnd);
     }
-    useEffect(() => {
 
+    useEffect(() => {
       if(startDateValue) dispatch(setStartTime(format(startDateValue, 'yyyy-MM-dd\'T\'HH:mm:ss')));
       if(endDateValue) dispatch(setEndTime(format(endDateValue, 'yyyy-MM-dd\'T\'HH:mm:ss')));
-      
     }, [dispatch, endDateValue, startDateValue])
 
     useEffect(() => {
-        if(chosenDateTime) setStartDateValue(new Date(dayjs(chosenDateTime).toString()))
 
-        if(preferredMeetLengthMins && startDateValue) handleStart(startDateValue);
 
         roundStart();
     }, [])
@@ -73,7 +71,7 @@ const DateTimeValidation = ({ preferredMeetLengthMins, chosenDateTime}: IDateTim
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={enUS}>
                         <DateTimePicker
                         views={["day", "hours", "minutes"]}
-                        inputFormat="MMMM dd, H:mm"
+                        inputFormat="MMMM dd, hh:mm"
                         renderInput={(props) => <TextField fullWidth {...props}/>}
                         label="Start Time"
                         value={startDateValue}
@@ -86,7 +84,7 @@ const DateTimeValidation = ({ preferredMeetLengthMins, chosenDateTime}: IDateTim
                         />
 
                         <DateTimePicker
-                        inputFormat="MMMM dd, H:mm"
+                        inputFormat="MMMM dd, hh:mm"
                         views={["day", "hours", "minutes"]}
                         renderInput={(props) => <TextField fullWidth {...props} />}
                         label="End Time"
