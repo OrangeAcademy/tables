@@ -37,7 +37,8 @@ const Calendar = () => {
           plugins={[timeGridDay, interactionPlugin]}
           initialView="timeGridDay"
           slotDuration="00:15:00"
-          weekends={false}
+          weekends={true}
+          scrollTime={dayjs().format('HH:mm:ss')}
           headerToolbar={{"end": 'prev,next'}}
           handleWindowResize={true}
           dayHeaders={true}

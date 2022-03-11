@@ -8,6 +8,7 @@ import upcomingEventReducer from "../slices/upcomingEventSlice";
 import meetingAttendeesReducer from "../slices/meetingAttendeesSlice";
 import meetingTopicsReducer from "../slices/meetingTopicsSlice";
 import roomStateReducer from "../slices/roomStateSlice";
+import createReservationReducer from "../slices/createReservationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,7 +19,8 @@ export const store = configureStore({
     // stateRoom: stateRoomReducer,
     meetingTopics: meetingTopicsReducer,
     meetingAttendees: meetingAttendeesReducer,
-    roomState: roomStateReducer
+    roomState: roomStateReducer,
+    createReservation: createReservationReducer
   },
 })
 

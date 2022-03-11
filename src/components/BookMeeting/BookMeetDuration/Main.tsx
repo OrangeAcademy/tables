@@ -7,6 +7,8 @@
 import dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../../redux/hooks/hooks";
+import { addPreferredLen } from "../../../redux/slices/createReservationSlice";
+import { store } from "../../../redux/store/store";
 
 // Local imports
 import BookMeetingBtn from './Button';
@@ -47,6 +49,11 @@ const MeetingDurationButtons = () => {
   // Sets the meeting duration to the value of the user-clicked button
   const setDuration = (index: number):number =>
     (selectedDuration.current = MEETING_DURATIONS[index]);
+
+  useEffect(() => {
+    selectedDuration.current = MEETING_DURATIONS[0]
+    store.dispatch(addPreferredLen({duration: MEETING_DURATIONS[0]}));
+  }, [])
    
 
   return (

@@ -8,8 +8,9 @@ import DateTimeValidation from "./DateTimePicker/DateTimePickerRange";
 import AddTopics from "../AddTopics/AddTopics";
 import AddAttendees from "../AddAttendees/AddAttendees";
 import { useState } from "react";
+import {IDateTimeValidation} from "./DateTimePicker/DateTimePickerRange";
 
-interface ICreateMeetingReservation {
+interface ICreateMeetingReservation extends IDateTimeValidation {
   visibility: boolean;
   setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -27,7 +28,7 @@ const StyledDialog = styled(Dialog)({
   minWidth: "100vw"
 })
 
-const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingReservation) => {
+const CreateMeetingReservation = ({visibility, setVisibility, preferredMeetLengthMins}: ICreateMeetingReservation) => {
   const [showAgenda, setShowAgenda] = useState(false);
   const [showAttendees, setShowAttendees] = useState(false);
 
@@ -38,10 +39,10 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
   return (
     <>
 
-    <StyledDialog maxWidth="xl" open={visibility} onClose={setVisibility} >
+    <Dialog maxWidth="xl" open={visibility} onClose={() => setVisibility(false)} >
       <Box sx={{display: "flex"}}>
 
-        <DialogContent sx={{width: "50%", pr: 0}}>
+        <DialogContent sx={{width: "35%", pr: 0}}>
         <DialogTitle sx={{display: "grid", placeItems: "center", gap: 1, pr: 0}}>
               <LockIcon />
               <Typography fontSize="1.5rem">Create New Reservation</Typography>
@@ -50,7 +51,7 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
             <Box sx={{display: "flex", flexDirection: "column", mb: "0.5rem"}} >
               <TextField label="Email" margin="dense" />
               <TextField label="Meeting Subject" margin="dense"/>
-              <DateTimeValidation />
+              <DateTimeValidation  preferredMeetLengthMins={preferredMeetLengthMins} />
             </Box>
 
             <DialogActions sx={{p: 0}}>
@@ -87,7 +88,7 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
             <Calendar />
         </DialogContent>
         </Box>
-      </StyledDialog>
+      </Dialog>
 
       {showAttendees && (
         <AddAttendees showAttendees={showAttendees} setShowAttendees={setShowAttendees} />)}

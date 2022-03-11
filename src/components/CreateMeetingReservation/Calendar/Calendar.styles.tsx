@@ -39,6 +39,9 @@ const CalendarStyle = styled(Box)(() => ({
   "#fc-dom-6":{
     minWidth: "205px"
   },
+  ".fc-prev-button.fc-button.fc-button-primary": {
+    marginRight: "1rem"
+  },
   overflow: "-moz-hidden-unscrollable",
   height: '100%',
   maxHeight: "510px",

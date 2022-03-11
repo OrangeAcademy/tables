@@ -27,9 +27,9 @@ const StyledButton = styled(Button)({
     borderColor: grey[500],
     boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.95)',
   },
-  '&:focus > *': {
-    color: '#75726c',
-  },
+  // '&:focus > *': {
+  //   color: '#75726c',
+  // },
   '&:disabled': {
     color: 'gray',
     backgroundColor: 'transparent',
