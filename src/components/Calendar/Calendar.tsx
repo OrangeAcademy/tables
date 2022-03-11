@@ -33,27 +33,32 @@ const eventsCalendar = useSelector(eventsSelector);
 
   return (
 
-      <CalendarStyle >
-        <FullCalendar
-          selectable
-          plugins={[timeGridDay, interactionPlugin]}
-          initialView="timeGridDay"
-          headerToolbar={false}
-          nowIndicator
-          height='100%'
-          allDaySlot={false}
-          slotMinTime="08:00"
-          slotMaxTime="18:00:01"
-          dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}
-          slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
-          events={eventsCalendar}
-          displayEventTime={false}
-          eventContent={renderEventContent}
-          expandRows
-        />
+    <CalendarStyle>
+    <FullCalendar
+      selectable={false}
+      eventOverlap={false}
+      plugins={[timeGridDay, interactionPlugin]}
+      initialView="timeGridDay"
+      slotDuration="00:15:00"
+      weekends={true}
+      scrollTime={dayjs().format('HH:mm:ss')}
+      headerToolbar={{"end": 'prev,next'}}
+      handleWindowResize={true}
+      dayHeaders={true}
+      nowIndicator
+      height={"100%"}
+      allDaySlot={false}
+      displayEventTime={false}
+      slotMinTime="08:00"
+      slotMaxTime="18:00:01"
+      dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}
+      slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
+      events={eventsCalendar}
+      eventContent={renderEventContent}
+      expandRows={false}
+    />
 
-      </CalendarStyle>
-
+</CalendarStyle>
   );
 }
 
