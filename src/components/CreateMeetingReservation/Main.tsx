@@ -1,6 +1,6 @@
 import { AddCircleOutlineOutlined, Toc } from "@mui/icons-material";
 import LockOutlined from "@mui/icons-material/LockOutlined";
-import { Dialog, DialogTitle, Typography, styled, DialogContent, TextField, Button, DialogActions, Stack } from "@mui/material";
+import { FormControl , Dialog, DialogTitle, Typography, styled, DialogContent, TextField, Button, DialogActions, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import Calendar from "./Calendar/Calendar";
 import DateTimeValidation from "./DateTimePicker/DateTimePickerRange";
@@ -36,10 +36,12 @@ const CreateMeetingReservation = ({visibility, setVisibility, preferredMeetLengt
   const hanldeAgendaPopup = () => setShowAgenda(!showAgenda);
   const handleAttendeesPopup = () => setShowAttendees(!showAttendees)
 
+  // const handleClose = () => setVisibility(false);
+
   return (
     <>
 
-    <Dialog maxWidth="xl" open={visibility} onClose={() => setVisibility(false)} >
+    <Dialog maxWidth="xl" open={visibility} >
       <Box sx={{display: "flex"}}>
 
         <DialogContent sx={{width: "35%", pr: 0}}>
@@ -49,8 +51,10 @@ const CreateMeetingReservation = ({visibility, setVisibility, preferredMeetLengt
         </DialogTitle>
             <Stack>
             <Box sx={{display: "flex", flexDirection: "column", mb: "0.5rem"}} >
+              <FormControl >
               <TextField label="Email" margin="dense" />
               <TextField label="Meeting Subject" margin="dense"/>
+              </FormControl>
               <DateTimeValidation  preferredMeetLengthMins={preferredMeetLengthMins} />
             </Box>
 
