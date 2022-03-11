@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {setStartTime, setEndTime} from "store/NewMeeting/newMeeting";
 import { format } from "date-fns";
 import { meetingsDurationSelector } from "store/NewMeeting/selectors";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 
 
@@ -27,6 +28,9 @@ export interface IDateTimeValidation extends IChosenMeetingDateTime, IChosenMeet
 }
 
 const DateTimeValidation = () => {
+    const theme = useTheme();
+    const hasReachedBp = useMediaQuery(theme.breakpoints.down('sm'))
+
     const [startDateValue, setStartDateValue] = React.useState<Date | null>(null);
     const [endDateValue, setEndDateValue] = React.useState<Date| null>(null);
     const prefferedLength = useSelector(meetingsDurationSelector) || 30;
@@ -70,7 +74,7 @@ const DateTimeValidation = () => {
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={enUS}>
                         <DateTimePicker
                         views={["day", "hours", "minutes"]}
-                        inputFormat="MMMM dd, hh:mm"
+                        inputFormat={hasReachedBp ? "MMM dd, hh:mm" : "MMMM dd, hh:mm"}
                         renderInput={(props) => <TextField fullWidth {...props}/>}
                         label="Start Time"
                         value={startDateValue}
@@ -83,7 +87,7 @@ const DateTimeValidation = () => {
                         />
 
                         <DateTimePicker
-                        inputFormat="MMMM dd, hh:mm"
+                        inputFormat={hasReachedBp ? "MMM dd, hh:mm" : "MMMM dd, hh:mm"}
                         views={["day", "hours", "minutes"]}
                         renderInput={(props) => <TextField fullWidth {...props} />}
                         label="End Time"
