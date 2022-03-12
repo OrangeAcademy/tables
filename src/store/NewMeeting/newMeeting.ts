@@ -11,7 +11,7 @@ export interface MeetingAgenda {
     agenda: MeetingAgenda[];
     topic: string;
     presenter: string;
-    attendees: { label: string, value: string }[] | null;
+    attendees: string[];
     duration: number| null;
 }
 
@@ -21,10 +21,10 @@ const initialState: NewMeeting = {
     start: null,
     end: null,
     agenda: [] as MeetingAgenda[],
-    attendees: null,
+    attendees: [],
     topic: '',
     presenter: '',
-    duration: null
+    duration: 15
 };
 
 export const newMeetingSlice = createSlice({
@@ -41,12 +41,22 @@ export const newMeetingSlice = createSlice({
             state.subject = action.payload;
         },
         setStartTime(state, action) {
-            state.start = action.payload;
+           return({
+               ...state,
+               start: action.payload
+           })
         },setEndTime(state, action) {
-            state.end = action.payload;
+            return({
+                ...state,
+                end: action.payload
+            })
         },
         setAgenda(state, action) {
-            state.agenda = action.payload;
+            return ({
+                ...state,
+                agenda: action.payload
+          
+              })
         },
         setTopic(state, action) {
             state.topic = action.payload;
@@ -55,7 +65,19 @@ export const newMeetingSlice = createSlice({
             state.presenter = action.payload;
         },
         setAttendee(state,action){
-            state.attendees=action.payload
+            state.attendees.push(action.payload)
+        },
+        removeAttende(state, action) {
+            return ({
+                ...state,
+                attendees: state.attendees.filter(atendee => atendee !== action.payload)
+            })
+        },
+        clearReservation(state, _) {
+            return ({
+                ...state,
+                ...initialState
+            })
         }
     },
     extraReducers: {}
@@ -67,5 +89,7 @@ export const {
     setMeetingDuration, setSubject,
     setStartTime,setEndTime, setAgenda,
     setTopic,setPresenter,
-    setAttendee
+    setAttendee,
+    removeAttende,
+    clearReservation
 } = newMeetingSlice.actions;

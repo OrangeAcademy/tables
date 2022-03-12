@@ -1,3 +1,5 @@
+import { MeetingAgenda } from "store/NewMeeting/newMeeting"
+
 export interface IEvent{
     id?:string,
     alias?: string,
@@ -31,6 +33,7 @@ export interface IEvent{
     topic?: string
     userEmail?: string
     userFullName?: string,
+    agenda: MeetingAgenda[],
     userOofSettingsData?: IUserOofSettingsData
 }
 
