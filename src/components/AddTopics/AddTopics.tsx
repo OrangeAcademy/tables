@@ -1,5 +1,5 @@
 // React imports
-import { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 
 // Redux Imports
 import { setAgenda } from "store/NewMeeting/newMeeting";
@@ -7,16 +7,32 @@ import { useSelector, useDispatch } from "react-redux";
 import { meetingsAgendaSelector } from "store/NewMeeting/selectors";
 
 // MUI Imports
-import { useTheme } from '@mui/material/styles';
-import { Dialog, DialogActions, DialogContent, useMediaQuery, Divider, Input, Table, TableBody, 
-  TableCell, TableHead, TableRow } from '@mui/material';
+import {useTheme} from '@mui/material/styles';
+import {
+  Dialog, DialogActions, DialogContent, useMediaQuery, Divider, Input, Table, TableBody,
+  TableCell, TableHead, TableRow, TextField, Autocomplete, FormControl
+} from '@mui/material';
 
-import {AddTopicBtn, RemoveTopicBtn, CircleButton, ActionButton, HeaderContainer, Title, NoAgenda, Topic,} from "./AddTopics.styled";
+import {
+  AddTopicBtn,
+  RemoveTopicBtn,
+  CircleButton,
+  ActionButton,
+  HeaderContainer,
+  Title,
+  NoAgenda,
+  Topic,
+} from "./AddTopics.styled";
 import ErrorSnackbar from "./ErrorSnackbar";
+
+import {usersSelector} from "../../store/User/selectors";
+import {IEvent} from "../../models/Event";
+import {string} from "prop-types";
 
 interface IAddTopicProps {
   showAgenda: boolean;
   setShowAgenda: (val: boolean) => void;
+  existingEvent?: IEvent | undefined
 }
 
 const errorMessages = {
@@ -24,18 +40,19 @@ const errorMessages = {
   duplicate: "We already have this topic registered!"
 }
 
-export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) {
+export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAddTopicProps) {
   // Theme
   const theme = useTheme();
   const hasReachedBp = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Redux
   const dispatch = useDispatch()
+  const users = useSelector(usersSelector);
 
   // State
   const topicsStoredRedux = useSelector(meetingsAgendaSelector);
   const [topic, setTopic] = useState('');
-  const [presenter, setPresenter] = useState('');
+  const [presenter, setPresenter] = useState<string | null>(null);
   const [meetingTopics, setMeetingTopics] = useState(topicsStoredRedux);
 
   // Errors
@@ -48,8 +65,17 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
   // Handlers
   const handleClose = () => setShowAgenda(false);
   const handleTopic = (event: React.ChangeEvent<{ value: string }>) => setTopic(event.target.value);
-  const handlePresenter = (event: React.ChangeEvent<{ value: string }>) => setPresenter(event.target.value);
-  const handleClearFields = () => { setTopic(''); setPresenter(''); };
+  const handlePresenter = (_event: any, newValue: any) => setPresenter(newValue);
+  const handleClearFields = () => {
+    setTopic('');
+    setPresenter('');
+  };
+
+  useEffect(() => {
+    if (existingEvent) {
+      setMeetingTopics(existingEvent.presenters);
+    }
+  });
 
   // // Adds topic to component state if topic and presenter are not empty
   const addTopic = () => {
@@ -66,13 +92,14 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
       setEmptyFieldsError(true);
     }
 
-    setMeetingTopics([...meetingTopics, {topic, presenter}]);
+    setMeetingTopics([...meetingTopics, {topic, presenter:presenter!}]);
+
     handleClearFields();
 
   };
   
   // // Removes topic from component state, based on given topic r_id (redux id)
-  const removeTopic = (topic: string, presenter: string) => setMeetingTopics(meetingTopics.filter(meetingTopic => meetingTopic.topic !== topic && meetingTopic.presenter !== presenter ));
+  const removeTopic = (topic: string, presenter: string) => setMeetingTopics(meetingTopics.filter(meetingTopic => meetingTopic.topic !== topic && meetingTopic.presenter !== presenter));
 
   // Stores topics in ReduxStore and closes the popup
   const handleConfirm = () => { 
@@ -82,52 +109,54 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
 
   return (
     <>
-    <Dialog fullScreen={hasReachedBp} open={showAgenda} onClose={handleClose}>
-      <HeaderContainer>
-        <Title>Add topics</Title>
-        <CircleButton />
-      </HeaderContainer>
- 
-      <DialogContent>
+      <Dialog fullScreen={hasReachedBp} open={showAgenda} onClose={handleClose}>
+        <HeaderContainer>
+          <Title>{existingEvent ? "View" : "Add"} topics</Title>
+          <CircleButton/>
+        </HeaderContainer>
+
+        <DialogContent>
 
           {hasReachedBp ? (
             <>
-            <Table stickyHeader={true}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Topic</TableCell>
-                  <TableCell >
-                    <Input
-                      fullWidth
-                      value={topic}
-                      onChange={handleTopic}
-                      placeholder="Topic"
-                    />
-                  </TableCell>
-                </TableRow>
+              <Table stickyHeader={true}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Topic</TableCell>
+                    <TableCell sx={{width: 180}}>
+                      <Input
+                        fullWidth
+                        value={topic}
+                        onChange={handleTopic}
+                        placeholder="Topic"
+                      />
+                    </TableCell>
+                  </TableRow>
 
-                <TableRow>
-                  <TableCell>Presenter</TableCell>
+                  <TableRow>
+                    <TableCell>Presenter</TableCell>
 
-                  <TableCell >
-                    <Input
-                      fullWidth
-                      value={presenter}
-                      onChange={handlePresenter}
-                      placeholder="Presenter"
-                    />
-                  </TableCell>
-                </TableRow>
+                    <TableCell sx={{width: 180}}>
+                      <Autocomplete
+                        fullWidth
+                        value={presenter}
+                        renderInput={(params) =>
+                          <TextField {...params} variant="standard" placeholder={'Email'} fullWidth/>}
+                        options={users.map((user) => user.email)}
+                        onChange={handlePresenter}
+                      />
+                    </TableCell>
+                  </TableRow>
 
-                <TableRow>
-                  <TableCell>Edit/Remove</TableCell>
-                  <TableCell >
-                    <AddTopicBtn addTopic={addTopic} />
-                    <RemoveTopicBtn handleClearFields={handleClearFields} />
-                  </TableCell>
-                </TableRow>
-                
-              </TableHead>
+                  <TableRow>
+                    <TableCell>Edit/Remove</TableCell>
+                    <TableCell>
+                      <AddTopicBtn addTopic={addTopic}/>
+                      <RemoveTopicBtn handleClearFields={handleClearFields}/>
+                    </TableCell>
+                  </TableRow>
+
+                </TableHead>
               </Table>
 
             <Table stickyHeader={true}>
@@ -154,13 +183,14 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
                 </TableRow>
               </TableHead>
               <TableBody>
+                {!existingEvent &&
                 <TableRow>
                   <TableCell>
-                    <AddTopicBtn addTopic={addTopic} />
-                    <RemoveTopicBtn handleClearFields={handleClearFields} />
+                    <AddTopicBtn addTopic={addTopic}/>
+                    <RemoveTopicBtn handleClearFields={handleClearFields}/>
                   </TableCell>
 
-                  <TableCell>
+                  <TableCell sx={{width: 180}}>
                     <Input
                       value={topic}
                       onChange={handleTopic}
@@ -168,14 +198,18 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
                     />
                   </TableCell>
 
-                  <TableCell>
-                    <Input
+                  <TableCell sx={{width: 180}}>
+                    <Autocomplete
+                      fullWidth
                       value={presenter}
+                      renderInput={(params) =>
+                        <TextField {...params} placeholder="Email" variant="standard" fullWidth/>}
+                      options={users.map((user) => user.email)}
                       onChange={handlePresenter}
-                      placeholder="Presenter"
                     />
                   </TableCell>
                 </TableRow>
+                }
 
                 {!!meetingTopics.length &&
                   meetingTopics.map((topicStored, topicIndex) => (
@@ -183,6 +217,7 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
                       topic={topicStored.topic}
                       key={topicIndex}
                       presenter={topicStored.presenter}
+                      removeActive={!existingEvent}
                       removeTopic={() => removeTopic(topicStored.topic,topicStored.presenter )}
                     ></Topic>
                   ))}
@@ -190,25 +225,26 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
             </Table>
           )}
 
-        {!meetingTopics.length && <NoAgenda />}
-      </DialogContent>
+          {!meetingTopics.length && <NoAgenda/>}
+        </DialogContent>
 
-      <Divider />
+        <Divider/>
 
-      <DialogActions>
-        <ActionButton color="error" onClick={handleClose} variant="contained">
-          Cancel
-        </ActionButton>
-        <ActionButton onClick={handleConfirm} variant="contained">
-          Confirm
-        </ActionButton>
-      </DialogActions>
-    </Dialog>
-
-    <ErrorSnackbar 
-    visibility={emptyFieldsError}
-    setVisibility={setEmptyFieldsError}
-    message={errorMessage} />
-  </>
+        <DialogActions>
+          <ActionButton color="error" onClick={handleClose} variant="contained">
+            Cancel
+          </ActionButton>
+          {!existingEvent &&
+          <ActionButton onClick={handleConfirm} variant="contained">
+            Confirm
+          </ActionButton>
+          }
+        </DialogActions>
+      </Dialog>
+      <ErrorSnackbar
+        visibility={emptyFieldsError}
+        setVisibility={setEmptyFieldsError}
+        message={errorMessage} />
+    </>
   );
 }
