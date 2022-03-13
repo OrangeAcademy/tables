@@ -26,7 +26,7 @@ const ViewMeeting = ({isBusy, upcomingEvent, seconds, getNextEventFunction}: Mee
           <Details isBusy={isBusy} upcomingEvent={upcomingEvent}/>
           <EndButton isBusy={isBusy} upcomingEvent={upcomingEvent} getNextEventFunction={getNextEventFunction}/>
         </ContentContainer>
-        <Calendar/>
+        <Calendar getNextEventFunction={getNextEventFunction} />
       </BackgroundContainer>
     </ThemeProvider>
   );

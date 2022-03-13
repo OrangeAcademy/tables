@@ -8,11 +8,8 @@ import dayjs from "dayjs";
 import interactionPlugin from "@fullcalendar/interaction";
 import CalendarStyle from "./Calendar.styles";
 
-
-
 const Calendar = () => {
 const eventsCalendar = useSelector(eventsSelector);
-
 
   const calculateDateDiff = (event: any) => {
     return dayjs(event.end).diff(dayjs(event.start), 'minutes')
@@ -24,12 +21,10 @@ const eventsCalendar = useSelector(eventsSelector);
     return (
       <Box sx={{flexDirection: direction}}>
         <b>{arg.event.extendedProps.subject}</b>
-        <span>{arg.event.extendedProps.attendees[0]}</span>
+        <span>{arg.event.extendedProps.userEmail}</span>
       </Box>
     )
   };
-
-
 
   return (
 

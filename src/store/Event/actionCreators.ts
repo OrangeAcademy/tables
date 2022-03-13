@@ -1,7 +1,7 @@
 import axios from "axios";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {IEvent} from "models/Event";
-import {DUMMY_PATH, MONGO_DB_PATH, SERVER_EVENTS_ROUTE} from "constants/paths";
+import {MONGO_DB_PATH, SERVER_EVENTS_ROUTE} from "constants/paths";
 
 export const fetchEvents = createAsyncThunk(
     'data/beta',
@@ -45,7 +45,8 @@ export const postEvents = createAsyncThunk(
 
 export const deleteEvent = createAsyncThunk(
   'events/deleteEvent',
-  async (id: number) => {
+  async (id: string) => {
+    console.log(id)
     return await fetch(`${SERVER_EVENTS_ROUTE}/${id}`, {
       method: 'DELETE',
     }).then(

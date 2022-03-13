@@ -80,13 +80,14 @@ interface ITopicUIProps {
   topic: string;
   presenter: string;
   removeTopic: () => void;
+  removeActive?: boolean;
 }
 
-export const Topic = ({ topic, presenter, removeTopic }: ITopicUIProps) => {
+export const Topic = ({ topic, presenter, removeTopic, removeActive }: ITopicUIProps) => {
   return (
     <TableRow>
       <TableCell>
-        <RemoveTopicBtn handleClearFields={removeTopic} />
+        {removeActive && <RemoveTopicBtn handleClearFields={removeTopic} /> }
       </TableCell>
 
       <TableCell>

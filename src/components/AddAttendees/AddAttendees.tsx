@@ -1,25 +1,23 @@
 // React imports
-import { useState } from "react";
+import React, {useEffect, useState} from "react";
 
 // Redux Imports
 import { setAttendee, removeAttende } from "store/NewMeeting/newMeeting";
 import { useSelector, useDispatch } from "react-redux";
 import { meetingsAttendeesSelector } from "store/NewMeeting/selectors";
 
-
-
-
 // MUI Imports
 import { useTheme } from '@mui/material/styles';
-import { Box , Button, Dialog,  DialogActions,  DialogContent, DialogTitle, useMediaQuery, Divider, 
-  IconButton, Input, Table, TableBody, TableCell, TableHead, Typography, TableRow, styled} from '@mui/material';
+import {
+  Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery, Divider,
+  IconButton, Input, Table, TableBody, TableCell, TableHead, Typography, TableRow, styled, Autocomplete, TextField
+} from '@mui/material';
 import { Close, Done, AddCircleOutline } from '@mui/icons-material';
 
 // Local imports
 import ErrorSnackbar from "./ErrorSnackbar";
-
-
-
+import {usersSelector} from "../../store/Users/selectors";
+import {IEvent} from "../../models/Event";
 
 interface IAddAttendeeBtn {
   addAttendee: () => void
@@ -112,14 +110,15 @@ const NoAttendees = () => {
 
 interface IAttendeeList {
   attendee: string,
-  removeAttendee: () => void
+  removeAttendee: () => void,
+  removeActive: boolean
 }
 
-const AttendeesList = ({attendee,removeAttendee}: IAttendeeList) => {
+const AttendeesList = ({attendee, removeAttendee, removeActive}: IAttendeeList) => {
   return (
     <TableRow>
       <TableCell>
-        <RemoveAttendeeBtn handleClearFields={removeAttendee} />
+        {removeActive && <RemoveAttendeeBtn handleClearFields={removeAttendee} /> }
       </TableCell>
 
       <TableCell>
@@ -133,6 +132,7 @@ const AttendeesList = ({attendee,removeAttendee}: IAttendeeList) => {
 interface IAddAttendeesProps {
   showAttendees: boolean;
   setShowAttendees: (val: boolean) => void;
+  existingEvent?: IEvent | undefined
 }
 
 const errorMessage = {
@@ -140,11 +140,12 @@ const errorMessage = {
   duplicate: "Oh no, this email is already in the list"
 }
 
-export default function AddAttendees({ showAttendees, setShowAttendees }: IAddAttendeesProps) {
+export default function AddAttendees({ showAttendees, setShowAttendees, existingEvent }: IAddAttendeesProps) {
   const theme = useTheme();
+  const users = useSelector(usersSelector);
   const hasReachedBp = useMediaQuery(theme.breakpoints.down('sm'));
   const attendeesStoredRedux = useSelector(meetingsAttendeesSelector);
-  const [localAttendee, setLocalAttendee] = useState('');
+  const [localAttendee, setLocalAttendee] = useState<string | null>(null);
   const [showEmailError, setShowEmailError] = useState(false);
   const [showDupeError, setShowDupeError] = useState(false);
 
@@ -152,7 +153,7 @@ export default function AddAttendees({ showAttendees, setShowAttendees }: IAddAt
   
   const handleClose = () => setShowAttendees(false);
 
-  const handleAttendee = (event: React.ChangeEvent<{value: string}>) => setLocalAttendee(event.target.value);
+  const handleAttendee = (_event: any, newValue: any) => setLocalAttendee(newValue);
 
   const handleClearFields = () => setLocalAttendee('');
 
@@ -169,27 +170,25 @@ export default function AddAttendees({ showAttendees, setShowAttendees }: IAddAt
 
 
   const addAttendee = () => {
-    if(attendeesStoredRedux.includes(localAttendee)) {
+    if(attendeesStoredRedux.includes(localAttendee!)) {
       setShowDupeError(true);
       return;
     }
 
-    if(!emailValidationRegex.test(localAttendee)) {
+    if(!emailValidationRegex.test(localAttendee!)) {
       setShowEmailError(true);
       return;
-    } 
+    }
 
     dispatch(setAttendee(localAttendee));
     handleClearFields();
-
   }
-
 
   return (
     <>
     <Dialog fullScreen={hasReachedBp} open={showAttendees} onClose={handleClose}>
       <HeaderContainer>
-        <Title>Add attendees</Title>
+        <Title>{existingEvent ? "View" : "Add"} attendees</Title>
         <CircleButton />
       </HeaderContainer>
 
@@ -197,21 +196,33 @@ export default function AddAttendees({ showAttendees, setShowAttendees }: IAddAt
         <Table stickyHeader={true}>
           <TableHeadStyled />
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <AddAttendeeBtn addAttendee={addAttendee}  />
-                <RemoveAttendeeBtn handleClearFields={handleClearFields} />
-              </TableCell>
+            {!existingEvent &&
+              <TableRow>
+                <TableCell>
+                  <AddAttendeeBtn addAttendee={addAttendee}/>
+                  <RemoveAttendeeBtn handleClearFields={handleClearFields}/>
+                </TableCell>
 
-              <TableCell>
-                <Input value={localAttendee} onChange={handleAttendee} placeholder="Attendee" />
-              </TableCell>
+                <TableCell sx={{width: 180}}>
+                  <Autocomplete
+                    fullWidth
+                    value={localAttendee}
+                    renderInput={(params) =>
+                      <TextField {...params} variant="standard" placeholder={'Attendee'} fullWidth/>}
+                    options={users.map((user) => user.email)}
+                    onChange={handleAttendee}
+                  />
+                </TableCell>
 
-            </TableRow>
-
+              </TableRow>
+            }
 
             {!!attendeesStoredRedux.length && attendeesStoredRedux.map( (attendeeStored, attendeeIndex) => (
-              <AttendeesList attendee={attendeeStored} key={attendeeIndex} removeAttendee={() => removeAttendee(attendeeStored)} ></ AttendeesList>
+              <AttendeesList
+                attendee={attendeeStored}
+                key={attendeeIndex}
+                removeAttendee={() => removeAttendee(attendeeStored)}
+                removeActive={!existingEvent}/>
               ))}
           
           </TableBody>
