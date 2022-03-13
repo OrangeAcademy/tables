@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useMemo} from "react";
 //MUI Imports
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -10,7 +10,7 @@ import {enUS} from 'date-fns/locale';
 
 import {useDispatch, useSelector} from "react-redux";
 import {setStartTime, setEndTime} from "store/NewMeeting/newMeeting";
-import {format} from "date-fns";
+import {addMinutes, format} from "date-fns";
 import {meetingsDurationSelector, meetingSelector} from "store/NewMeeting/selectors";
 import {useMediaQuery, useTheme} from "@mui/material";
 
@@ -64,18 +64,28 @@ const DateTimeValidation = () => {
 
     useEffect(() => {
 
-
         roundStart();
     }, []);
 
     const {start} = useSelector(meetingSelector);
-    const dateMin = () => {
+    const dateMin = useMemo(() => {
         if (start) {
             return new Date(start);
+
         } else {
             return new Date(new Date().getTime() + 30 * 60000);
         }
-    };
+    }, [start]);
+    const timeMin = useMemo(() => {
+        if (start) {
+            console.log(new Date(new Date(start).getTime()));
+
+            return addMinutes(new Date(new Date(start).getTime()),15);
+
+        } else {
+            return new Date(0, 0, 0, 8);
+        }
+    }, [start]);
     return (
 
         <Stack direction="row" marginTop="0.5rem" spacing={2}>
@@ -102,8 +112,8 @@ const DateTimeValidation = () => {
                     value={endDateValue}
                     minutesStep={5}
                     onChange={handleEnd}
-                    minDate={dateMin()}
-                    minTime={new Date(0, 0, 0, 8)}
+                    minDate={dateMin}
+                    minTime={timeMin}
                     maxTime={new Date(0, 0, 0, 18, 45)}
 
                 />

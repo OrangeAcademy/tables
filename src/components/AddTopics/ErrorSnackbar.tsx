@@ -16,7 +16,7 @@ const ErrorSnackbar = ({visibility, setVisibility, message}: IErrorSnackbar)  =>
     const showTimer = setTimeout(() => setVisibility(true), 2000 );
 
     return () => clearTimeout(showTimer);
-  })
+  },[])
 
   return (
     <Snackbar open={visibility} autoHideDuration={6000} onClose={()=>setVisibility(false)}>
