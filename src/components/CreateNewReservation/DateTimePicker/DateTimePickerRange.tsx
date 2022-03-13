@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from "react";
+import React, {useCallback, useEffect, useMemo} from "react";
 //MUI Imports
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -47,7 +47,7 @@ const DateTimeValidation = () => {
         setStartDateValue(timeValue);
     };
 
-    const roundStart = () => {
+    const roundStart = useCallback(() => {
         const coeff = 1000 * 60 * 5;
         const date = new Date();  //or use any other date
         const rounded = new Date(Math.round(date.getTime() / coeff) * coeff);
@@ -55,7 +55,7 @@ const DateTimeValidation = () => {
         const addMinutesStart = new Date(rounded.getTime() + 15 * 60000);
         setStartDateValue(addMinutesStart);
         setEndDateValue(addMinutesEnd);
-    };
+    }, [prefferedLength]);
 
     useEffect(() => {
         if (startDateValue) dispatch(setStartTime(format(startDateValue, 'yyyy-MM-dd\'T\'HH:mm:ss')));
@@ -65,7 +65,7 @@ const DateTimeValidation = () => {
     useEffect(() => {
 
         roundStart();
-    }, []);
+    }, [roundStart]);
 
     const {start} = useSelector(meetingSelector);
     const dateMin = useMemo(() => {
@@ -78,8 +78,6 @@ const DateTimeValidation = () => {
     }, [start]);
     const timeMin = useMemo(() => {
         if (start) {
-            console.log(new Date(new Date(start).getTime()));
-
             return addMinutes(new Date(new Date(start).getTime()),15);
 
         } else {

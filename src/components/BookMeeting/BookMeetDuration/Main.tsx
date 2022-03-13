@@ -30,7 +30,7 @@ interface IMeetingDurationProps {
 const MeetingDurationButtons = ({localSeconds}: IMeetingDurationProps) => {
 
   // Storing the user-selected meeting duration
-  const selectedDuration = useRef(MEETING_DURATIONS[0]);
+  // const selectedDuration = useRef(MEETING_DURATIONS[0]);
   const dispatch = useDispatch()
   // Sets the meeting duration to the value of the user-clicked button
   const setDuration = (index: number) => dispatch(setMeetingDuration(MEETING_DURATIONS[index]));

@@ -1,57 +1,92 @@
 
-import React, {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {Route, Routes} from "react-router-dom";
 import dayjs from "dayjs";
 import {IEvent, IPresenters} from "./models/Event";
 import {getEvents} from "./store/Event/actionCreators";
-import {setState} from "./store/StateRoom/stateRoomSlice";
+import {setRoomStatus, storeUpcomingEvent, setNextEventStart, setIsLessThan15Mins} from "./store/StateRoom/stateRoomSlice";
 import {useAppDispatch, useAppSelector} from "./hooks/redux";
-import MeetingAgenda from "./store/NewMeeting/newMeeting";
 
 // Local imports
 
 import BookMeeting from "./pages/BookMeeting";
 import ViewMeeting from "./pages/ViewMeeting";
 import PageNotFound from "./pages/404";
-import PopUpMeeting from "./pages/PopUpMeeting";
 
-import {FindUpcomingEvents} from "./utils/events.utils";
-import {eventsSelector} from "./store/Event/selectors";
-import {useSelector} from "react-redux";
+import { getClosestEvent } from "./utils/events.utils";
+import { useSelector } from "react-redux";
+import { nextEventStartSelector, roomStatusSelector } from "store/StateRoom/selectors";
+
+
+const controller = new AbortController();
+const upcomingEventInit = {
+  elementId: 0,
+  end: "",
+  occurrencesEnd: "",
+  start: "",
+  subject: "",
+  agenda: [],
+  presenters: Array<IPresenters>({
+    presenter: "",
+    topic: ""
+  }),
+  attendees: Array<string>("")
+}
 
 function App() {
+  const currentDay = dayjs();
   const dispatch = useAppDispatch();
-  const isBusyRoom = useAppSelector((state) => state.stateRoom.value);
-  const events = useSelector(eventsSelector)
+  const eventStartTime = useSelector(nextEventStartSelector);
+  const isBusyRoom = useSelector(roomStatusSelector);
   const [nextUpdate, setNextUpdate] = useState<string>("");
   const [time, setTime] = useState<number>(0);
-  let currentDay = dayjs();
+  const [upcomingEvent, setUpcomingEvent] = useState<IEvent>(upcomingEventInit);
+  const startTimeOfNextEvent = dayjs(useSelector(nextEventStartSelector)).diff(dayjs(), "seconds");
+  
+  const StateOfRoom = useCallback(() => {
+    const busyRoom = currentDay.isBetween(dayjs(upcomingEvent.start), dayjs(upcomingEvent.end));
+    dispatch(setRoomStatus(busyRoom));
+    return busyRoom;
+  }, [currentDay, dispatch, upcomingEvent.end, upcomingEvent.start])
 
-  const [upcomingEvent, setUpcomingEvent] = useState<IEvent>({
-    elementId: 0,
-    end: "",
-    occurrencesEnd: "",
-    start: "",
-    subject: "",
-    agenda: [],
-    presenters: Array<IPresenters>({
-      presenter: "",
-      topic: ""
-    }),
-    attendees: Array<string>("")
-  })
+  const NextUpdate = useCallback((isBusy: boolean) => {
+    if (!isBusy) {
+      setNextUpdate(upcomingEvent.start);
+    } else {
+      setNextUpdate(upcomingEvent.end);
+    }
+  }, [upcomingEvent.end, upcomingEvent.start])
 
-  const GetUpcomingEvent = () => {
-    dispatch(getEvents())
-      .unwrap()
-      .then((originalPromiseResult) => {
-        setUpcomingEvent(FindUpcomingEvents(originalPromiseResult))
-      })
-  }
+  const UpdateTime = useCallback((isBusy: boolean) => {
+    const currentDay = dayjs();
+    if (!upcomingEvent)
+      setTime(0);
+    if (isBusy) {
+      setTime(dayjs(upcomingEvent.end).diff(currentDay, 's'));
+      
+    } else {
+      setTime(dayjs(upcomingEvent.start).diff(currentDay, 's'))
+    }
+  },[upcomingEvent])
+
+
+
+  const GetUpcomingEvent = useCallback(async () => {
+    const events: IEvent[] = await dispatch(getEvents()).unwrap();
+    const nextMeeting = await getClosestEvent({ events });
+
+    setUpcomingEvent(nextMeeting);
+    dispatch(storeUpcomingEvent(nextMeeting));
+    dispatch(setNextEventStart(nextMeeting.start));
+
+    return nextMeeting;
+  },[dispatch])
 
   useEffect(() => {
     GetUpcomingEvent()
-  }, [])
+
+    return () => controller.abort()
+  }, [GetUpcomingEvent])
 
   useEffect(() => {
     if (upcomingEvent === undefined)
@@ -59,7 +94,7 @@ function App() {
     let isBusy = StateOfRoom()
     NextUpdate(isBusy)
     UpdateTime(isBusy)
-  }, [upcomingEvent])
+  }, [NextUpdate, StateOfRoom, UpdateTime, upcomingEvent])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -70,40 +105,40 @@ function App() {
     }, 1000);
     return () => clearInterval(interval);
 
-  }, [nextUpdate]);
+  }, [GetUpcomingEvent, nextUpdate]);
 
-  const StateOfRoom = () => {
-    let busyRoom: boolean;
-    busyRoom = currentDay.isBetween(dayjs(upcomingEvent.start), dayjs(upcomingEvent.end));
-    dispatch(setState(busyRoom));
-    return busyRoom;
-  }
 
-  const NextUpdate = (isBusy: boolean) => {
-    if (!isBusy) {
-      setNextUpdate(upcomingEvent.start);
+  const checkIfBusy = useCallback(() => {
+    if(!eventStartTime) return ;
+
+    const tillEventStart = dayjs(eventStartTime).diff(dayjs(), "minutes");
+
+    if( tillEventStart <= 15) {
+      dispatch(setIsLessThan15Mins(true));
     } else {
-      setNextUpdate(upcomingEvent.end);
+      dispatch(setIsLessThan15Mins(false));
     }
-  };
 
-  const UpdateTime = (isBusy: boolean) => {
-    if (!upcomingEvent)
-      setTime(0);
-    let currentDay = dayjs();
-    if (isBusy) {
-      setTime(dayjs(upcomingEvent.end).diff(currentDay, 's'));
+    if(tillEventStart <= 0) {
+      dispatch(setRoomStatus(true));
     } else {
-      setTime(dayjs(upcomingEvent.start).diff(currentDay, 's'))
+      dispatch(setRoomStatus(false));
     }
-  }
+
+
+     
+  }, [dispatch, eventStartTime])
+
+  useEffect(() => {
+    checkIfBusy();
+    setTime(startTimeOfNextEvent);
+  }, [checkIfBusy])
 
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<BookMeeting isBusy={isBusyRoom} upcomingEvent={upcomingEvent} seconds={time} timeFunction={UpdateTime}/>}/>
+        <Route path="/" element={<BookMeeting isBusy={isBusyRoom} seconds={time} timeFunction={UpdateTime}/>}/>
         <Route path="/view" element={<ViewMeeting isBusy={isBusyRoom} upcomingEvent={upcomingEvent} seconds={time} timeFunction={UpdateTime} getNextEventFunction={GetUpcomingEvent}/>}/>
-        <Route path="/meeting" element={<PopUpMeeting />}/>
         <Route path="*" element={<PageNotFound/>}/>
       </Routes>
     </div>

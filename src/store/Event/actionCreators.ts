@@ -1,7 +1,6 @@
 import axios from "axios";
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {IEvent} from "models/Event";
-import {DUMMY_PATH, MONGO_DB_PATH, SERVER_EVENTS_ROUTE} from "constants/paths";
+import {MONGO_DB_PATH, SERVER_EVENTS_ROUTE} from "constants/paths";
 import { NewMeeting } from "store/NewMeeting/newMeeting";
 
 export const fetchEvents = createAsyncThunk(

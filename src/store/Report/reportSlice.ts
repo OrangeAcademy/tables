@@ -17,7 +17,11 @@ export const reportSlice = createSlice({
     reducers: {
         setIssue(state, action) {
             state.reports = action.payload;
-        }
+        },
+        clearIssue: (state, _) => ({
+            ...state,
+            reports: []
+        })
     },
     extraReducers: {}
 })

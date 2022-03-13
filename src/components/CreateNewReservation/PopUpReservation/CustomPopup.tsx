@@ -17,17 +17,23 @@ import {
 import AddAttendees from "components/AddAttendees/AddAttendees";
 import AddTopics from "components/AddTopics/AddTopics";
 import Calendar from "components/Calendar/Calendar";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postEvents } from "store/Event/actionCreators";
+import { getEvents, postEvents } from "store/Event/actionCreators";
 import { clearReservation, NewMeeting, setSubject, setUserEmail } from "store/NewMeeting/newMeeting";
 import { meetingSelector } from "store/NewMeeting/selectors";
+import { SERVER_EVENTS_ROUTE } from "constants/paths";
+
 
 
 import DateTimeValidation from "../DateTimePicker/DateTimePickerRange";
 import ErrorSnackbar from "../../AddTopics/ErrorSnackbar";
 import {eventsSelector} from "../../../store/Event/selectors";
 import {isWithinInterval} from "date-fns";
+import { IEvent } from "models/Event";
+import { storeUpcomingEvent, setNextEventStart } from "store/StateRoom/stateRoomSlice";
+import { getClosestEvent } from "utils/events.utils";
+
 
 interface ICreateMeetingReservation {
     visibility: boolean;
@@ -53,11 +59,14 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
     const [showAgenda, setShowAgenda] = useState(false);
     const [showAttendees, setShowAttendees] = useState(false);
 
+    // Redux selectors
+    const {start, end, attendees, presenters} = useSelector(meetingSelector);
+    const storedEventsRedux = useSelector(eventsSelector);
+
     // Handlers
     const hanldeAgendaPopup = () => setShowAgenda(!showAgenda);
     const handleAttendeesPopup = () => setShowAttendees(!showAttendees);
     const eventsCalendar = useSelector(eventsSelector);
-    const {start, end, attendees, presenters} = useSelector(meetingSelector);
 
     const isConfirmDisabled = useMemo(() => {
         if (start && end) {
@@ -70,7 +79,7 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
             );
         }
 
-    }, [start, end]);
+    }, [start, end, eventsCalendar]);
 
 
     // const [emails] = useState([{label: "firstUser@mail.com"}, {label: "secondUser@mail.com"}, {label: "thirdUser@mail.com"}]);
@@ -85,9 +94,6 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
     const errorMessage = {
         emptyField: "Please make sure all fields are completed!",
     };
-
-
-
 
 
     const onEmailFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -115,7 +121,19 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
 
     };
 
-    console.log(inputError);
+    const GetUpcomingEvent = useCallback(() => {
+        setTimeout(async () => {
+        const events = await(await fetch(SERVER_EVENTS_ROUTE)).json();
+        const nextMeeting = await getClosestEvent({ events });
+    
+
+        dispatch(storeUpcomingEvent(nextMeeting));
+        dispatch(setNextEventStart(nextMeeting.start));
+    
+        return nextMeeting;
+        }, 1000);
+    }, [dispatch])
+
     const handleSubmit = () => {
 
         if (!inputEmail || !inputSubject) {
@@ -139,9 +157,20 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
         dispatch(setSubject(inputSubject));
 
         dispatch(postEvents(newReservation));
-        dispatch(clearReservation({}));
+
+
+        dispatch(getEvents());
+        
+        GetUpcomingEvent();
+
+        
         setVisibility(false);
     };
+
+    useEffect(()=>{
+        dispatch(clearReservation({}));
+    
+    }, [dispatch]);
 
     return (
         <>

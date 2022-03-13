@@ -8,7 +8,7 @@ import {eventAPI} from "../services/EventServices";
 const rootReducer = combineReducers({
     event:eventReducer,
     report:reportReducer,
-    stateRoom:stateRoomReducer,
+    roomState:stateRoomReducer,
     newMeeting: newMeetingReducer,
     [eventAPI.reducerPath]: eventAPI.reducer
 })

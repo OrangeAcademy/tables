@@ -1,9 +1,6 @@
-import React, {useEffect} from "react";
 import Button from "@mui/material/Button";
 import {styled} from "@mui/material";
 import {deleteEvent} from "../../../store/Event/actionCreators";
-import {useDispatch} from "react-redux";
-import {FindUpcomingEvents} from "../../../utils/events.utils";
 import {useAppDispatch} from "../../../hooks/redux";
 
 const MeetingEndButton = styled(Button)({
@@ -30,7 +27,7 @@ const EndButton = ({isBusy, upcomingEvent, getNextEventFunction}: any) => {
       })
   }
   if (isBusy) {
-    return (<MeetingEndButton onClick={() => DeleteEvent(upcomingEvent.elementId)}>End Now</MeetingEndButton>)
+    return (<MeetingEndButton onClick={() => DeleteEvent(upcomingEvent._id)}>End Now</MeetingEndButton>)
   } else return (<></>)
 }
 

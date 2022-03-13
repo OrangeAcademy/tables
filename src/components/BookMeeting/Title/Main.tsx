@@ -1,12 +1,7 @@
+import dayjs from "dayjs";
+import { useSelector } from "react-redux";
+import { roomLocationSelector, roomNameSelector, roomStatusSelector, nextEventStartSelector } from "store/StateRoom/selectors";
 import {TitleContainer, TitleText} from "./Partials/StyledTitle";
-
-// Props validation
-interface props {
-  location: string,
-  meetingRoom: string, 
-  isRoomAvailable?: boolean
-}
-
 
 /* ----------------------  Component  -------------------- */
 /* 
@@ -17,11 +12,17 @@ The Book Meeting page title (route-path: "/"), containing:
 
 */
 
-const Title = ({location,meetingRoom,isRoomAvailable}: props) => {
+const Title = () => {
+  const roomLocation = useSelector(roomLocationSelector);
+  const roomName = useSelector(roomNameSelector);
+  const isRoomBusy = useSelector(roomStatusSelector);
+  const nextEventStart = useSelector(nextEventStartSelector);
+
+
   return (
     <TitleContainer >
-      <TitleText>{`${location} - ${meetingRoom}`}</TitleText>
-      <TitleText>{isRoomAvailable ? `Free until 10:50` : `Busy`}</TitleText>
+      <TitleText>{`${roomLocation} - ${roomName}`}</TitleText>
+      <TitleText>{isRoomBusy ? `${roomName} is busy` : `Free until ${dayjs(nextEventStart).format('HH:mm')}` }</TitleText>
     </TitleContainer>
   );
 };

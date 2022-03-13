@@ -15,28 +15,45 @@ import ReportIssue from '../components/BookMeeting/ReportIssue/Main';
 import Timer from '../components/BookMeeting/Timer/Main';
 import Title from '../components/BookMeeting/Title/Main';
 import {MeetingDetails} from "../interfaces/MeetingDetails";
-import {Navigate} from "react-router";
+import { useNavigate} from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { IsLessThan15MinsSelector, roomStatusSelector } from "store/StateRoom/selectors";
 
-const BookMeeting = ({isBusy, upcomingEvent, seconds, timeFunction}: MeetingDetails) => {
-  let [localSeconds, setLocalSeconds] = useState(seconds)
-
+const BookMeeting = ({ seconds, timeFunction}: MeetingDetails) => {
+  const [localSeconds, setLocalSeconds] = useState(seconds);
+  const IsLessThan15Mins = useSelector(IsLessThan15MinsSelector);
+  const isBusy = useSelector(roomStatusSelector);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const interval = setInterval(() => {
       setLocalSeconds(localSeconds - 1);
+
     }, 1000);
     return () => clearInterval(interval)
-  }, [localSeconds])
+  }, [dispatch, localSeconds])
 
-  if (upcomingEvent && (isBusy || localSeconds < (15 * 60))) {
-    timeFunction(isBusy);
-    return <Navigate to="/view"/>
-  }
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    
+    if(IsLessThan15Mins) {
+      timeFunction(isBusy);
+      navigate('/view');
+    }
+
+    if (isBusy) {
+      timeFunction(isBusy);
+      navigate('/view');
+    }
+  }, [IsLessThan15Mins, isBusy, navigate, timeFunction])
+
+
   return (
     <ThemeProvider theme={bookMeetBreakpoints}>
       <BackgroundContainer>
         <Timer/>
-        <Title location={"Orange {kITchen}"} meetingRoom={"Agora"} isRoomAvailable={true}/>
+        <Title />
         <MeetingDurationButtons localSeconds={localSeconds}/>
         <ButtonMeeting/>
         <ReportIssue/>
