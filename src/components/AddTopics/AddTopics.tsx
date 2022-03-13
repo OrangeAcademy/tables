@@ -40,9 +40,9 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
 
   // Errors
   const [emptyFieldsError, setEmptyFieldsError] = useState(false);
-  const [duplicateError, setDuplicateError] = useState(false);
-  const closeEmptyFieldsError = () => setEmptyFieldsError(false);
-  const closeDuplicateError = () => setDuplicateError(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  // const closeEmptyFieldsError = () => setEmptyFieldsError(false);
+  // const closeDuplicateError = () => setErrorMessage(false);
 
 
   // Handlers
@@ -57,13 +57,13 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
     const isDupePresenter = !!meetingTopics.filter(meetingTopic => presenter === meetingTopic.presenter).length;
 
     if(isDupeTopic && isDupePresenter) {
-      setDuplicateError(true);
-      return;
+      setErrorMessage(errorMessages.duplicate);
+      setEmptyFieldsError(true);
     }
 
     if(!topic || !presenter) {
+      setErrorMessage(errorMessages.emptyField);
       setEmptyFieldsError(true);
-      return;
     }
 
     setMeetingTopics([...meetingTopics, {topic, presenter}]);
@@ -206,9 +206,9 @@ export default function AddTopic({ showAgenda, setShowAgenda }: IAddTopicProps) 
     </Dialog>
 
     <ErrorSnackbar 
-    visibility={duplicateError || emptyFieldsError} 
-    setVisibility={emptyFieldsError ? closeEmptyFieldsError : closeDuplicateError} 
-    message={emptyFieldsError ? errorMessages.emptyField: errorMessages.duplicate} />
+    visibility={emptyFieldsError}
+    setVisibility={setEmptyFieldsError}
+    message={errorMessage} />
   </>
   );
 }

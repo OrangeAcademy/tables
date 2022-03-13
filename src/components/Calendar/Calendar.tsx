@@ -12,7 +12,9 @@ import CalendarStyle from "./Calendar.styles";
 
 const Calendar = () => {
 const eventsCalendar = useSelector(eventsSelector);
-
+  const validTime = () => {
+    return { start: new Date() };
+  };
 
   const calculateDateDiff = (event: any) => {
     return dayjs(event.end).diff(dayjs(event.start), 'minutes')
@@ -40,6 +42,7 @@ const eventsCalendar = useSelector(eventsSelector);
       plugins={[timeGridDay, interactionPlugin]}
       initialView="timeGridDay"
       slotDuration="00:15:00"
+      validRange={validTime}
       weekends={true}
       scrollTime={dayjs().format('HH:mm:ss')}
       headerToolbar={{"end": 'prev,next'}}
