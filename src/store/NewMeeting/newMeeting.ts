@@ -6,13 +6,13 @@ export interface MeetingAgenda {
  export interface NewMeeting {
     userEmail: string | null;
     subject: string | null;
-    start: Date | null;
-    end: Date | null;
-    agenda: MeetingAgenda[];
+    start: Date | string | null;
+    end: Date | string  | null;
+    presenters: MeetingAgenda[];
     topic: string;
     presenter: string;
     attendees: string[];
-    duration: number| null;
+    duration?: number| null;
 }
 
 const initialState: NewMeeting = {
@@ -20,7 +20,7 @@ const initialState: NewMeeting = {
     subject: null,
     start: null,
     end: null,
-    agenda: [] as MeetingAgenda[],
+    presenters: [] as MeetingAgenda[],
     attendees: [],
     topic: '',
     presenter: '',
@@ -54,7 +54,7 @@ export const newMeetingSlice = createSlice({
         setAgenda(state, action) {
             return ({
                 ...state,
-                agenda: action.payload
+                presenters: action.payload
           
               })
         },

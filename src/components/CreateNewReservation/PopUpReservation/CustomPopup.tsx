@@ -17,12 +17,11 @@ import {
 import AddAttendees from "components/AddAttendees/AddAttendees";
 import AddTopics from "components/AddTopics/AddTopics";
 import Calendar from "components/Calendar/Calendar";
-import {IEvent} from "models/Event";
-import {memo, useMemo, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {postEvents} from "store/Event/actionCreators";
-import {clearReservation, setSubject, setUserEmail} from "store/NewMeeting/newMeeting";
-import {meetingSelector} from "store/NewMeeting/selectors";
+import { useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { postEvents } from "store/Event/actionCreators";
+import { clearReservation, NewMeeting, setSubject, setUserEmail } from "store/NewMeeting/newMeeting";
+import { meetingSelector } from "store/NewMeeting/selectors";
 
 
 import DateTimeValidation from "../DateTimePicker/DateTimePickerRange";
@@ -58,7 +57,7 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
     const hanldeAgendaPopup = () => setShowAgenda(!showAgenda);
     const handleAttendeesPopup = () => setShowAttendees(!showAttendees);
     const eventsCalendar = useSelector(eventsSelector);
-    const {start, end, attendees, agenda} = useSelector(meetingSelector);
+    const {start, end, attendees, presenters} = useSelector(meetingSelector);
 
     const isConfirmDisabled = useMemo(() => {
         if (start && end) {
@@ -87,7 +86,8 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
         emptyField: "Please make sure all fields are completed!",
     };
 
-    // const closeEmptyFieldsError = () => setInputError(false);
+
+
 
 
     const onEmailFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -123,15 +123,15 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
             return;
         }
 
-        const newReservation: IEvent = {
+        const newReservation: NewMeeting = {
             userEmail: inputEmail,
             subject: inputSubject,
+            topic: inputEmail,
+            presenter: inputSubject,
             start: start!.toString(),
             end: end!.toString(),
             attendees,
-            agenda,
-            presenters: [],
-            elementId: +new Date()
+            presenters,
         };
 
         // These 2 dispatches might be unecessary
