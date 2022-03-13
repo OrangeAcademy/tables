@@ -7,7 +7,7 @@ import { IEvent } from "models/Event";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postEvents } from "store/Event/actionCreators";
-import { clearReservation, setSubject, setUserEmail } from "store/NewMeeting/newMeeting";
+import { clearReservation, MeetingAgenda, NewMeeting, setSubject, setUserEmail } from "store/NewMeeting/newMeeting";
 import { meetingSelector } from "store/NewMeeting/selectors";
 
 
@@ -57,7 +57,7 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
     // dispatch(setSubject(event.target.value));
   };
 
-  const { start, end, attendees, agenda} = useSelector(meetingSelector);
+  const { start, end, attendees, presenters} = useSelector(meetingSelector);
 
   const handleSubmit = () => {
 
@@ -66,15 +66,15 @@ const CreateMeetingReservation = ({visibility, setVisibility}: ICreateMeetingRes
 
 
 
-    const newReservation: IEvent = {
+    const newReservation: NewMeeting = {
       userEmail: inputEmail,
       subject: inputSubject,
+      topic: inputSubject,
+      presenter: inputEmail,
       start: start!.toString(),
       end: end!.toString(),
       attendees,
-      agenda,
-      presenters: [],
-      elementId: +new Date()
+      presenters,
   };
 
     // These 2 dispatches might be unecessary 

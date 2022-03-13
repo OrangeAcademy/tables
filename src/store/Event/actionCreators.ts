@@ -2,13 +2,14 @@ import axios from "axios";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {IEvent} from "models/Event";
 import {DUMMY_PATH, MONGO_DB_PATH, SERVER_EVENTS_ROUTE} from "constants/paths";
+import { NewMeeting } from "store/NewMeeting/newMeeting";
 
 export const fetchEvents = createAsyncThunk(
     'data/beta',
     async (_, thunkAPI) => {
         try {
             console.log('events are fetched');
-            const {data} = await axios.get<IEvent[]>(MONGO_DB_PATH)
+            const {data} = await axios.get<NewMeeting[]>(MONGO_DB_PATH)
             return data;
         } catch (e) {
             return thunkAPI.rejectWithValue("Some error on fetching API")
@@ -28,7 +29,7 @@ export const getEvents = createAsyncThunk(
 
 export const postEvents = createAsyncThunk(
   'events/postEvents',
-  async (event: IEvent) => {
+  async (event: NewMeeting) => {
     await fetch(SERVER_EVENTS_ROUTE, {
       method: 'POST',
       headers: {
