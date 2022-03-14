@@ -13,11 +13,11 @@ import {setStartTime, setEndTime} from "store/NewMeeting/newMeeting";
 import {addMinutes, format} from "date-fns";
 import {meetingsDurationSelector, meetingSelector} from "store/NewMeeting/selectors";
 import {useMediaQuery, useTheme} from "@mui/material";
-import {IEvent} from "../../../models/Event";
+// import {IEvent} from "../../../models/Event";
 
-interface IExistingEvent {
-  existingEvent?: IEvent | undefined
-}
+// interface IExistingEvent {
+//   existingEvent?: IEvent | undefined
+// }
 
 // export interface IDateTimeValidation extends IChosenMeetingDateTime, IChosenMeetingLength {
 

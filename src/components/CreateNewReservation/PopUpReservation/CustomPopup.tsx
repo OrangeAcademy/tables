@@ -20,11 +20,11 @@ import AddTopics from "components/AddTopics/AddTopics";
 import Calendar from "components/Calendar/Calendar";
 
 import React, {useMemo, useCallback, useState, useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {getEvents, postEvents} from "store/Event/actionCreators";
 import {clearReservation, NewMeeting, setSubject, setUserEmail, setAttendees} from "store/NewMeeting/newMeeting";
 import {meetingSelector} from "store/NewMeeting/selectors";
-import {useAppDispatch, useAppSelector} from "hooks/redux";
+import {useAppDispatch} from "hooks/redux";
 import {deleteEvent} from "store/Event/actionCreators";
 import {SERVER_EVENTS_ROUTE} from "constants/paths";
 

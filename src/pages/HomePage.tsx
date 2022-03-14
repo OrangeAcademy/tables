@@ -123,10 +123,8 @@ function HomePage() {
 
     if( tillEventStart < (15 * 60)) {
       dispatch(setIsLessThan15Mins(true));
-      console.log('RUN in HOMEPAGE. set to true');
     } else if( tillEventStart >= (15 * 60)){
       dispatch(setIsLessThan15Mins(false));
-      console.log('RUN in HOMEPAGE. set to false');
     }
 
     if(tillEventStart <= 0) {
