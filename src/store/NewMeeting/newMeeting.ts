@@ -67,6 +67,12 @@ export const newMeetingSlice = createSlice({
         setAttendee(state,action){
             state.attendees.push(action.payload)
         },
+        setAttendees(state,action){
+            return ({
+                ...state,
+                attendees: action.payload
+            })
+        },
         removeAttende(state, action) {
             return ({
                 ...state,
@@ -90,6 +96,7 @@ export const {
     setStartTime,setEndTime, setAgenda,
     setTopic,setPresenter,
     setAttendee,
+    setAttendees,
     removeAttende,
     clearReservation
 } = newMeetingSlice.actions;

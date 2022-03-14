@@ -47,7 +47,7 @@ export default function Details(props: any) {
           <Box style={titleMeeting.div}> Meeting <strong><i>{upcomingEvent.subject}</i></strong></Box>
           <Box style={authorMeeting.div}>
             <Box> <PersonIcon style={userIcon}> </PersonIcon></Box>
-            <Box style={userNameAuthor.div}>{upcomingEvent.attendees[0]}</Box>
+            <Box style={userNameAuthor.div}>{upcomingEvent.userEmail}</Box>
           </Box>
         </Box>)
         :

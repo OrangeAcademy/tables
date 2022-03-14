@@ -1,7 +1,6 @@
 import { MeetingAgenda } from "store/NewMeeting/newMeeting"
 
 export interface IEvent{
-    _id?: number,
     id?:string,
     alias?: string,
     attendees: Array<string>
@@ -10,7 +9,7 @@ export interface IEvent{
     buildingName?: string,
     changeKey?: string,
     dayNames?: Array<string>,
-    elementId: number,
+    elementId?: number,
     end: string,
     externalUser?: boolean,
     floorNumber?: number,
