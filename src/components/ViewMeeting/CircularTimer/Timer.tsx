@@ -24,6 +24,7 @@ function CircularTimer() {
 
   const [ttlSec, setTtlSec] = useState<number | null>(null);
   const [progress, setProgress] = useState<number | null>(null);
+  const [relativeTime, setRelativeTime] =  useState<string | null>(null);
 
 
   const normalise = () => (progress&&ttlSec) ? progress * 100 / ttlSec : 100;
@@ -56,12 +57,15 @@ function CircularTimer() {
 
     if(nextEventStart && timeToNextEventStart >= 2) {
       setTtlSec(timeToNextEventStart);
+      setRelativeTime(nextEventStart);
       setProgress((ttlSec));
       dispatch(setRoomStatus(false));
     }
 
-    if(nextEventStart && timeToNextEventStart <= 1) {
+    if(nextEventStart && timeToNextEventStart < 2) {
       setTtlSec(timeToNextEventEnd);
+      nextEventEnd && setRelativeTime(nextEventEnd?.toString());
+      console.log(nextEventEnd?.toString())
       dispatch(setRoomStatus(true));
       setProgress((ttlSec));
     }
@@ -82,24 +86,25 @@ function CircularTimer() {
   useEffect(() => {
     const timer = setInterval(() => {
 
-      if(!ttlSec) {
+      if(!Number.isInteger(ttlSec)) {
+        totalSecToEvent()
         return;
       }
 
 
-      if(!progress || progress <= 1) {
+      if(Number.isInteger(progress) && progress! <= 1) {
         totalSecToEvent();
         return;
       }
 
-      if(progress) {
-        setProgress(progress - 1);
+      if(Number.isInteger(progress)) {
+        setProgress(dayjs(relativeTime).diff(dayjs(), "seconds"));
         return;
       }
     }, 1000)
 
     return () => clearInterval(timer);
-  }, [progress, totalSecToEvent, ttlSec])
+  }, [progress, relativeTime, totalSecToEvent, ttlSec])
 
   return (
    <>

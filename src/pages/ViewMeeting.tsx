@@ -30,7 +30,7 @@ const ViewMeeting = ({isBusy, upcomingEvent, seconds, getNextEventFunction}: Mee
     // navigate('/');
     return;
   }
-console.log('RENDER');
+
   if(secondsToEvent <= 15 * 60) {
     dispatch(getEvents());
     dispatch(setRoomStatus(true))
@@ -43,7 +43,7 @@ console.log('RENDER');
     // navigate('/');
     return;
   }
- }, [upcomingEvent])
+ }, [dispatch, isBusy, nextEvent, seconds, secondsToEvent, upcomingEvent])
 
 
   return (
