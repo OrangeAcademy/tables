@@ -13,6 +13,7 @@ interface Timer {
 function CircularTimer({ timeForProgressBar, seconds }:Timer) {
   const normalise = (value:any) => value * 100 / timeForProgressBar;
   const largeScreen = useMediaQuery((theme:any) => theme.breakpoints.down('tablet'));
+
   return (
     <div
       style={{

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import PersonIcon from '@mui/icons-material/Person';
+import { useSelector } from "react-redux";
+import { nextEventSelector } from "store/StateRoom/selectors";
 
 const main: any = {
   div: {
@@ -38,24 +40,37 @@ const userIcon: any = {
 }
 
 export default function Details(props: any) {
-  const {upcomingEvent} = props;
+  // const {upcomingEvent} = props;  
+  const nextEventSelected = useSelector(nextEventSelector);
+  const [eventParticipants, setEventParticipant] = useState('');
+
+  useEffect(() => {
+    if(nextEventSelected && nextEventSelected.attendees.length) {
+      const allParticipants = `${nextEventSelected.userEmail}, ${nextEventSelected.attendees.join(",")}`;
+      setEventParticipant(allParticipants);
+    } else if(nextEventSelected && nextEventSelected.userEmail) {
+      setEventParticipant(nextEventSelected.userEmail);
+    }
+  }, [nextEventSelected])
 
   return (
     <>
-      {props.isBusy ?
+      {props.isBusy && nextEventSelected ?
         (<Box style={main.div}>
-          <Box style={titleMeeting.div}> Meeting <strong><i>{upcomingEvent.subject}</i></strong></Box>
+          <Box style={titleMeeting.div}> Meeting <strong><i>{nextEventSelected.subject}</i></strong></Box>
           <Box style={authorMeeting.div}>
             <Box> <PersonIcon style={userIcon}> </PersonIcon></Box>
-            <Box style={userNameAuthor.div}>{upcomingEvent.userEmail}</Box>
+            <Box style={userNameAuthor.div}>{eventParticipants}</Box>
           </Box>
         </Box>)
-        :
+        : !props.isBusy && nextEventSelected 
+        ?
         (<Box style={main.div}>
           <Box style={titleMeeting.div}>
-            Meeting <strong><i>{upcomingEvent.subject}</i></strong> will start soon
+            Meeting <strong><i>{nextEventSelected.subject}</i></strong> will start soon
           </Box>
         </Box>)
+        : null
       }
     </>
   );

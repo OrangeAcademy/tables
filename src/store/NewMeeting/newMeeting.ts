@@ -80,9 +80,11 @@ export const newMeetingSlice = createSlice({
             })
         },
         clearReservation(state, _) {
+            const prevState = state;
             return ({
                 ...state,
-                ...initialState
+                ...initialState,
+                duration: prevState.duration
             })
         }
     },

@@ -20,10 +20,22 @@ interface IGetClosestEvent {
   events?: IEvent[]
 }
 
-
-
+const upcomingEventInit = {
+  elementId: 0,
+  end: new Date(new Date().getFullYear() + 1, 11, 31).toString(),
+  start: new Date(new Date().getFullYear() + 1, 11, 31).toString(),
+  occurrencesEnd: "",
+  subject: "",
+  agenda: [],
+  presenters: Array<IPresenters>({
+    presenter: "",
+    topic: ""
+  }),
+  attendees: Array<string>("")
+}
 export const getClosestEvent = async ({ events } : IGetClosestEvent) => {
-  const timeNow = dayjs();
+  try {
+    const timeNow = dayjs();
 
   if(!events) return initialState;
   // Sort event date and time [ FROM closest to present date and time TO furthest from now ] 
@@ -36,6 +48,10 @@ export const getClosestEvent = async ({ events } : IGetClosestEvent) => {
   });
 
   return upcomingEvent;
+  } catch(e) {
+    console.log('No upcoming events');
+    return upcomingEventInit
+  }
   
 }
 

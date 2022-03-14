@@ -33,7 +33,7 @@ interface props {
 const BookMeetingBtn = ({ localSeconds, duration, setDuration, index }: props) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const durationRedux = useSelector(meetingsDurationSelector);
-    const eventStartTime = useSelector(nextEventStartSelector);
+  const eventStartTime = useSelector(nextEventStartSelector);
   const dispatch = useDispatch();
 
   const handleClick = () => {
@@ -46,6 +46,9 @@ const BookMeetingBtn = ({ localSeconds, duration, setDuration, index }: props) =
     borderColor: "gray",
     boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.95)',
     color: '#75726c',
+    "&:hover": {
+      backgroundColor: '#fef9e5',
+    }
   }) : null;
   // const navigate = useNavigate();
   const checkIfBusy = useCallback(() => {
@@ -53,24 +56,22 @@ const BookMeetingBtn = ({ localSeconds, duration, setDuration, index }: props) =
 
     const tillEventStart = dayjs(eventStartTime).diff(dayjs(), "minutes");
 
-    if(duration >= tillEventStart){ 
-      return setIsDisabled(true)
+    if(duration > tillEventStart){ 
+      setIsDisabled(true)
+    } else {
+      setIsDisabled(false);
     }
 
-    if(tillEventStart - 1 <= 15) {
-      window.location.reload();
-      dispatch(setIsLessThan15Mins(true));
-    }
+    // if(tillEventStart < 15) {
+    //   dispatch(setIsLessThan15Mins(true));
+    // }
 
-    return setIsDisabled(false);
+
      
-  }, [dispatch, duration, eventStartTime])
+  }, [duration, eventStartTime])
 
   useEffect(() => {
     checkIfBusy();
-
-
-
   }, [checkIfBusy, localSeconds])
 
   return (

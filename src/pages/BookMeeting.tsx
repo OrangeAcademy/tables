@@ -15,15 +15,15 @@ import ReportIssue from '../components/BookMeeting/ReportIssue/Main';
 import Timer from '../components/BookMeeting/Timer/Main';
 import Title from '../components/BookMeeting/Title/Main';
 import {MeetingDetails} from "../interfaces/MeetingDetails";
-import { useNavigate} from "react-router";
+// import { useNavigate} from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { IsLessThan15MinsSelector, roomStatusSelector } from "store/StateRoom/selectors";
 
 const BookMeeting = ({ seconds, timeFunction}: MeetingDetails) => {
+  const dispatch = useDispatch();
   const [localSeconds, setLocalSeconds] = useState(seconds);
   const IsLessThan15Mins = useSelector(IsLessThan15MinsSelector);
   const isBusy = useSelector(roomStatusSelector);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,20 +33,17 @@ const BookMeeting = ({ seconds, timeFunction}: MeetingDetails) => {
     return () => clearInterval(interval)
   }, [dispatch, localSeconds])
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   
   useEffect(() => {
     
-    if(IsLessThan15Mins) {
+    if(IsLessThan15Mins || isBusy) {
       timeFunction(isBusy);
-      navigate('/view');
+      // navigate('/view');
     }
 
-    if (isBusy) {
-      timeFunction(isBusy);
-      navigate('/view');
-    }
-  }, [IsLessThan15Mins, isBusy, navigate, timeFunction])
+
+  }, [IsLessThan15Mins, isBusy, timeFunction])
 
 
   return (

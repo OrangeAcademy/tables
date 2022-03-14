@@ -23,12 +23,20 @@ const EndButton = ({isBusy, upcomingEvent, getNextEventFunction}: any) => {
     dispatch(deleteEvent(id))
       .unwrap()
       .then(() => {
-        getNextEventFunction()
+        getNextEventFunction();
+        window.location.reload();
       })
   }
-  if (isBusy) {
-    return (<MeetingEndButton onClick={() => DeleteEvent(upcomingEvent._id)}>End Now</MeetingEndButton>)
-  } else return (<></>)
+
+  return (
+    <>
+      {isBusy 
+      ? <MeetingEndButton onClick={() => DeleteEvent(upcomingEvent._id)}>End Now</MeetingEndButton> 
+      : null
+    }
+    </>
+  )
+
 }
 
 export default EndButton;

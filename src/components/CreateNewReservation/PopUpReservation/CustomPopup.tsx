@@ -132,9 +132,13 @@ const CreateMeetingReservation = (
       const events = await (await fetch(SERVER_EVENTS_ROUTE)).json();
       const nextMeeting = await getClosestEvent({events});
 
+      try{
+        dispatch(storeUpcomingEvent(nextMeeting));
 
-      dispatch(storeUpcomingEvent(nextMeeting));
-      dispatch(setNextEventStart(nextMeeting.start));
+        dispatch(setNextEventStart(nextMeeting.start));
+      } catch(e) {
+        console.log('No events');
+      }
 
       return nextMeeting;
     }, 1000);
@@ -163,9 +167,10 @@ const CreateMeetingReservation = (
     dispatch(setSubject(inputSubject));
 
     dispatch(postEvents(newReservation));
-    setVisibility(false);
     dispatch(getEvents());
     GetUpcomingEvent();
+    setVisibility(false);
+ 
   };
 
   useEffect(() => {
@@ -175,7 +180,10 @@ const CreateMeetingReservation = (
       dispatch(setAttendees(existingEvent.attendees));
     }
 
-    dispatch(getUsers())
+    dispatch(getUsers());
+    dispatch(getEvents());
+    GetUpcomingEvent();
+
   }, [])
 
   useEffect(() => {
@@ -187,8 +195,9 @@ const CreateMeetingReservation = (
     dispatch(deleteEvent(id))
       .unwrap()
       .then(() => {
-        setVisibility(false)
-        getNextEventFunction()
+        setVisibility(false);
+        getNextEventFunction();
+        window.location.reload();
       })
   }
 
@@ -221,7 +230,7 @@ const CreateMeetingReservation = (
                              onChange={onSubjectFieldChange}
                              label="Meeting Subject" margin="dense"/>
                 </FormControl>
-                <DateTimeValidation existingEvent={existingEvent}/>
+                <DateTimeValidation />
               </Box>
 
               <DialogActions sx={{p: 0}}>
@@ -257,7 +266,7 @@ const CreateMeetingReservation = (
                   ? <Button variant="contained" color="error" fullWidth
                             onClick={() => deleteEventExistingEvent(existingEvent.id!)}>Delete</Button>
                   :
-                  <Button variant="contained" color="primary" fullWidth onClick={() => handleSubmit()}>Confirm</Button>
+                  <Button variant="contained" disabled={isConfirmDisabled} color="primary" fullWidth onClick={() => handleSubmit()}>Confirm</Button>
                 }
               </DialogActions>
             </Stack>

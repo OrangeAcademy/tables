@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IEvent } from "models/Event";
+import { IEvent, IPresenters } from "models/Event";
 import { NewMeeting } from "store/NewMeeting/newMeeting";
 
 export interface IRoomState {
@@ -12,6 +12,22 @@ export interface IRoomState {
   upcomingEvent: NewMeeting | IEvent | null
 }
 
+
+
+const upcomingEventInit = {
+  elementId: 0,
+  end: new Date(new Date().getFullYear() + 1, 11, 31).toString(),
+  start: new Date(new Date().getFullYear() + 1, 11, 31).toString(),
+  occurrencesEnd: "",
+  subject: "",
+  agenda: [],
+  presenters: Array<IPresenters>({
+    presenter: "",
+    topic: ""
+  }),
+  attendees: Array<string>("")
+}
+
 const initialState: IRoomState = {
   roomLocation: "Orange {kITchen}",
   roomName: 'Agora',
@@ -19,7 +35,7 @@ const initialState: IRoomState = {
   nextEventStart: '',
   isBusy: false,
   isLessThan15Mins: false,
-  upcomingEvent: null
+  upcomingEvent: upcomingEventInit
 }
 
 export const stateRoomSlice = createSlice({
