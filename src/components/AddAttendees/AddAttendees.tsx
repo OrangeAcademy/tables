@@ -1,5 +1,5 @@
 // React imports
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 
 // Redux Imports
 import {setAttendee, removeAttende} from "store/NewMeeting/newMeeting";
@@ -10,7 +10,7 @@ import {meetingsAttendeesSelector} from "store/NewMeeting/selectors";
 // MUI Imports
 import {useTheme} from '@mui/material/styles';
 import {
-  Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery, Divider,
+  Box, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery, Divider,
   IconButton, Input, Table, TableBody, TableCell, TableHead, Typography, TableRow, styled, Autocomplete, TextField
 } from '@mui/material';
 import {Close, Done, AddCircleOutline} from '@mui/icons-material';
@@ -19,6 +19,7 @@ import {Close, Done, AddCircleOutline} from '@mui/icons-material';
 import ErrorSnackbar from "./ErrorSnackbar";
 import {usersSelector} from "../../store/User/selectors";
 import {IEvent} from "../../models/Event";
+import {ActionButton} from "../AddTopics/AddTopics.styled";
 
 interface IAddAttendeeBtn {
   addAttendee: () => void
@@ -49,18 +50,6 @@ const RemoveAttendeeBtn = ({handleClearFields}: IRemoveAttendeeBtn) => {
     <RemoveButton onClick={handleClearFields}>
       <Close/>
     </RemoveButton>
-  );
-};
-
-const CircleButton = () => {
-  const Btn = styled(IconButton)({
-    color: '#000099',
-  });
-
-  return (
-    <Btn size="large">
-      <AddCircleOutline fontSize="inherit"/>
-    </Btn>
   );
 };
 
@@ -151,7 +140,6 @@ export default function AddAttendees({showAttendees, setShowAttendees, existingE
   const [showDupeError, setShowDupeError] = useState(false);
 
   const dispatch = useDispatch();
-
   const handleClose = () => setShowAttendees(false);
 
   const handleAttendee = (_event: any, newValue: any) => setLocalAttendee(newValue);
@@ -180,19 +168,16 @@ export default function AddAttendees({showAttendees, setShowAttendees, existingE
       setShowEmailError(true);
       return;
     }
-
     dispatch(setAttendee(localAttendee));
     handleClearFields();
 
   }
 
-
   return (
     <>
       <Dialog fullScreen={hasReachedBp} open={showAttendees} onClose={handleClose}>
-        <HeaderContainer>
+        <HeaderContainer sx={{display: 'flex', justifyContent: 'center'}}>
           <Title>{existingEvent ? "View" : "Add"} attendees</Title>
-          <CircleButton/>
         </HeaderContainer>
 
         <DialogContent>
@@ -206,7 +191,7 @@ export default function AddAttendees({showAttendees, setShowAttendees, existingE
                   <RemoveAttendeeBtn handleClearFields={handleClearFields}/>
                 </TableCell>
 
-                <TableCell sx={{width: 180}}>
+                <TableCell sx={{width: '14rem'}}>
                   <Autocomplete
                     fullWidth
                     value={localAttendee}
@@ -223,7 +208,6 @@ export default function AddAttendees({showAttendees, setShowAttendees, existingE
               </TableRow>
               }
 
-
               {!!attendeesStoredRedux.length && attendeesStoredRedux.map((attendeeStored, attendeeIndex) => (
                 <AttendeesList
                   attendee={attendeeStored}
@@ -232,22 +216,33 @@ export default function AddAttendees({showAttendees, setShowAttendees, existingE
                   removeActive={!existingEvent}/>
               ))}
 
+              {existingEvent && !!existingEvent.attendees.length && existingEvent.attendees.map((attendeeStored, attendeeIndex) => (
+                <AttendeesList
+                  attendee={attendeeStored}
+                  key={attendeeIndex}
+                  removeAttendee={() => removeAttendee(attendeeStored)}
+                  removeActive={!existingEvent}/>
+              ))}
             </TableBody>
           </Table>
-          {!attendeesStoredRedux.length && <NoAttendees/>}
-        </DialogContent>
+          {!attendeesStoredRedux.length || (existingEvent && !!existingEvent.attendees.length) && <NoAttendees/>}
 
+        </DialogContent>
         <Divider/>
 
-        <DialogActions>
-          <Button fullWidth onClick={handleClose} variant="contained">
-            Confirm and Close
-          </Button>
+        <DialogActions  sx={{justifyContent: 'center'}}>
+          <ActionButton color="error" onClick={handleClose} variant="contained">
+            Close
+          </ActionButton>
+          {!existingEvent &&
+          <ActionButton onClick={handleClose} variant="contained">
+            Confirm
+          </ActionButton>
+          }
         </DialogActions>
       </Dialog>
       <ErrorSnackbar visibility={showEmailError} message={errorMessage.email} setVisibility={closeEmailError}/>
       <ErrorSnackbar visibility={showDupeError} message={errorMessage.duplicate} setVisibility={closeDupeError}/>
-
     </>
   );
 }

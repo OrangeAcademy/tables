@@ -1,22 +1,21 @@
 // React imports
-import React, {useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 // Redux Imports
-import { setAgenda } from "store/NewMeeting/newMeeting";
-import { useSelector, useDispatch } from "react-redux";
-import { meetingsAgendaSelector } from "store/NewMeeting/selectors";
+import {setAgenda} from "store/NewMeeting/newMeeting";
+import {useSelector, useDispatch} from "react-redux";
+import {meetingsAgendaSelector} from "store/NewMeeting/selectors";
 
 // MUI Imports
 import {useTheme} from '@mui/material/styles';
 import {
   Dialog, DialogActions, DialogContent, useMediaQuery, Divider, Input, Table, TableBody,
-  TableCell, TableHead, TableRow, TextField, Autocomplete, FormControl
+  TableCell, TableHead, TableRow, TextField, Autocomplete
 } from '@mui/material';
 
 import {
   AddTopicBtn,
   RemoveTopicBtn,
-  CircleButton,
   ActionButton,
   HeaderContainer,
   Title,
@@ -27,7 +26,6 @@ import ErrorSnackbar from "./ErrorSnackbar";
 
 import {usersSelector} from "../../store/User/selectors";
 import {IEvent} from "../../models/Event";
-import {string} from "prop-types";
 
 interface IAddTopicProps {
   showAgenda: boolean;
@@ -75,44 +73,50 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
     if (existingEvent) {
       setMeetingTopics(existingEvent.presenters);
     }
-  });
+    setErrorMessage(errorMessages.emptyField);
+    setEmptyFieldsError(true);
+  }, []);
 
   // // Adds topic to component state if topic and presenter are not empty
   const addTopic = () => {
     const isDupeTopic = !!meetingTopics.filter(meetingTopic => topic === meetingTopic.topic).length;
     const isDupePresenter = !!meetingTopics.filter(meetingTopic => presenter === meetingTopic.presenter).length;
 
-    if(isDupeTopic && isDupePresenter) {
+    if (isDupeTopic && isDupePresenter) {
       setErrorMessage(errorMessages.duplicate);
       setEmptyFieldsError(true);
     }
 
-    if(!topic || !presenter) {
+    if (!topic || !presenter) {
       setErrorMessage(errorMessages.emptyField);
       setEmptyFieldsError(true);
     }
 
-    setMeetingTopics([...meetingTopics, {topic, presenter:presenter!}]);
+    setMeetingTopics([...meetingTopics, {topic, presenter: presenter!}]);
 
     handleClearFields();
 
   };
-  
+
   // // Removes topic from component state, based on given topic r_id (redux id)
   const removeTopic = (topic: string, presenter: string) => setMeetingTopics(meetingTopics.filter(meetingTopic => meetingTopic.topic !== topic && meetingTopic.presenter !== presenter));
 
   // Stores topics in ReduxStore and closes the popup
-  const handleConfirm = () => { 
+  const handleConfirm = () => {
     dispatch(setAgenda(meetingTopics));
-    handleClose();
+    if (!meetingTopics.length) {
+      setErrorMessage(errorMessages.emptyField);
+      setEmptyFieldsError(true);
+    } else {
+      handleClose()
+    }
   }
 
   return (
     <>
       <Dialog fullScreen={hasReachedBp} open={showAgenda} onClose={handleClose}>
-        <HeaderContainer>
+        <HeaderContainer sx={{display: 'flex', justifyContent: 'center'}}>
           <Title>{existingEvent ? "View" : "Add"} topics</Title>
-          <CircleButton/>
         </HeaderContainer>
 
         <DialogContent>
@@ -159,9 +163,9 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
                 </TableHead>
               </Table>
 
-            <Table stickyHeader={true}>
-              <TableBody>
-                {!!meetingTopics.length &&
+              <Table stickyHeader={true}>
+                <TableBody>
+                  {!!meetingTopics.length &&
                   meetingTopics.map((topicStored, topicIndex) => (
                     <Topic
                       topic={topicStored.topic}
@@ -170,8 +174,8 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
                       removeTopic={() => removeTopic(topicStored.topic, topicStored.presenter)}
                     ></Topic>
                   ))}
-              </TableBody>
-            </Table>
+                </TableBody>
+              </Table>
             </>
           ) : (
             <Table stickyHeader={true}>
@@ -198,7 +202,7 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
                     />
                   </TableCell>
 
-                  <TableCell sx={{width: 180}}>
+                  <TableCell sx={{width: '19rem'}}>
                     <Autocomplete
                       fullWidth
                       value={presenter}
@@ -212,15 +216,15 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
                 }
 
                 {!!meetingTopics.length &&
-                  meetingTopics.map((topicStored, topicIndex) => (
-                    <Topic
-                      topic={topicStored.topic}
-                      key={topicIndex}
-                      presenter={topicStored.presenter}
-                      removeActive={!existingEvent}
-                      removeTopic={() => removeTopic(topicStored.topic,topicStored.presenter )}
-                    ></Topic>
-                  ))}
+                meetingTopics.map((topicStored, topicIndex) => (
+                  <Topic
+                    topic={topicStored.topic}
+                    key={topicIndex}
+                    presenter={topicStored.presenter}
+                    removeActive={!existingEvent}
+                    removeTopic={() => removeTopic(topicStored.topic, topicStored.presenter)}
+                  ></Topic>
+                ))}
               </TableBody>
             </Table>
           )}
@@ -230,10 +234,11 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
 
         <Divider/>
 
-        <DialogActions>
+        <DialogActions sx={{justifyContent: 'center'}}>
           <ActionButton color="error" onClick={handleClose} variant="contained">
-            Cancel
+            Close
           </ActionButton>
+
           {!existingEvent &&
           <ActionButton onClick={handleConfirm} variant="contained">
             Confirm
@@ -244,7 +249,7 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
       <ErrorSnackbar
         visibility={emptyFieldsError}
         setVisibility={setEmptyFieldsError}
-        message={errorMessage} />
+        message={errorMessage}/>
     </>
   );
 }
