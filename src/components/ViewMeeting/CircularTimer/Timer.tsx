@@ -65,7 +65,6 @@ function CircularTimer() {
     if(nextEventStart && timeToNextEventStart < 2) {
       setTtlSec(timeToNextEventEnd);
       nextEventEnd && setRelativeTime(nextEventEnd?.toString());
-      console.log(nextEventEnd?.toString())
       dispatch(setRoomStatus(true));
       setProgress((ttlSec));
     }

@@ -13,19 +13,13 @@ import {setStartTime, setEndTime} from "store/NewMeeting/newMeeting";
 import {addMinutes, format} from "date-fns";
 import {meetingsDurationSelector, meetingSelector} from "store/NewMeeting/selectors";
 import {useMediaQuery, useTheme} from "@mui/material";
-// import {IEvent} from "../../../models/Event";
+import {IEvent} from "../../../models/Event";
 
-// interface IExistingEvent {
-//   existingEvent?: IEvent | undefined
-// }
+interface IExistingEvent {
+  existingEvent?: IEvent | undefined
+}
 
-// export interface IDateTimeValidation extends IChosenMeetingDateTime, IChosenMeetingLength {
-
-// }
-
-
-
-const DateTimeValidation = () => {
+const DateTimeValidation = ({existingEvent}: IExistingEvent) => {
     const theme = useTheme();
     const hasReachedBp = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -61,8 +55,12 @@ const DateTimeValidation = () => {
     }, [dispatch, endDateValue, startDateValue]);
 
     useEffect(() => {
-
+      if (existingEvent) {
+        setStartDateValue(new Date(existingEvent.start));
+        setEndDateValue(new Date(existingEvent.end));
+      } else {
         roundStart();
+      }
     }, [roundStart]);
 
     const {start} = useSelector(meetingSelector);
@@ -98,6 +96,7 @@ const DateTimeValidation = () => {
                     label="Start Time"
                     value={startDateValue}
                     onChange={handleStart}
+                    disabled={!!existingEvent}
                     minutesStep={5}
                     minDate={new Date(new Date().getTime() + 15 * 60000)}
                     minTime={new Date(0, 0, 0, 8)}
@@ -118,6 +117,7 @@ const DateTimeValidation = () => {
                     value={endDateValue}
                     minutesStep={5}
                     onChange={handleEnd}
+                    disabled={!!existingEvent}
                     minDate={dateMin}
                     minTime={timeMin}
                     maxTime={new Date(0, 0, 0, 18, 45)}

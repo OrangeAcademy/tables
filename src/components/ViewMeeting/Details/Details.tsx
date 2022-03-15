@@ -24,7 +24,8 @@ const authorMeeting: any = {
   div: {
     color: 'white',
     display: 'flex',
-    alignItems: 'center'
+    width: '450px',
+    justifyContent: 'center',
   }
 }
 
@@ -58,9 +59,12 @@ export default function Details(props: any) {
       {props.isBusy && nextEventSelected ?
         (<Box style={main.div}>
           <Box style={titleMeeting.div}> Meeting <strong><i>{nextEventSelected.subject}</i></strong></Box>
-          <Box style={authorMeeting.div}>
+          <Box style={authorMeeting.div} title={eventParticipants}>
             <Box> <PersonIcon style={userIcon}> </PersonIcon></Box>
-            <Box style={userNameAuthor.div}>{eventParticipants}</Box>
+            <Box style={userNameAuthor.div} sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'}}>{eventParticipants}</Box>
           </Box>
         </Box>)
         : !props.isBusy && nextEventSelected 

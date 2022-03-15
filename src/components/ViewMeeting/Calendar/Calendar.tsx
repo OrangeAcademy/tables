@@ -69,13 +69,14 @@ const Calendar = ({getNextEventFunction}: any) => {
           nowIndicator
           height={'100vh'}
           eventMinHeight={30}
+          slotDuration="00:15:00"
           eventShortHeight={30}
           eventOverlap={false}
           allDaySlot={false}
           eventClick={handleEventClick}
           // slotMinTime={"08:00"}
           dateClick={handleClick}
-          // slotMaxTime={"20:00:01"}
+          // slotMaxTime={"18:00:01"}
           dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}
           slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
           events={eventsCalendar}

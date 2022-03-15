@@ -23,7 +23,7 @@ import React, {useMemo, useCallback, useState, useEffect} from "react";
 import {useSelector} from "react-redux";
 import {getEvents, postEvents} from "store/Event/actionCreators";
 import {clearReservation, NewMeeting, setSubject, setUserEmail, setAttendees} from "store/NewMeeting/newMeeting";
-import {meetingSelector} from "store/NewMeeting/selectors";
+import {meetingsAgendaSelector, meetingsAttendeesSelector, meetingSelector} from "store/NewMeeting/selectors";
 import {useAppDispatch} from "hooks/redux";
 import {deleteEvent} from "store/Event/actionCreators";
 import {SERVER_EVENTS_ROUTE} from "constants/paths";
@@ -95,7 +95,6 @@ const CreateMeetingReservation = (
   const [errorEmail, setErrorEmail] = useState<{ inputEmail: string }>();
   const [errorSubject, setErrorSubject] = useState<{ inputSubject: string }>();
   const [inputError, setInputError] = useState(false);
-
   const dispatch = useAppDispatch();
   const users = useSelector(usersSelector);
 
@@ -112,7 +111,6 @@ const CreateMeetingReservation = (
     if (!regular) {
       setErrorEmail({inputEmail: 'Invalid email'});
     }
-    // dispatch(setUserEmail(event.target.value));
   };
 
 
@@ -175,15 +173,14 @@ const CreateMeetingReservation = (
 
   useEffect(() => {
     if (existingEvent) {
+      console.log(existingEvent.attendees)
       setInputEmail(existingEvent.userEmail!);
       setInputSubject(existingEvent.subject);
       dispatch(setAttendees(existingEvent.attendees));
     }
-
     dispatch(getUsers());
     dispatch(getEvents());
     GetUpcomingEvent();
-
   }, [])
 
   useEffect(() => {
@@ -230,7 +227,7 @@ const CreateMeetingReservation = (
                              onChange={onSubjectFieldChange}
                              label="Meeting Subject" margin="dense"/>
                 </FormControl>
-                <DateTimeValidation />
+                <DateTimeValidation existingEvent={existingEvent}/>
               </Box>
 
               <DialogActions sx={{p: 0}}>
