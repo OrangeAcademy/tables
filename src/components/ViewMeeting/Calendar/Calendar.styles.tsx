@@ -4,6 +4,9 @@ const CalendarStyle = styled('div')(() => ({
   '& .fc': {
     padding: '10px'
   },
+  '& .fc-event': {
+    cursor: 'pointer'
+  },
   '& .fc-event-main': {
     display: 'flex',
     alignItems: 'center',

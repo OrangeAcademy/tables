@@ -9,10 +9,6 @@ import PopupButtons from "./Buttons";
 import {useDispatch} from "react-redux";
 import { setIssue } from 'store/Report/reportSlice';
 
-// Redux
-import {addReport} from "../../../../../redux/slices/reportIssueSlice";
-import {store} from "../../../../../redux/store/store";
-
 
 interface IFormProps {
     handleClose: () => void

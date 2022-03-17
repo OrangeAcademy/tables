@@ -6,13 +6,13 @@ export interface MeetingAgenda {
  export interface NewMeeting {
     userEmail: string | null;
     subject: string | null;
-    start: Date | null;
-    end: Date | null;
-    agenda: MeetingAgenda[];
+    start: Date | string | null;
+    end: Date | string  | null;
+    presenters: MeetingAgenda[];
     topic: string;
     presenter: string;
     attendees: string[];
-    duration: number| null;
+    duration?: number| null;
 }
 
 const initialState: NewMeeting = {
@@ -20,7 +20,7 @@ const initialState: NewMeeting = {
     subject: null,
     start: null,
     end: null,
-    agenda: [] as MeetingAgenda[],
+    presenters: [] as MeetingAgenda[],
     attendees: [],
     topic: '',
     presenter: '',
@@ -54,8 +54,8 @@ export const newMeetingSlice = createSlice({
         setAgenda(state, action) {
             return ({
                 ...state,
-                agenda: action.payload
-          
+                presenters: action.payload
+
               })
         },
         setTopic(state, action) {
@@ -67,6 +67,10 @@ export const newMeetingSlice = createSlice({
         setAttendee(state,action){
             state.attendees.push(action.payload)
         },
+        setAttendees(state,action){
+            console.log(action.payload)
+           state.attendees.push(action.payload)
+        },
         removeAttende(state, action) {
             return ({
                 ...state,
@@ -74,9 +78,11 @@ export const newMeetingSlice = createSlice({
             })
         },
         clearReservation(state, _) {
+            const prevState = state;
             return ({
                 ...state,
-                ...initialState
+                ...initialState,
+                duration: prevState.duration
             })
         }
     },
@@ -90,6 +96,7 @@ export const {
     setStartTime,setEndTime, setAgenda,
     setTopic,setPresenter,
     setAttendee,
+    setAttendees,
     removeAttende,
     clearReservation
 } = newMeetingSlice.actions;

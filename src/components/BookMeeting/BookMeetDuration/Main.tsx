@@ -4,13 +4,17 @@
 */
 
 // React imports
-import { useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 // Local imports
 import BookMeetingBtn from './Button';
 import StyledBox from './Containers/Box';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setMeetingDuration} from "../../../store/NewMeeting/newMeeting";
+import { nextEventStartSelector } from "store/StateRoom/selectors";
+import { duration } from "@mui/material";
+import dayjs from "dayjs";
+import { setIsLessThan15Mins } from "store/StateRoom/stateRoomSlice";
 
 
 // This array defines the duration of a meeting user wants to book
@@ -30,10 +34,28 @@ interface IMeetingDurationProps {
 const MeetingDurationButtons = ({localSeconds}: IMeetingDurationProps) => {
 
   // Storing the user-selected meeting duration
-  const selectedDuration = useRef(MEETING_DURATIONS[0]);
+  // const selectedDuration = useRef(MEETING_DURATIONS[0]);
   const dispatch = useDispatch()
   // Sets the meeting duration to the value of the user-clicked button
   const setDuration = (index: number) => dispatch(setMeetingDuration(MEETING_DURATIONS[index]));
+  const eventStartTime = useSelector(nextEventStartSelector);
+
+  const checkIfBusy = useCallback(() => {
+    if(!eventStartTime) return ;
+
+    const tillEventStart = dayjs(eventStartTime).diff(dayjs(), "minutes");
+
+    if(tillEventStart < 15) {
+      dispatch(setIsLessThan15Mins(true));
+    }
+
+    
+     
+  }, [dispatch, eventStartTime])
+
+  useEffect(() => {
+    checkIfBusy();
+  }, [checkIfBusy, localSeconds])
 
   return (
     <StyledBox>

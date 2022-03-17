@@ -24,7 +24,7 @@ eventsRoute.route('/events').post((req, res) => {
 })
 
 eventsRoute.route('/events/:id').delete((req, res) => {
-  Event.findOneAndRemove({elementId: { $eq: req.params.id }}, (error) => {
+  Event.findOneAndRemove({ _id: { $eq: req.params.id } }, (error) => {
     if (error) {
       res.status(500).json(error);
     } else {
