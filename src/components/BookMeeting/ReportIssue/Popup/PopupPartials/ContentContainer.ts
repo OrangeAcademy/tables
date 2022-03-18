@@ -12,7 +12,9 @@ export const ContentContainer = styled(DialogContent, {
   name: 'ReportIssueContentContainer'
 })(({theme}) => ({
   padding: '20px 24px',
+  width: '550px',
   [theme.breakpoints.down('tablet')]: {
-    padding: "10px 20px 0px 5px"
+    padding: "10px 20px",
+    width: "auto"
   }
 }))

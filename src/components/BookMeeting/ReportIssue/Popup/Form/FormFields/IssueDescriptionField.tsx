@@ -10,7 +10,6 @@ interface IReportDescriptionProps {
   handleIssueDescription:(e: React.ChangeEvent<{ value: string }>) => void
 }
 
-
 const IssueDescriptionField = ({issueDescription, handleIssueDescription}: IReportDescriptionProps) => {
 
   return (
@@ -27,9 +26,7 @@ const IssueDescriptionField = ({issueDescription, handleIssueDescription}: IRepo
         type='email'
         value={issueDescription}
       />
-
     </FormControl>
-
   );
 };
 

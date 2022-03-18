@@ -31,7 +31,7 @@ const IssueTypeField = ({issueType, handleIssueType}: IReportIssueProps) => {
   const handleOpen = () => setOpen(true);
 
   return (
-    <FormControl margin="dense" fullWidth  >
+    <FormControl margin="dense" fullWidth>
       <Label inputLabel="Issue type"/>
       <Select
         open={open}

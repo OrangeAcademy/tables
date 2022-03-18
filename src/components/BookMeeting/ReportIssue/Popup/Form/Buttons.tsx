@@ -1,27 +1,17 @@
 // MUI Imports
 import { DialogActions, Button, styled, Typography } from '@mui/material';
 
-
-// Redux imports
-// import { store } from "../../../../../pages/store/store";
-// import { addReport } from "../../../../../pages/store/slices/reportIssueSlice";
-
-
-
 // Props validation
 interface IPopupProps {
   submitReport: () => void,
   handleClose: () => void
 }
 
-
 /* ------------------------ Component ------------------------ */
 /* 
  Contains 'Report' and 'Cancel' buttons for the Report Issue Popup. 
 */
 const PopupButtons = ({ submitReport, handleClose }: IPopupProps) => {
-  
-
 
   // Button style for 'Cancel' and 'Report' buttons
   const StyledBtn = styled(Button)(({theme}) => ({

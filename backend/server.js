@@ -21,7 +21,10 @@ const eventsRoute = require('./routes/event.route');
 app.use('/api', eventsRoute);
 
 const usersRoute = require('./routes/user.route');
-app.use('/api', usersRoute)
+app.use('/api', usersRoute);
+
+const issuesRoute = require('./routes/issue.route');
+app.use('/api', issuesRoute);
 
 const port = process.env.PORT || 4000;
 const server = app.listen(port, () => {
