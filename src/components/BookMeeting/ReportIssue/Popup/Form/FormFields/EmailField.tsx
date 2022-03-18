@@ -1,34 +1,36 @@
 //MUI Imports - Icons
-import { EmailRounded} from '@mui/icons-material';
-import { FormControl, OutlinedInput, InputAdornment } from '@mui/material';
+import {EmailRounded} from '@mui/icons-material';
+import {FormControl, OutlinedInput, InputAdornment, TableCell} from '@mui/material';
 
 // Local imports
-import Label from "../FormPartials/InputLabel";
+import React, {useEffect} from "react";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import {useDispatch, useSelector} from "react-redux";
+import {usersSelector} from "../../../../../../store/User/selectors";
+import {getUsers} from "../../../../../../store/User/actionCreators";
 
 interface IReportEmailProps {
   userEmail: string,
-  handleEmail:(e: React.ChangeEvent<{    value: string;}>) => void
+  handleEmail: any
 }
 
+const   EmailField = ({userEmail, handleEmail}: IReportEmailProps) => {
+  const users = useSelector(usersSelector);
+  const dispatch = useDispatch();
 
-const EmailField = ({userEmail, handleEmail}: IReportEmailProps) => {
+  useEffect(() => {
+    dispatch(getUsers())
+  }, []);
 
   return (
-    <FormControl margin="dense" fullWidth>
-      <Label inputLabel="Your email" />
-      <OutlinedInput
-        color="primary"
-        label="email"
-        onChange={handleEmail}
-        startAdornment={
-          <InputAdornment position="start" sx={{ color: '#3d50af' }}> <EmailRounded /> </InputAdornment>
-        }
-        type='email'
-        value={userEmail}
-      />
-
-    </FormControl>
-
+    <Autocomplete
+      value={userEmail}
+      fullWidth
+      options={users.map((user) => user.email)}
+      renderInput={(params) => <TextField {...params} label="Email"/>}
+      onChange={handleEmail}
+    />
   );
 };
 

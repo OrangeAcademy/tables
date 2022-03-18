@@ -1,7 +1,7 @@
 export interface ReportState {
-    issueId: string,
+    issueId?: string,
     email: string,
-    userId: number,
+    userId?: number,
     description: string,
     issueType: string
 }

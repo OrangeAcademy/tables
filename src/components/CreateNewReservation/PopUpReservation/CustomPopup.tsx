@@ -173,7 +173,6 @@ const CreateMeetingReservation = (
 
   useEffect(() => {
     if (existingEvent) {
-      console.log(existingEvent.attendees)
       setInputEmail(existingEvent.userEmail!);
       setInputSubject(existingEvent.subject);
       dispatch(setAttendees(existingEvent.attendees));
@@ -269,7 +268,7 @@ const CreateMeetingReservation = (
             </Stack>
           </DialogContent>
           <DialogContent
-            sx={hasReachedBp ? {width: "100%", height: "40vh", maxHeight: "100%"} : {width: "25%"}}>
+            sx={hasReachedBp ? {width: "100%", height: "100vh", maxHeight: "100%"} : {width: "25%"}}>
             <Calendar/>
           </DialogContent>
         </Box>
