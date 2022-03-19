@@ -7,6 +7,8 @@ import { styles } from './Styles';
 
 import CreateNewReservationPopup from "../../CreateNewReservation/PopUpReservation/CustomPopup";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { nextEventNameSelector } from "store/StateRoom/selectors";
 
 
 
@@ -21,12 +23,13 @@ import { useState } from "react";
 
 const ButtonMeeting = () => {
   const [visibility, setVisibility] = useState(false);
+  const nextMeetingName = useSelector(nextEventNameSelector)
 
   return (
     <>
     <Grid sx={{ ...styles.grid }}>
       <Typography variant="h4" sx={{ ...styles.title }}>
-        Next Meeting - Test
+        {nextMeetingName ? `Next Meeting - ${nextMeetingName}` : ""}
       </Typography>
       <Button
         variant="contained"

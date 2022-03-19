@@ -3,6 +3,7 @@ import {RootState} from "../types";
 
 export const roomStateSelector: Selector<RootState, RootState['roomState']> = (state) => state.roomState;
 export const nextEventSelector = createSelector(roomStateSelector, state => state.upcomingEvent);
+export const nextEventNameSelector = createSelector(roomStateSelector, state => state.upcomingEvent?.subject);
 export const nextEventStartSelector = createSelector(roomStateSelector, state => state.nextEventStart);
 export const nextEventEndSelector = createSelector(roomStateSelector, state => state.upcomingEvent?.end);
 export const roomStatusSelector = createSelector(roomStateSelector, state => state.isBusy);
