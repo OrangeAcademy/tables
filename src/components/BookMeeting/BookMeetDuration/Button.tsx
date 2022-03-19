@@ -1,25 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setMeetingDuration } from "store/NewMeeting/newMeeting";
 
 // Local Imports
-import StyledBtnText from './ButtonPartials/StyledBtnText';
-import StyledButton from './ButtonPartials/StyledButton';
 
 
-import {useSelector} from "react-redux";
-import { meetingsDurationSelector } from "store/NewMeeting/selectors";
-import { nextEventStartSelector } from "store/StateRoom/selectors";
-import dayjs from "dayjs";
 // import { useNavigate } from "react-router-dom";
-import { setIsLessThan15Mins } from "store/StateRoom/stateRoomSlice";
 import { Button, styled } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
-// Props validation
-interface props { 
-  value: string
-}
 
 
 /* ------------------ Component -------------- */
@@ -60,6 +46,24 @@ const BookMeetingBtn = styled(Button)(({theme}) => ({
     border: '1px solid gray'
   }
 }));
+
+export const focusedStyled = ({  
+  backgroundColor: '#fef9e5',
+  opacity: [0.4, 0.4, 0.9],
+  borderColor: grey[500],
+  boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.95)',
+  color: '#75726c',
+  "&:hover": {
+    backgroundColor: "#fef9e5"
+  }
+})
+
+export const unFocusedStyle = ({
+  "&:hover": {
+    backgroundColor: "#a6dab3"
+  }
+})
+
 
 
 // const BookMeetingBtn = ({ value}: props) => {

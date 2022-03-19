@@ -6,16 +6,16 @@
 // React imports
 import { useCallback, useEffect, useState } from "react";
 
+
+
 // Local imports
 import BookMeetingBtn from './Button';
 import StyledBox from './Containers/Box';
 import {useDispatch, useSelector} from "react-redux";
-import {setMeetingDuration} from "../../../store/NewMeeting/newMeeting";
-import { nextEventStartSelector, shouldAutoBookSelector } from "store/StateRoom/selectors";
+import { autoBookDurationSelector, nextEventStartSelector } from "store/StateRoom/selectors";
 import dayjs from "dayjs";
-import { setIsLessThan15Mins, setShouldAutoBook, setAutoBookDuration } from "store/StateRoom/stateRoomSlice";
-import { grey } from "@mui/material/colors";
-
+import { setShouldAutoBook, setAutoBookDuration, setIsLessThan15Mins } from "store/StateRoom/stateRoomSlice";
+import { focusedStyled, unFocusedStyle } from "./Button";
 
 // This array defines the duration of a meeting user wants to book
 const MEETING_DURATIONS: number[] = [15, 30, 45, 60];
@@ -27,81 +27,62 @@ const MEETING_DURATIONS: number[] = [15, 30, 45, 60];
 
 */
 
-
-
-
 const MeetingDurationButtons = () => {
+  const dispatch = useDispatch(); // Instantiating the Redux Store dispatch
+  const eventStartTime = useSelector(nextEventStartSelector);  // Upcoming event start time
+  const isSelected = useSelector(autoBookDurationSelector);   // Variable that holds the duration selected by user
 
-  // Storing the user-selected meeting duration
-  // const selectedDuration = useRef(MEETING_DURATIONS[0]);
-  const dispatch = useDispatch()
+  const [isDisabled, setIsDisabled] = useState<number[]>([]);   // Array that holds invalid durations
+  
+  // Dispatches for RESETTING the autobookConfig in Redux
+  const resetAutobookConfig = useCallback(() => {
+    dispatch(setAutoBookDuration(null))
+    dispatch(setShouldAutoBook(false));
+  }, [dispatch])
 
-  const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
-  const [isSelected, setIsSelected] = useState<number | null>(null);
-  const [isDisabled, setIsDisabled] = useState(false);
-
-  const eventStartTime = useSelector(nextEventStartSelector);
-
-
-  const focusedStyled = ({  
-    backgroundColor: '#fef9e5',
-    opacity: [0.4, 0.4, 0.9],
-    borderColor: grey[500],
-    boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.95)',
-    color: '#75726c',
-    "&:hover": {
-      backgroundColor: "#fef9e5"
-    }
-  })
-
-  const unFocusedStyle = ({
-    "&:hover": {
-      backgroundColor: "#a6dab3"
-    }
-  })
-
-  const checkShouldDisable = (index: number) => {
-    const tillEventStart = dayjs(eventStartTime).diff(dayjs(), "minutes");
-
-    if(MEETING_DURATIONS[index] > tillEventStart) { 
-      return setIsDisabled(true)
-    } else {
-      return setIsDisabled(false);
-    }
-  }
-
-  const handleClick = (index: number) => {
-    if(index === isSelected) {
-      setIsSelected(null);
-      dispatch(setShouldAutoBook(false));
-      dispatch(setAutoBookDuration(null))
-      return
-    }
- 
-    setIsSelected(index);
+  // Dispatches for SETTING UP the autobookConfig in Redux
+  const setAutoBookConfig = useCallback((meetingDuration: number) => {
+    dispatch(setAutoBookDuration(meetingDuration))
     dispatch(setShouldAutoBook(true));
-    dispatch(setAutoBookDuration(MEETING_DURATIONS[index]))
+  }, [dispatch])
+
+  // Handles | Toggles autoBookConfig
+  const handleClick = (meetingDuration: number) => {
+    if( meetingDuration === isSelected) return resetAutobookConfig();
+    
+    setAutoBookConfig(meetingDuration);
   } 
+
+  // Checks how much time is left till the next event start and stores invalid durations if any
+  const btnsToDisable = useCallback(() => {
+    const tillEventStart = dayjs(eventStartTime).diff(dayjs(), "seconds");
+
+    return MEETING_DURATIONS.filter(dur => dur > tillEventStart / 60);
+  }, [eventStartTime])
+
+
+  // Interval that handles the disabled state of buttons
+  useEffect(() => {
+    const checkForDisableInterval = setInterval(() => {
+      setIsDisabled(btnsToDisable());
+
+      if(isSelected && isDisabled.includes(isSelected)) resetAutobookConfig();
+      if(isDisabled.length === MEETING_DURATIONS.length) dispatch(setIsLessThan15Mins(true));
+
+    }, 1000);
+
+    return () => clearInterval(checkForDisableInterval);
+  }, [btnsToDisable, dispatch, eventStartTime, isDisabled, isSelected, resetAutobookConfig])
 
   return (
     <StyledBox>
-
-    <BookMeetingBtn sx={isSelected === 0 ? focusedStyled : unFocusedStyle} onClick={() => handleClick(0)} disabled={isDisabled}>15 min</BookMeetingBtn>
-    <BookMeetingBtn sx={isSelected === 1 ? focusedStyled : unFocusedStyle} onClick={() => handleClick(1)} disabled={isDisabled}>30 min</BookMeetingBtn>
-    <BookMeetingBtn sx={isSelected === 2 ? focusedStyled : unFocusedStyle} onClick={() => handleClick(2)} disabled={isDisabled}>45 min</BookMeetingBtn>
-    <BookMeetingBtn sx={isSelected === 3 ? focusedStyled : unFocusedStyle} onClick={() => handleClick(3)} disabled={isDisabled}>60 min</BookMeetingBtn>
-
-
-      {/* {MEETING_DURATIONS.map((meetingDuration, index) => (
+      {MEETING_DURATIONS.map((meetingDuration, index) => (
         
-        <BookMeetingBtn key={index} onClick={() => {
-          setIsSelected(!isSelected);
+        <BookMeetingBtn key={index} sx={isSelected === meetingDuration ? focusedStyled : unFocusedStyle} onClick={() => handleClick(meetingDuration)} disabled={btnsToDisable().includes(meetingDuration)}>
+          {meetingDuration} min
+        </BookMeetingBtn>
 
-          isSelected ? setSelectedDuration(MEETING_DURATIONS[index]) : setSelectedDuration(null);
-
-        }}>{meetingDuration} min</BookMeetingBtn>
-
-      ))} */}
+      ))}
      
     </StyledBox>
   );

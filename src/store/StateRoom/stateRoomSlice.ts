@@ -9,11 +9,12 @@ export interface IRoomState {
   nextEventStart: string,
   isBusy: boolean,
   isLessThan15Mins: boolean,
-  upcomingEvent: NewMeeting | IEvent | null,
-  autoBook: {
-    shouldAutoBook: boolean,
+  autoBookConfig: {
+    isAutoBookable: boolean,
     duration: number | null
-  } 
+  },
+  upcomingEvent: NewMeeting | IEvent | null,
+
 }
 
 
@@ -39,11 +40,11 @@ const initialState: IRoomState = {
   nextEventStart: '',
   isBusy: false,
   isLessThan15Mins: false,
-  upcomingEvent: upcomingEventInit,
-  autoBook: {
-    shouldAutoBook: false,
+  autoBookConfig: {
+    isAutoBookable: false,
     duration: null
-  }
+  },
+  upcomingEvent: upcomingEventInit,
 }
 
 export const stateRoomSlice = createSlice({
@@ -64,10 +65,10 @@ export const stateRoomSlice = createSlice({
       state.isLessThan15Mins = action.payload
     },
     setShouldAutoBook: (state, action) => {
-      state.autoBook.shouldAutoBook = action.payload
+      state.autoBookConfig.isAutoBookable = action.payload
     },
     setAutoBookDuration: (state, action) => {
-      state.autoBook.duration = action.payload
+      state.autoBookConfig.duration = action.payload
     }
 
   }
