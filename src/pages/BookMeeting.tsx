@@ -14,10 +14,22 @@ import Timer from '../components/BookMeeting/Timer/Main';
 import Title from '../components/BookMeeting/Title/Main';
 
 import { useDispatch } from "react-redux";
+import { useCallback, useEffect } from "react";
+import { setAutoBookDuration, setShouldAutoBook } from "store/StateRoom/stateRoomSlice";
 
 const BookMeeting = () => {
   const dispatch = useDispatch();
 
+    // Dispatches for RESETTING the autobookConfig in Redux
+    const resetAutobookConfig = useCallback(() => {
+      dispatch(setAutoBookDuration(null))
+      dispatch(setShouldAutoBook(false));
+    }, [dispatch])
+
+  useEffect(() => {
+
+    return () => resetAutobookConfig();
+  }, [resetAutobookConfig])
 
   return (
     <ThemeProvider theme={bookMeetBreakpoints}>

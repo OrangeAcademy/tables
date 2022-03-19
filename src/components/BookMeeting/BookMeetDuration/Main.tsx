@@ -66,12 +66,13 @@ const MeetingDurationButtons = () => {
     const checkForDisableInterval = setInterval(() => {
       setIsDisabled(btnsToDisable());
 
-      if(isSelected && isDisabled.includes(isSelected)) resetAutobookConfig();
-      if(isDisabled.length === MEETING_DURATIONS.length) dispatch(setIsLessThan15Mins(true));
+      if(isSelected && isDisabled.includes(isSelected)) return resetAutobookConfig();
+      if(isDisabled.length === MEETING_DURATIONS.length) return dispatch(setIsLessThan15Mins(true));
 
     }, 1000);
 
     return () => clearInterval(checkForDisableInterval);
+    
   }, [btnsToDisable, dispatch, eventStartTime, isDisabled, isSelected, resetAutobookConfig])
 
   return (
