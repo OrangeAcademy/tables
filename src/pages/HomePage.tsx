@@ -56,7 +56,7 @@ function HomePage() {
     } else {
       setNextUpdate(upcomingEvent.end);
     }
-  }, [])
+  }, [upcomingEvent.end, upcomingEvent.start])
 
   const UpdateTime = useCallback((isBusy: boolean) => {
     const currentDay = dayjs();

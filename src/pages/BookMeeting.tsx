@@ -23,13 +23,13 @@ const BookMeeting = ({ seconds, timeFunction}: MeetingDetails) => {
   const IsLessThan15Mins = useSelector(IsLessThan15MinsSelector);
   const isBusy = useSelector(roomStatusSelector);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setLocalSeconds(localSeconds - 1);
-  //
-  //   }, 1000);
-  //   return () => clearInterval(interval)
-  // }, [dispatch, localSeconds])
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLocalSeconds(localSeconds - 1);
+  
+    }, 1000);
+    return () => clearInterval(interval)
+  }, [localSeconds])
 
   // const navigate = useNavigate();
   
