@@ -38,6 +38,7 @@ import {storeUpcomingEvent, setNextEventStart} from "store/StateRoom/stateRoomSl
 import {getClosestEvent} from "utils/events.utils";
 import {getUsers} from "../../../store/User/actionCreators";
 import {usersSelector} from "../../../store/User/selectors";
+import dayjs from "dayjs";
 
 interface ICreateMeetingReservation {
     visibility: boolean;
@@ -70,6 +71,7 @@ const CreateMeetingReservation = (
     // State
     const [showAgenda, setShowAgenda] = useState(false);
     const [showAttendees, setShowAttendees] = useState(false);
+    const [isBtnDisabled, setIsBtnDisabled] = useState(false);
 
     // Handlers
     const hanldeAgendaPopup = () => setShowAgenda(!showAgenda);
@@ -77,28 +79,50 @@ const CreateMeetingReservation = (
     const eventsCalendar = useSelector(eventsSelector);
     const {start, end, attendees, presenters} = useSelector(meetingSelector);
 
-    const isConfirmDisabled = useMemo(() => {
-        const startLimit=(hours:number, minutes:number) => new Date(getYear(new Date()), new Date().getMonth(), new Date().getDate(), hours,minutes);
-        console.log( startLimit(18,0),startLimit(23,59) );
+    // const isConfirmDisabled = useMemo(() => {
+    //     const startLimit=(hours:number, minutes:number) => new Date(getYear(new Date()), new Date().getMonth(), new Date().getDate(), hours,minutes);
+    //     console.log( startLimit(18,0),startLimit(23,59) );
 
-        // if (start) {
-        //     return (
-        //         isWithinInterval(new Date(start), {start: startLimit(18,0), end:startLimit(23,59)})||
-        //         isWithinInterval(new Date(start), {start: startLimit(0,0), end:startLimit(7,59)})
-        //     );
-        // }
-        if (start && end) {
-            return eventsCalendar.some(
-                (el) =>
-                    isWithinInterval(new Date(start), {start: new Date(el.start), end: new Date(el.end)}) ||
-                    isWithinInterval(new Date(end), {start: new Date(el.start), end: new Date(el.end)}) ||
-                    isWithinInterval(new Date(el.start), {start: new Date(start), end: new Date(end)}) ||
-                    isWithinInterval(new Date(el.end), {start: new Date(start), end: new Date(end)})
-            );
+    //     // if (start) {
+    //     //     return (
+    //     //         isWithinInterval(new Date(start), {start: startLimit(18,0), end:startLimit(23,59)})||
+    //     //         isWithinInterval(new Date(start), {start: startLimit(0,0), end:startLimit(7,59)})
+    //     //     );
+    //     // }
+    //     if (start && end) {
+    //         return eventsCalendar.some(
+    //             (el) =>
+    //                 isWithinInterval(new Date(start), {start: new Date(el.start), end: new Date(el.end)}) ||
+    //                 isWithinInterval(new Date(end), {start: new Date(el.start), end: new Date(el.end)}) ||
+    //                 isWithinInterval(new Date(el.start), {start: new Date(start), end: new Date(end)}) ||
+    //                 isWithinInterval(new Date(el.end), {start: new Date(start), end: new Date(end)})
+    //         );
+    //     }
+
+
+    // }, [start, end, eventsCalendar]);
+    
+
+    const isConfirmDisabled = useMemo(() => {
+        if((eventsCalendar.length && start && end) && start < end) {
+            if(dayjs(start).hour() >= 18) {
+                return true;
+            }
         }
 
+        // Check if the start and end time selected by user overlaps with events
+        if((eventsCalendar.length && start && end) && start < end) {
+            return eventsCalendar.some(event => {
+                return dayjs(event.start).isBetween(dayjs(start), dayjs(end)) || dayjs(event.end).isBetween(dayjs(start), dayjs(end))
+            })
+        }
 
-    }, [start, end, eventsCalendar]);
+        return true;
+    }, [end, eventsCalendar, start])
+
+    useEffect(() => {
+        setIsBtnDisabled(isConfirmDisabled)
+    }, [isConfirmDisabled])
 
     const [inputEmail, setInputEmail] = useState<string | null>(null);
     const [inputSubject, setInputSubject] = useState("");
@@ -277,7 +301,7 @@ const CreateMeetingReservation = (
                                     ? <Button variant="contained" color="error" fullWidth
                                               onClick={() => deleteEventExistingEvent(existingEvent.id!)}>Delete</Button>
                                     :
-                                    <Button variant="contained" disabled={isConfirmDisabled} color="primary" fullWidth
+                                    <Button variant="contained" disabled={isBtnDisabled} color="primary" fullWidth
                                             onClick={() => handleSubmit()}>Confirm</Button>
                                 }
                             </DialogActions>

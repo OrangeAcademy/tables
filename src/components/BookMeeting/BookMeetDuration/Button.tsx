@@ -19,7 +19,7 @@ interface props {
   duration: number,
   setDuration: Function,
   index: number,
-  localSeconds: number
+
 }
 
 
@@ -30,7 +30,7 @@ interface props {
 
 
 
-const BookMeetingBtn = ({ localSeconds, duration, setDuration, index }: props) => {
+const BookMeetingBtn = ({ duration, setDuration, index }: props) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const durationRedux = useSelector(meetingsDurationSelector);
   const eventStartTime = useSelector(nextEventStartSelector);
@@ -62,17 +62,17 @@ const BookMeetingBtn = ({ localSeconds, duration, setDuration, index }: props) =
       setIsDisabled(false);
     }
 
-    // if(tillEventStart < 15) {
-    //   dispatch(setIsLessThan15Mins(true));
-    // }
+    if(tillEventStart < 15) {
+      dispatch(setIsLessThan15Mins(true));
+    }
 
 
      
-  }, [duration, eventStartTime])
+  }, [dispatch, duration, eventStartTime])
 
   useEffect(() => {
     checkIfBusy();
-  }, [checkIfBusy, localSeconds])
+  }, [checkIfBusy])
 
   return (
     <StyledButton sx={{...styles}} disabled={isDisabled} onClick={handleClick}>
