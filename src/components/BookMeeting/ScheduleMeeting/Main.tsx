@@ -6,9 +6,10 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import { styles } from './Styles';
 
 import CreateNewReservationPopup from "../../CreateNewReservation/PopUpReservation/CustomPopup";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { nextEventNameSelector } from "store/StateRoom/selectors";
+import { setShouldAutoBook } from "store/StateRoom/stateRoomSlice";
 
 
 
@@ -24,6 +25,16 @@ import { nextEventNameSelector } from "store/StateRoom/selectors";
 const ButtonMeeting = () => {
   const [visibility, setVisibility] = useState(false);
   const nextMeetingName = useSelector(nextEventNameSelector)
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+
+  
+    return () => {
+      dispatch(setShouldAutoBook(false));
+    }
+  }, [])
 
   return (
     <>

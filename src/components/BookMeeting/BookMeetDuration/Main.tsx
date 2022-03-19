@@ -4,16 +4,17 @@
 */
 
 // React imports
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // Local imports
 import BookMeetingBtn from './Button';
 import StyledBox from './Containers/Box';
 import {useDispatch, useSelector} from "react-redux";
 import {setMeetingDuration} from "../../../store/NewMeeting/newMeeting";
-import { nextEventStartSelector } from "store/StateRoom/selectors";
+import { nextEventStartSelector, shouldAutoBookSelector } from "store/StateRoom/selectors";
 import dayjs from "dayjs";
-import { setIsLessThan15Mins } from "store/StateRoom/stateRoomSlice";
+import { setIsLessThan15Mins, setShouldAutoBook, setAutoBookDuration } from "store/StateRoom/stateRoomSlice";
+import { grey } from "@mui/material/colors";
 
 
 // This array defines the duration of a meeting user wants to book
@@ -27,42 +28,84 @@ const MEETING_DURATIONS: number[] = [15, 30, 45, 60];
 */
 
 
+
+
 const MeetingDurationButtons = () => {
 
   // Storing the user-selected meeting duration
   // const selectedDuration = useRef(MEETING_DURATIONS[0]);
   const dispatch = useDispatch()
-  // Sets the meeting duration to the value of the user-clicked button
-  const setDuration = (index: number) => dispatch(setMeetingDuration(MEETING_DURATIONS[index]));
+
+  const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
+  const [isSelected, setIsSelected] = useState<number | null>(null);
+  const [isDisabled, setIsDisabled] = useState(false);
+
   const eventStartTime = useSelector(nextEventStartSelector);
 
-  const checkIfBusy = useCallback(() => {
-    if(!eventStartTime) return ;
 
-    const tillEventStart = dayjs(eventStartTime).diff(dayjs(), "seconds");
-
-    if(tillEventStart <= 15 * 60) {
-      dispatch(setIsLessThan15Mins(true));
+  const focusedStyled = ({  
+    backgroundColor: '#fef9e5',
+    opacity: [0.4, 0.4, 0.9],
+    borderColor: grey[500],
+    boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.95)',
+    color: '#75726c',
+    "&:hover": {
+      backgroundColor: "#fef9e5"
     }
+  })
 
-  
-    
-     
-  }, [dispatch, eventStartTime])
+  const unFocusedStyle = ({
+    "&:hover": {
+      backgroundColor: "#a6dab3"
+    }
+  })
 
-  useEffect(() => {
-    checkIfBusy();
-  }, [checkIfBusy])
+  const checkShouldDisable = (index: number) => {
+    const tillEventStart = dayjs(eventStartTime).diff(dayjs(), "minutes");
+
+    if(MEETING_DURATIONS[index] > tillEventStart) { 
+      return setIsDisabled(true)
+    } else {
+      return setIsDisabled(false);
+    }
+  }
+
+  const handleClick = (index: number) => {
+    if(index === isSelected) {
+      setIsSelected(null);
+      dispatch(setShouldAutoBook(false));
+      dispatch(setAutoBookDuration(null))
+      return
+    }
+ 
+    setIsSelected(index);
+    dispatch(setShouldAutoBook(true));
+    dispatch(setAutoBookDuration(MEETING_DURATIONS[index]))
+  } 
 
   return (
     <StyledBox>
-      {MEETING_DURATIONS.map((meetingDuration, index) => (
-        
-        <BookMeetingBtn index={index}  key={index} duration={meetingDuration} setDuration={setDuration} />
 
-      ))}
+    <BookMeetingBtn sx={isSelected === 0 ? focusedStyled : unFocusedStyle} onClick={() => handleClick(0)} disabled={isDisabled}>15 min</BookMeetingBtn>
+    <BookMeetingBtn sx={isSelected === 1 ? focusedStyled : unFocusedStyle} onClick={() => handleClick(1)} disabled={isDisabled}>30 min</BookMeetingBtn>
+    <BookMeetingBtn sx={isSelected === 2 ? focusedStyled : unFocusedStyle} onClick={() => handleClick(2)} disabled={isDisabled}>45 min</BookMeetingBtn>
+    <BookMeetingBtn sx={isSelected === 3 ? focusedStyled : unFocusedStyle} onClick={() => handleClick(3)} disabled={isDisabled}>60 min</BookMeetingBtn>
+
+
+      {/* {MEETING_DURATIONS.map((meetingDuration, index) => (
+        
+        <BookMeetingBtn key={index} onClick={() => {
+          setIsSelected(!isSelected);
+
+          isSelected ? setSelectedDuration(MEETING_DURATIONS[index]) : setSelectedDuration(null);
+
+        }}>{meetingDuration} min</BookMeetingBtn>
+
+      ))} */}
+     
     </StyledBox>
   );
 };
 
 export default MeetingDurationButtons;
+

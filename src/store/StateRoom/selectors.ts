@@ -10,3 +10,5 @@ export const roomStatusSelector = createSelector(roomStateSelector, state => sta
 export const roomNameSelector = createSelector(roomStateSelector, state => state.roomName);
 export const roomLocationSelector = createSelector(roomStateSelector, state => state.roomLocation);
 export const IsLessThan15MinsSelector = createSelector(roomStateSelector, state => state.isLessThan15Mins);
+export const shouldAutoBookSelector = createSelector(roomStateSelector, state => state.autoBook.shouldAutoBook);
+export const autoBookDurationSelector = createSelector(roomStateSelector, state => state.autoBook.duration);

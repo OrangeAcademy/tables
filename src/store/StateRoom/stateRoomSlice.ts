@@ -9,7 +9,11 @@ export interface IRoomState {
   nextEventStart: string,
   isBusy: boolean,
   isLessThan15Mins: boolean,
-  upcomingEvent: NewMeeting | IEvent | null
+  upcomingEvent: NewMeeting | IEvent | null,
+  autoBook: {
+    shouldAutoBook: boolean,
+    duration: number | null
+  } 
 }
 
 
@@ -35,7 +39,11 @@ const initialState: IRoomState = {
   nextEventStart: '',
   isBusy: false,
   isLessThan15Mins: false,
-  upcomingEvent: upcomingEventInit
+  upcomingEvent: upcomingEventInit,
+  autoBook: {
+    shouldAutoBook: false,
+    duration: null
+  }
 }
 
 export const stateRoomSlice = createSlice({
@@ -55,9 +63,15 @@ export const stateRoomSlice = createSlice({
     setIsLessThan15Mins: (state, action) => {
       state.isLessThan15Mins = action.payload
     },
+    setShouldAutoBook: (state, action) => {
+      state.autoBook.shouldAutoBook = action.payload
+    },
+    setAutoBookDuration: (state, action) => {
+      state.autoBook.duration = action.payload
+    }
 
   }
 });
 
-export const { storeUpcomingEvent, setNextEventStart, setRoomStatus, setIsLessThan15Mins } = stateRoomSlice.actions;
+export const { setAutoBookDuration, setShouldAutoBook, storeUpcomingEvent, setNextEventStart, setRoomStatus, setIsLessThan15Mins } = stateRoomSlice.actions;
 export default stateRoomSlice.reducer
