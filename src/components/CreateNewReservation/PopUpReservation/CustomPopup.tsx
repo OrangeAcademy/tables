@@ -81,12 +81,12 @@ const CreateMeetingReservation = (
         const startLimit=(hours:number, minutes:number) => new Date(getYear(new Date()), new Date().getMonth(), new Date().getDate(), hours,minutes);
         console.log( startLimit(18,0),startLimit(23,59) );
 
-        if (start) {
-            return (
-                isWithinInterval(new Date(start), {start: startLimit(18,0), end:startLimit(23,59)})||
-                isWithinInterval(new Date(start), {start: startLimit(0,0), end:startLimit(7,59)})
-            );
-        }
+        // if (start) {
+        //     return (
+        //         isWithinInterval(new Date(start), {start: startLimit(18,0), end:startLimit(23,59)})||
+        //         isWithinInterval(new Date(start), {start: startLimit(0,0), end:startLimit(7,59)})
+        //     );
+        // }
         if (start && end) {
             return eventsCalendar.some(
                 (el) =>

@@ -2,6 +2,7 @@ import Button from "@mui/material/Button";
 import {styled} from "@mui/material";
 import {deleteEvent} from "../../../store/Event/actionCreators";
 import {useAppDispatch} from "../../../hooks/redux";
+import { useEffect } from "react";
 
 const MeetingEndButton = styled(Button)({
   width: '100%',

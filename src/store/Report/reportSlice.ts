@@ -1,29 +1,24 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {ReportState} from "./types";
-
-
+import {postIssue} from "./actionCreators";
 
 interface initialSliceState {
-    reports: ReportState[];
+  reports: ReportState[];
 }
 
-const initialState: initialSliceState  = {
-    reports: [],
+const initialState: initialSliceState = {
+  reports: [],
 }
 
 export const reportSlice = createSlice({
-    name: 'report',
-    initialState,
-    reducers: {
-        setIssue(state, action) {
-            state.reports = action.payload;
-        },
-        clearIssue: (state, _) => ({
-            ...state,
-            reports: []
-        })
+  name: 'report',
+  initialState,
+  reducers: {},
+  extraReducers: {
+    [postIssue.fulfilled.type]: (state, action: PayloadAction<ReportState[]>) => {
+      state.reports = action.payload;
     },
-    extraReducers: {}
+  }
 })
-export const { setIssue } = reportSlice.actions;
+
 export default reportSlice.reducer;

@@ -23,7 +23,7 @@ const theme = createTheme({
       lg: 1200,
       xl: 1536,
       mobile: 0,
-      tablet: 640,
+      tablet: 870,
       laptop: 1024,
       desktop: 1200,
     },

@@ -18,7 +18,7 @@ const ErrorSnackbar = ({visibility, setVisibility, message}: IErrorSnackbar)  =>
   })
 
   return (
-    <Snackbar open={visibility} autoHideDuration={6000} onClose={setVisibility}>
+    <Snackbar open={visibility} autoHideDuration={6000} anchorOrigin={{vertical: "top", horizontal: "right"}} onClose={setVisibility}>
       <Alert onClose={setVisibility} severity="error" sx={{ width: '100%' }}>
         {message}
       </Alert>

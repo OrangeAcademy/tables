@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // Local imports
 import ReportIssuePopup from './Popup/Popup';
 import ReportIssueButton from './MainButton/MainButton';
+import {Box} from "@mui/material";
 
 
 /* -------------------Main Component---------------- */
