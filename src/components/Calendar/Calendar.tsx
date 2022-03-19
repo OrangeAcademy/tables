@@ -49,7 +49,7 @@ const Calendar = () => {
         allDaySlot={false}
         displayEventTime={false}
         slotMinTime="08:00"
-        slotMaxTime="18:00:01"
+        slotMaxTime="17:59:59"
         dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}
         slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
         events={eventsCalendar}

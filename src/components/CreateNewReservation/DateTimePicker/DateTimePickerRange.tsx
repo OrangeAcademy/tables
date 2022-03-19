@@ -31,12 +31,12 @@ const DateTimeValidation = ({existingEvent}: IExistingEvent) => {
   const handleEnd = (timeValue: Date | null) => setEndDateValue(timeValue);
 
   const handleStart = (timeValue: Date | null) => {
+    setStartDateValue(timeValue);
     if (timeValue !== null) {
       const addMinutes = new Date(timeValue.getTime() + prefferedLength * 60000);
       setEndDateValue(addMinutes);
     }
 
-    setStartDateValue(timeValue);
   };
 
    const roundStart = useCallback(() => {
@@ -100,7 +100,7 @@ const DateTimeValidation = ({existingEvent}: IExistingEvent) => {
                     minutesStep={5}
                     minDate={new Date(new Date().getTime() + 15 * 60000)}
                     minTime={new Date(0, 0, 0, 8)}
-                    maxTime={new Date(0, 0, 0, 18, 45)}
+                    maxTime={new Date(0, 0, 0, 17, 45)}
                   
                 />
 
@@ -120,7 +120,7 @@ const DateTimeValidation = ({existingEvent}: IExistingEvent) => {
                     disabled={!!existingEvent}
                     minDate={dateMin}
                     minTime={timeMin}
-                    maxTime={new Date(0, 0, 0, 18, 45)}
+                    maxTime={new Date(0, 0, 0, 18, 0)}
 
                 />
             </LocalizationProvider>
