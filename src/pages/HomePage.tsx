@@ -84,9 +84,7 @@ function HomePage() {
       return nextMeeting;
     } catch (e) {
       console.log("No upcoming meetings. ");
-    } finally {
-      // window.location.reload();
-    }
+    } 
 
   },[dispatch])
 
@@ -143,8 +141,6 @@ function HomePage() {
   }, [checkIfBusy, time])
 
   const isLessThan15Mins = useSelector(IsLessThan15MinsSelector);
-
-  console.log(isBusyRoom);
 
   return (
     <div>
