@@ -14,8 +14,9 @@ import StyledBox from './Containers/Box';
 import {useDispatch, useSelector} from "react-redux";
 import { autoBookDurationSelector, nextEventStartSelector } from "store/StateRoom/selectors";
 import dayjs from "dayjs";
-import { setShouldAutoBook, setAutoBookDuration, setIsLessThan15Mins } from "store/StateRoom/stateRoomSlice";
+import { setIsLessThan15Mins } from "store/StateRoom/stateRoomSlice";
 import { focusedStyled, unFocusedStyle } from "./Button";
+import useAutobook from "hooks/useAutoBook";
 
 // This array defines the duration of a meeting user wants to book
 const MEETING_DURATIONS: number[] = [15, 30, 45, 60];
@@ -29,28 +30,17 @@ const MEETING_DURATIONS: number[] = [15, 30, 45, 60];
 
 const MeetingDurationButtons = () => {
   const dispatch = useDispatch(); // Instantiating the Redux Store dispatch
+  const {resetConfig, setConfig } = useAutobook(); // Custom Hook for managing autoBookConfig in Redux store 
   const eventStartTime = useSelector(nextEventStartSelector);  // Upcoming event start time
   const isSelected = useSelector(autoBookDurationSelector);   // Variable that holds the duration selected by user
 
   const [isDisabled, setIsDisabled] = useState<number[]>([]);   // Array that holds invalid durations
   
-  // Dispatches for RESETTING the autobookConfig in Redux
-  const resetAutobookConfig = useCallback(() => {
-    dispatch(setAutoBookDuration(null))
-    dispatch(setShouldAutoBook(false));
-  }, [dispatch])
-
-  // Dispatches for SETTING UP the autobookConfig in Redux
-  const setAutoBookConfig = useCallback((meetingDuration: number) => {
-    dispatch(setAutoBookDuration(meetingDuration))
-    dispatch(setShouldAutoBook(true));
-  }, [dispatch])
-
   // Handles | Toggles autoBookConfig
   const handleClick = (meetingDuration: number) => {
-    if( meetingDuration === isSelected) return resetAutobookConfig();
+    if( meetingDuration === isSelected) return resetConfig();
     
-    setAutoBookConfig(meetingDuration);
+    setConfig(meetingDuration);
   } 
 
   // Checks how much time is left till the next event start and stores invalid durations if any
@@ -66,14 +56,14 @@ const MeetingDurationButtons = () => {
     const checkForDisableInterval = setInterval(() => {
       setIsDisabled(btnsToDisable());
 
-      if(isSelected && isDisabled.includes(isSelected)) return resetAutobookConfig();
+      if(isSelected && isDisabled.includes(isSelected)) return resetConfig();
       if(isDisabled.length === MEETING_DURATIONS.length) return dispatch(setIsLessThan15Mins(true));
 
     }, 1000);
 
     return () => clearInterval(checkForDisableInterval);
     
-  }, [btnsToDisable, dispatch, eventStartTime, isDisabled, isSelected, resetAutobookConfig])
+  }, [btnsToDisable, dispatch, eventStartTime, isDisabled, isSelected, resetConfig])
 
   return (
     <StyledBox>
