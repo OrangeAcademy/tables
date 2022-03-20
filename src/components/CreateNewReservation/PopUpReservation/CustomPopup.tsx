@@ -201,7 +201,6 @@ const CreateMeetingReservation = (
 
     useEffect(() => {
         if (existingEvent) {
-            console.log(existingEvent.attendees);
             setInputEmail(existingEvent.userEmail!);
             setInputSubject(existingEvent.subject);
             dispatch(setAttendees(existingEvent.attendees));
