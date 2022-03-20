@@ -9,6 +9,7 @@ import CreateNewReservationPopup from "../../CreateNewReservation/PopUpReservati
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { nextEventNameSelector } from "store/StateRoom/selectors";
+import useAutobook from "hooks/useAutoBook";
 
 
 
@@ -22,8 +23,17 @@ import { nextEventNameSelector } from "store/StateRoom/selectors";
 */
 
 const ButtonMeeting = () => {
+  const {_getConfig, automaticallyBookMeeting} = useAutobook();
   const [visibility, setVisibility] = useState(false);
-  const nextMeetingName = useSelector(nextEventNameSelector)
+  const nextMeetingName = useSelector(nextEventNameSelector);
+
+  const handleScheduleMeeting = () => {
+    if(_getConfig.isAutoBookable) {
+      return automaticallyBookMeeting();
+    }
+
+    setVisibility(!visibility)
+  }
 
   return (
     <>
@@ -37,7 +47,7 @@ const ButtonMeeting = () => {
         size="large"
         startIcon={<DateRangeIcon sx={{ ...styles.icon }} />}
         sx={{ ...styles.button }}
-        onClick={() => setVisibility(!visibility)}
+        onClick={handleScheduleMeeting}
       >
         <Typography variant="subtitle1" sx={{ ...styles.btnText }}>
           SCHEDULE A MEETING

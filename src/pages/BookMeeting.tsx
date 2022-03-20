@@ -13,11 +13,15 @@ import ReportIssue from '../components/BookMeeting/ReportIssue/Main';
 import Timer from '../components/BookMeeting/Timer/Main';
 import Title from '../components/BookMeeting/Title/Main';
 
-import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import useAutobook from "hooks/useAutoBook";
 
 const BookMeeting = () => {
-  const dispatch = useDispatch();
+  const { resetConfig } = useAutobook();
 
+  useEffect(() => {
+    return () => resetConfig();
+  }, [resetConfig])
 
   return (
     <ThemeProvider theme={bookMeetBreakpoints}>

@@ -23,7 +23,7 @@ import React, {useMemo, useCallback, useState, useEffect} from "react";
 import {useSelector} from "react-redux";
 import {getEvents, postEvents} from "store/Event/actionCreators";
 import {clearReservation, NewMeeting, setSubject, setUserEmail, setAttendees} from "store/NewMeeting/newMeeting";
-import {meetingsAgendaSelector, meetingsAttendeesSelector, meetingSelector} from "store/NewMeeting/selectors";
+import {meetingSelector} from "store/NewMeeting/selectors";
 import {useAppDispatch} from "hooks/redux";
 import {deleteEvent} from "store/Event/actionCreators";
 import {SERVER_EVENTS_ROUTE} from "constants/paths";
@@ -31,7 +31,6 @@ import {SERVER_EVENTS_ROUTE} from "constants/paths";
 import DateTimeValidation from "../DateTimePicker/DateTimePickerRange";
 import ErrorSnackbar from "../../AddTopics/ErrorSnackbar";
 import {eventsSelector} from "../../../store/Event/selectors";
-import {getYear, isAfter, isWithinInterval} from "date-fns";
 
 import {IEvent} from "models/Event";
 import {storeUpcomingEvent, setNextEventStart} from "store/StateRoom/stateRoomSlice";
@@ -104,14 +103,9 @@ const CreateMeetingReservation = (
     
 
     const isConfirmDisabled = useMemo(() => {
-        if((eventsCalendar.length && start && end) && start < end) {
-            if(dayjs(start).hour() >= 18) {
-                return true;
-            }
-        }
-
         // Check if the start and end time selected by user overlaps with events
-        if((eventsCalendar.length && start && end) && start < end) {
+        if( (start && end) && dayjs(start).isBefore(dayjs(end))) {
+
             return eventsCalendar.some(event => {
                 return dayjs(event.start).isBetween(dayjs(start), dayjs(end)) || dayjs(event.end).isBetween(dayjs(start), dayjs(end))
             })
@@ -126,7 +120,7 @@ const CreateMeetingReservation = (
 
     const [inputEmail, setInputEmail] = useState<string | null>(null);
     const [inputSubject, setInputSubject] = useState("");
-    const [errorEmail, setErrorEmail] = useState<{ inputEmail: string }>();
+    const [, setErrorEmail] = useState<{ inputEmail: string }>();
     const [errorSubject, setErrorSubject] = useState<{ inputSubject: string }>();
     const [inputError, setInputError] = useState(false);
     const dispatch = useAppDispatch();
@@ -215,7 +209,7 @@ const CreateMeetingReservation = (
         dispatch(getUsers());
         dispatch(getEvents());
         GetUpcomingEvent();
-    }, []);
+    }, [GetUpcomingEvent, dispatch, existingEvent]);
 
     useEffect(() => {
         dispatch(clearReservation({}));

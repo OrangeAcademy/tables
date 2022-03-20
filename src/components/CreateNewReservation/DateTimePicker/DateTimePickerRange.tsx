@@ -61,7 +61,7 @@ const DateTimeValidation = ({existingEvent}: IExistingEvent) => {
       } else {
         roundStart();
       }
-    }, [roundStart]);
+    }, [existingEvent, roundStart]);
 
     const {start} = useSelector(meetingSelector);
     const dateMin = useMemo(() => {

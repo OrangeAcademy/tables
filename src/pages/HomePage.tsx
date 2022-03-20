@@ -144,13 +144,11 @@ function HomePage() {
 
   const isLessThan15Mins = useSelector(IsLessThan15MinsSelector);
 
-
-
-
+  console.log(isBusyRoom);
 
   return (
     <div>
-      { (isLessThan15Mins || isBusyRoom) && eventStartTime
+      { (isLessThan15Mins || isBusyRoom) 
         ? <ViewMeeting isBusy={isBusyRoom} upcomingEvent={upcomingEvent} seconds={time} timeFunction={UpdateTime} getNextEventFunction={GetUpcomingEvent}/>
         : <BookMeeting />
       }
