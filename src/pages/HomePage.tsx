@@ -142,7 +142,6 @@ function HomePage() {
 
   const isLessThan15Mins = useSelector(IsLessThan15MinsSelector);
 
-
   return (
     <div>
       { (isLessThan15Mins || isBusyRoom) 

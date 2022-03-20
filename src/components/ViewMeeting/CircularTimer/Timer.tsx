@@ -40,6 +40,8 @@ function CircularTimer() {
       dispatch(setNextEventStart(nextMeeting.start));
       dispatch(setRoomStatus(dayjs(nextMeeting.end) >= dayjs()));
       dispatch(setIsLessThan15Mins(dayjs(nextMeeting.end).diff(dayjs(), "seconds") <= 15 * 60));
+
+      console.log('MEETING ROOM STATUS SET TO: ', dayjs(nextMeeting.end) <= dayjs() )
     } else {
       window.location.reload();
       // dispatch(setNextEventStart(""));
