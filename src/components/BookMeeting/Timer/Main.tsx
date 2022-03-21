@@ -3,6 +3,9 @@ import dayjs from 'dayjs';
 
 // MUI Imports
 import { Typography, Container } from '@mui/material';
+import { useDispatch, useSelector } from "react-redux";
+import { nextEventStartSelector } from "store/StateRoom/selectors";
+import { setIsLessThan15Mins } from "store/StateRoom/stateRoomSlice";
 
 // Styles
 const containerStyles = { display: 'grid', minWidth: '100%' };
@@ -21,17 +24,22 @@ const currentTimeFormatted = () => dayjs().format('HH:mm:ss');
 const Timer = () => {
   // Stores current time in format (HH:mm:ss) // 23:59:59
   const [currentTime, setCurrentTime] = useState(currentTimeFormatted);
+  const nextEventStart = useSelector(nextEventStartSelector);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // Updates time every second
     const updateTime = setInterval(
-      () => setCurrentTime(currentTimeFormatted),
+      () => {
+        setCurrentTime(currentTimeFormatted);
+        
+      },
       1000
     );
 
     // Cleanup for setInterval
     return () => clearInterval(updateTime);
-  }, []);
+  }, [dispatch, nextEventStart]);
 
   return (
     <Container disableGutters={true} sx={{ ...containerStyles }}>

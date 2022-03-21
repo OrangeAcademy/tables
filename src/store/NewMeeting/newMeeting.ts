@@ -6,6 +6,7 @@ export interface MeetingAgenda {
  export interface NewMeeting {
     userEmail: string | null;
     subject: string | null;
+    elementId: number | null;
     start: Date | string | null;
     end: Date | string  | null;
     presenters: MeetingAgenda[];
@@ -18,6 +19,7 @@ export interface MeetingAgenda {
 const initialState: NewMeeting = {
     userEmail: null,
     subject: null,
+    elementId: null,
     start: null,
     end: null,
     presenters: [] as MeetingAgenda[],

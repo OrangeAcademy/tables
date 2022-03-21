@@ -75,7 +75,7 @@ const DateTimeValidation = ({ selectedIntervalFromPopup, selectedInterval}: IExi
         else {
             roundStart();
         }
-    }, [roundStart, selectedIntervalFromPopup, existingEvent]);
+    }, [roundStart, selectedIntervalFromPopup, existingEvent, selectedInterval?.start, selectedInterval?.end]);
 
     const {start} = useSelector(meetingSelector);
     const dateMin = useMemo(() => {

@@ -23,20 +23,22 @@ import React, {useMemo, useCallback, useState, useEffect} from "react";
 import {useSelector} from "react-redux";
 import {getEvents, postEvents} from "store/Event/actionCreators";
 import {clearReservation, NewMeeting, setSubject, setUserEmail, setAttendees} from "store/NewMeeting/newMeeting";
-import {meetingsAgendaSelector, meetingsAttendeesSelector, meetingSelector} from "store/NewMeeting/selectors";
+import {meetingSelector} from "store/NewMeeting/selectors";
 import {useAppDispatch, useAppSelector} from "hooks/redux";
+
 import {deleteEvent} from "store/Event/actionCreators";
 import {SERVER_EVENTS_ROUTE} from "constants/paths";
 
 import DateTimeValidation from "../DateTimePicker/DateTimePickerRange";
 import ErrorSnackbar from "../../AddTopics/ErrorSnackbar";
 import {eventsSelector} from "../../../store/Event/selectors";
-import {getYear, isAfter, isWithinInterval} from "date-fns";
+
 import {storeUpcomingEvent, setNextEventStart} from "store/StateRoom/stateRoomSlice";
 import {getClosestEvent} from "utils/events.utils";
 import {getUsers} from "../../../store/User/actionCreators";
 import {usersSelector} from "../../../store/User/selectors";
 import {clearSelectedEvent} from 'store/SelectedEvent/selectedEventSlice';
+import dayjs from "dayjs";
 
 interface ISelectedInterval {
     start: string,
@@ -84,6 +86,7 @@ const CreateMeetingReservation = (
     // State
     const [showAgenda, setShowAgenda] = useState(false);
     const [showAttendees, setShowAttendees] = useState(false);
+    const [isBtnDisabled, setIsBtnDisabled] = useState(false);
 
     // Handlers
     const hanldeAgendaPopup = () => setShowAgenda(!showAgenda);
@@ -92,31 +95,49 @@ const CreateMeetingReservation = (
     const eventsCalendar = useSelector(eventsSelector);
     const {start, end, attendees, presenters} = useSelector(meetingSelector);
 
-    const isConfirmDisabled = useMemo(() => {
-        const startLimit = (hours: number, minutes: number) => new Date(getYear(new Date()), new Date().getMonth(), new Date().getDate(), hours, minutes);
+    // const isConfirmDisabled = useMemo(() => {
+    //     const startLimit=(hours:number, minutes:number) => new Date(getYear(new Date()), new Date().getMonth(), new Date().getDate(), hours,minutes);
+    //     console.log( startLimit(18,0),startLimit(23,59) );
 
-        // if (start) {
-        //     return (
-        //         isWithinInterval(new Date(start), {start: startLimit(18,0), end:startLimit(23,59)})||
-        //         isWithinInterval(new Date(start), {start: startLimit(0,0), end:startLimit(7,59)})
-        //     );
-        // }
-        if (start && end) {
-            return eventsCalendar.some(
-                (el) =>
-                    isWithinInterval(new Date(start), {start: new Date(el.start), end: new Date(el.end)}) ||
-                    isWithinInterval(new Date(end), {start: new Date(el.start), end: new Date(el.end)}) ||
-                    isWithinInterval(new Date(el.start), {start: new Date(start), end: new Date(end)}) ||
-                    isWithinInterval(new Date(el.end), {start: new Date(start), end: new Date(end)})
-            );
+    //     // if (start) {
+    //     //     return (
+    //     //         isWithinInterval(new Date(start), {start: startLimit(18,0), end:startLimit(23,59)})||
+    //     //         isWithinInterval(new Date(start), {start: startLimit(0,0), end:startLimit(7,59)})
+    //     //     );
+    //     // }
+    //     if (start && end) {
+    //         return eventsCalendar.some(
+    //             (el) =>
+    //                 isWithinInterval(new Date(start), {start: new Date(el.start), end: new Date(el.end)}) ||
+    //                 isWithinInterval(new Date(end), {start: new Date(el.start), end: new Date(el.end)}) ||
+    //                 isWithinInterval(new Date(el.start), {start: new Date(start), end: new Date(end)}) ||
+    //                 isWithinInterval(new Date(el.end), {start: new Date(start), end: new Date(end)})
+    //         );
+    //     }
+
+
+    // }, [start, end, eventsCalendar]);
+    
+
+    const isConfirmDisabled = useMemo(() => {
+        // Check if the start and end time selected by user overlaps with events
+        if( (start && end) && dayjs(start).isBefore(dayjs(end))) {
+
+            return eventsCalendar.some(event => {
+                return dayjs(event.start).isBetween(dayjs(start), dayjs(end)) || dayjs(event.end).isBetween(dayjs(start), dayjs(end))
+            })
         }
 
+        return true;
+    }, [end, eventsCalendar, start])
 
-    }, [start, end, eventsCalendar]);
+    useEffect(() => {
+        setIsBtnDisabled(isConfirmDisabled)
+    }, [isConfirmDisabled])
 
     const [inputEmail, setInputEmail] = useState<string | null>(null);
     const [inputSubject, setInputSubject] = useState("");
-    const [errorEmail, setErrorEmail] = useState<{ inputEmail: string }>();
+    const [, setErrorEmail] = useState<{ inputEmail: string }>();
     const [errorSubject, setErrorSubject] = useState<{ inputSubject: string }>();
     const [inputError, setInputError] = useState(false);
     const dispatch = useAppDispatch();
@@ -174,6 +195,7 @@ const CreateMeetingReservation = (
 
         const newReservation: NewMeeting = {
             userEmail: inputEmail,
+            elementId: +new Date(),
             subject: inputSubject,
             topic: inputSubject,
             presenter: inputEmail,
@@ -194,13 +216,14 @@ const CreateMeetingReservation = (
 
     };
 
-    const clearInputs = () => {
+    const clearInputs = useCallback(() => {
         setInputEmail(null)
         setInputSubject("")
         dispatch(setAttendees([]));
-    }
+    }, [dispatch])
 
     useEffect(() => {
+        console.log(existingEvent)
         if (existingEvent.id) {
             setInputEmail(existingEvent.userEmail!);
             setInputSubject(existingEvent.subject);
@@ -212,11 +235,12 @@ const CreateMeetingReservation = (
         dispatch(getUsers());
         dispatch(getEvents());
         GetUpcomingEvent();
-    }, [existingEvent]);
-    //
-    // useEffect(() => {
-    //     dispatch(clearReservation({}));
-    // }, [dispatch]);
+    }, [GetUpcomingEvent, clearInputs, dispatch, existingEvent]);
+
+    useEffect(() => {
+        dispatch(clearReservation({}));
+
+    }, [dispatch]);
 
     const deleteEventExistingEvent = (id: string) => {
         dispatch(deleteEvent(id))
@@ -304,7 +328,7 @@ const CreateMeetingReservation = (
                                     ? <Button variant="contained" color="error" fullWidth
                                               onClick={() => deleteEventExistingEvent(existingEvent.id!)}>Delete</Button>
                                     :
-                                    <Button variant="contained" color="primary" fullWidth
+                                    <Button variant="contained" disabled={isBtnDisabled} color="primary" fullWidth
                                             onClick={() => handleSubmit()}>Confirm</Button>
                                 }
                             </DialogActions>

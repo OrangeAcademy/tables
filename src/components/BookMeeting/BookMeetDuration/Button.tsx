@@ -1,26 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setMeetingDuration } from "store/NewMeeting/newMeeting";
 
 // Local Imports
-import StyledBtnText from './ButtonPartials/StyledBtnText';
-import StyledButton from './ButtonPartials/StyledButton';
 
 
-import {useSelector} from "react-redux";
-import { meetingsDurationSelector } from "store/NewMeeting/selectors";
-import { nextEventStartSelector } from "store/StateRoom/selectors";
-import dayjs from "dayjs";
 // import { useNavigate } from "react-router-dom";
-import { setIsLessThan15Mins } from "store/StateRoom/stateRoomSlice";
+import { Button, styled } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
-// Props validation
-interface props { 
-  duration: number,
-  setDuration: Function,
-  index: number,
-  localSeconds: number
-}
 
 
 /* ------------------ Component -------------- */
@@ -28,57 +13,65 @@ interface props {
   Building block for creating the 'XYZ min' meeting duration button(s)
 */
 
-
-
-const BookMeetingBtn = ({ localSeconds, duration, setDuration, index }: props) => {
-  const [isDisabled, setIsDisabled] = useState(false);
-  const durationRedux = useSelector(meetingsDurationSelector);
-  const eventStartTime = useSelector(nextEventStartSelector);
-  const dispatch = useDispatch();
-
-  const handleClick = () => {
-    setDuration(index);
-    dispatch(setMeetingDuration(duration));
+const BookMeetingBtn = styled(Button)(({theme}) => ({
+  padding: "clamp(1rem, 0.4830rem + 2.5141vw, 3.5rem)",
+  backgroundColor: '#a6dab3',
+  // fontSize: '1.6rem',
+  boxShadow: '6px 10px 37px -7px rgba(0,0,0,0.41)',
+  border: 0,
+  borderRadius: 5,
+  flexShrink: 1,
+  color: '#679980',
+  fontSize: 'clamp(25px, 4.5vw, 3rem)',
+  textTransform: 'lowercase',
+  fontWeight: 900,
+  [theme.breakpoints.down('tablet')]: {
+    fontWeight: 400
+  },
+  "&:hover": {
+    background: 'none',
+    backgroundColor: "transparent"
+  },
+  // '&:focus': {
+  //   backgroundColor: '#fef9e5',
+  //   opacity: [0.4, 0.4, 0.9],
+  //   borderColor: grey[500],
+  //   boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.95)',
+  //   color: '#75726c',
+  // },
+  "&:disabled": {
+    color: "gray",
+    backgroundColor: 'transparent',
+    boxShadow: 'none',
+    border: '1px solid gray'
   }
+}));
 
-  const styles = durationRedux === duration ? ({
-    backgroundColor: '#fef9e5',
-    borderColor: "gray",
-    boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.95)',
-    color: '#75726c',
-    "&:hover": {
-      backgroundColor: '#fef9e5',
-    }
-  }) : null;
-  // const navigate = useNavigate();
-  const checkIfBusy = useCallback(() => {
-    if(!eventStartTime) return ;
+export const focusedStyled = ({  
+  backgroundColor: '#fef9e5',
+  opacity: [0.4, 0.4, 0.9],
+  borderColor: grey[500],
+  boxShadow: '5px 11px 50px -8px rgba(0,0,0,0.95)',
+  color: '#75726c',
+  "&:hover": {
+    backgroundColor: "#fef9e5"
+  }
+})
 
-    const tillEventStart = dayjs(eventStartTime).diff(dayjs(), "minutes");
-
-    if(duration > tillEventStart){ 
-      setIsDisabled(true)
-    } else {
-      setIsDisabled(false);
-    }
-
-    // if(tillEventStart < 15) {
-    //   dispatch(setIsLessThan15Mins(true));
-    // }
+export const unFocusedStyle = ({
+  "&:hover": {
+    backgroundColor: "#a6dab3"
+  }
+})
 
 
-     
-  }, [duration, eventStartTime])
 
-  useEffect(() => {
-    checkIfBusy();
-  }, [checkIfBusy, localSeconds])
-
-  return (
-    <StyledButton sx={{...styles}} disabled={isDisabled} onClick={handleClick}>
-      <StyledBtnText>{duration} min</StyledBtnText>
-    </StyledButton>
-  );
-};
+// const BookMeetingBtn = ({ value}: props) => {
+//   return (
+//     <StyledButton>
+//       <StyledBtnText>{value}</StyledBtnText>
+//     </StyledButton>
+//   );
+// };
 
 export default BookMeetingBtn;
