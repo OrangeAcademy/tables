@@ -62,7 +62,7 @@ const Calendar = ({getNextEventFunction}: any) => {
             attendees: extendedProps.attendees,
             agenda: [],
             presenters: extendedProps.presenters,
-            id: extendedProps._id
+            id: extendedProps.elementId
         };
         dispatch(setSelectedEvent(event));
         setVisibility(!visibility);

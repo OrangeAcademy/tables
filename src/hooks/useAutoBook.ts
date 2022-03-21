@@ -73,6 +73,7 @@ function useAutobook() {
     setConfig,
     resetConfig,
     automaticallyBookMeeting,
+    handlePostAndUpdate,
     _getConfig,
     _getIsAutobookable,
     _getDuration
