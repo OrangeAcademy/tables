@@ -62,7 +62,8 @@ const Calendar = ({getNextEventFunction}: any) => {
             attendees: extendedProps.attendees,
             agenda: [],
             presenters: extendedProps.presenters,
-            id: extendedProps.elementId
+            id: extendedProps.elementId,
+            elementId: extendedProps.elementId
         };
         dispatch(setSelectedEvent(event));
         setVisibility(!visibility);
@@ -82,6 +83,7 @@ const Calendar = ({getNextEventFunction}: any) => {
                     height={'100vh'}
                     slotDuration="00:15:00"
                     eventOverlap={false}
+                    scrollTime={dayjs().format('HH:mm:ss')}
                     allDaySlot={false}
                     eventClick={handleEventClick}
                     slotMinTime={"08:00"}

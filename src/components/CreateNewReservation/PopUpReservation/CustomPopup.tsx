@@ -39,6 +39,8 @@ import {getUsers} from "../../../store/User/actionCreators";
 import {usersSelector} from "../../../store/User/selectors";
 import {clearSelectedEvent} from 'store/SelectedEvent/selectedEventSlice';
 import dayjs from "dayjs";
+import useDeleteEvent from "hooks/useDeleteEvent";
+import { selectedEventSelector } from "store/SelectedEvent/selectors";
 
 interface ISelectedInterval {
     start: string,
@@ -78,7 +80,9 @@ const CreateMeetingReservation = (
         start: "",
         end: ""
     });
-    const existingEvent = useAppSelector(state => state.selectedEvent.event);
+    const existingEvent =  useSelector(selectedEventSelector);
+
+
     // Theme
     const theme = useTheme();
     const hasReachedBp = useMediaQuery(theme.breakpoints.down('md'));
@@ -91,6 +95,8 @@ const CreateMeetingReservation = (
     // Handlers
     const hanldeAgendaPopup = () => setShowAgenda(!showAgenda);
     const handleAttendeesPopup = () => setShowAttendees(!showAttendees);
+
+    const {deleteSelectedEvent} = useDeleteEvent();
 
     const eventsCalendar = useSelector(eventsSelector);
     const {start, end, attendees, presenters} = useSelector(meetingSelector);
@@ -173,7 +179,7 @@ const CreateMeetingReservation = (
     const GetUpcomingEvent = useCallback(() => {
         setTimeout(async () => {
             const events = await (await fetch(SERVER_EVENTS_ROUTE)).json();
-            const nextMeeting = await getClosestEvent({events});
+            const nextMeeting = await getClosestEvent(events);
 
             try {
                 dispatch(storeUpcomingEvent(nextMeeting));
@@ -242,14 +248,14 @@ const CreateMeetingReservation = (
 
     }, [dispatch]);
 
-    const deleteEventExistingEvent = (id: string) => {
+    const deleteEventExistingEvent = (id: number) => {
         dispatch(deleteEvent(id))
             .unwrap()
             .then(() => {
                 setVisibility(false);
                 dispatch(clearSelectedEvent({}));
                 getNextEventFunction();
-                window.location.reload();
+                // window.location.reload();
             });
     };
 
@@ -326,7 +332,13 @@ const CreateMeetingReservation = (
                                         onClick={() => handleClose()}>Close</Button>
                                 {existingEvent.start
                                     ? <Button variant="contained" color="error" fullWidth
-                                              onClick={() => deleteEventExistingEvent(existingEvent.id!)}>Delete</Button>
+                                              onClick={() => {
+                                                  console.log(existingEvent.elementId)
+                                                if(existingEvent && existingEvent.elementId) {
+                                                    deleteSelectedEvent();
+                                                }
+
+                                              }}>Delete</Button>
                                     :
                                     <Button variant="contained" disabled={isBtnDisabled} color="primary" fullWidth
                                             onClick={() => handleSubmit()}>Confirm</Button>

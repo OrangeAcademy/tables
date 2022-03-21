@@ -52,7 +52,8 @@ const Calendar = ({setSelectedIntervalFromPopup}:any) => {
             attendees: extendedProps.attendees,
             agenda: [],
             presenters: extendedProps.presenters,
-            id: extendedProps._id
+            id: extendedProps._id,
+            elementId: extendedProps.elementId
         };
         dispatch(setSelectedEvent(event));
     }

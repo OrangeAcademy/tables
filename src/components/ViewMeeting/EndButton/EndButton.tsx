@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import useAutobook from "hooks/useAutoBook";
 import { useSelector } from "react-redux";
 import { nextEventSelector } from "store/StateRoom/selectors";
+import { selectedEventSelector } from "store/SelectedEvent/selectors";
+import useDeleteEvent from "hooks/useDeleteEvent";
 
 const MeetingEndButton = styled(Button)({
   width: '100%',
@@ -20,14 +22,23 @@ const MeetingEndButton = styled(Button)({
   },
 })
 
+
+
 const EndButton = ({isBusy, upcomingEvent, getNextEventFunction}: any) => {
   const nextEvent = useSelector(nextEventSelector);
+  const selectedEvent = useSelector(selectedEventSelector);
+  const {deleteSelectedEvent} = useDeleteEvent();
+  
   const ev = upcomingEvent;
   const dispatch = useAppDispatch();
   const { handlePostAndUpdate } = useAutobook();
 
   const DeleteEvent = async () => {
     await handlePostAndUpdate();
+
+    if(selectedEvent && selectedEvent.elementId) return deleteSelectedEvent();
+  
+
     if(nextEvent && nextEvent.elementId) {
 
       dispatch(deleteEvent(nextEvent.elementId))
@@ -36,6 +47,8 @@ const EndButton = ({isBusy, upcomingEvent, getNextEventFunction}: any) => {
         getNextEventFunction();
         // window.location.reload();
       })
+
+      return;
     }
     }
 

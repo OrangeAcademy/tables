@@ -75,7 +75,7 @@ function HomePage() {
   const GetUpcomingEvent = useCallback(async () => {
     try {
       const events: IEvent[] = await dispatch(getEvents()).unwrap();
-      const nextMeeting = await getClosestEvent({ events });
+      const nextMeeting = await getClosestEvent(events);
   
       setUpcomingEvent(nextMeeting);
       dispatch(storeUpcomingEvent(nextMeeting));

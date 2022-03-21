@@ -32,7 +32,7 @@ function CircularTimer() {
   const GetUpcomingEvent = useCallback(async () => {
     await dispatch(getEvents());
     const events = await (await fetch(SERVER_EVENTS_ROUTE)).json();
-    const nextMeeting = await getClosestEvent({ events });
+    const nextMeeting = await getClosestEvent(events);
 
     
     if(nextMeeting) {

@@ -9,7 +9,7 @@ export interface IEvent{
     buildingName?: string,
     changeKey?: string,
     dayNames?: Array<string>,
-    elementId?: number,
+    elementId?: number | null,
     end: string,
     externalUser?: boolean,
     floorNumber?: number,
