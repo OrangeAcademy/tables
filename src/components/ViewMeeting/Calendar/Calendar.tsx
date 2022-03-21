@@ -69,6 +69,10 @@ const Calendar = ({getNextEventFunction}: any) => {
         setVisibility(!visibility);
     }
 
+    const selectOverlap = (arg:any) => {
+        return arg.rendering === 'background';
+    }
+
     return (
         <>
             <CalendarStyle sx={{width: {mobile: '100%', tablet: '40%'}}}>
@@ -87,7 +91,7 @@ const Calendar = ({getNextEventFunction}: any) => {
                     allDaySlot={false}
                     eventClick={handleEventClick}
                     slotMinTime={"08:00"}
-                    // slotMaxTime={"18:00:01"}
+                    slotMaxTime={"18:00:01"}
                     dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}
                     slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
                     events={eventsCalendar}
@@ -95,6 +99,7 @@ const Calendar = ({getNextEventFunction}: any) => {
                     eventContent={renderEventContent}
                     expandRows
                     select={selectEvent}
+                    selectOverlap={selectOverlap}
                 />
             </CalendarStyle>
 

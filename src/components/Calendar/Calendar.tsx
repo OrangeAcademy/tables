@@ -58,6 +58,10 @@ const Calendar = ({setSelectedIntervalFromPopup}:any) => {
         dispatch(setSelectedEvent(event));
     }
 
+    const selectOverlap = (arg:any) => {
+        return arg.rendering === 'background';
+    }
+
     return (
         <CalendarStyle>
             <FullCalendar
@@ -79,7 +83,7 @@ const Calendar = ({setSelectedIntervalFromPopup}:any) => {
                 allDaySlot={false}
                 displayEventTime={false}
                 slotMinTime="08:00"
-                // slotMaxTime="18:00:01"
+                slotMaxTime="18:00:01"
                 dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}
                 slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
                 events={eventsCalendar}
@@ -87,6 +91,7 @@ const Calendar = ({setSelectedIntervalFromPopup}:any) => {
                 expandRows={false}
                 select={selectEvent}
                 eventClick={handleEventClick}
+                selectOverlap={selectOverlap}
             />
         </CalendarStyle>
     );
