@@ -5,8 +5,8 @@ import { NewMeeting } from "store/NewMeeting/newMeeting";
 export const newReservationTemplate = (_getDuration: number): NewMeeting => ({
   userEmail: 'admin@orange.md',
   elementId: +new Date(),
-  subject: 'Meeting at {time}',
-  topic: 'Meeting at {time}',
+  subject: `Auto-generated meeting for ${_getDuration} minutes`,
+  topic: `Auto-generated meeting for ${_getDuration} minutes`,
   presenter: 'admin@orange.md',
   start: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
   end: _getDuration ? dayjs().add(_getDuration, "minute").format('YYYY-MM-DDTHH:mm:ss') : "",
