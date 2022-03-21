@@ -24,7 +24,7 @@ import {useSelector} from "react-redux";
 import {getEvents, postEvents} from "store/Event/actionCreators";
 import {clearReservation, NewMeeting, setSubject, setUserEmail, setAttendees} from "store/NewMeeting/newMeeting";
 import {meetingsAgendaSelector, meetingsAttendeesSelector, meetingSelector} from "store/NewMeeting/selectors";
-import {useAppDispatch} from "hooks/redux";
+import {useAppDispatch, useAppSelector} from "hooks/redux";
 import {deleteEvent} from "store/Event/actionCreators";
 import {SERVER_EVENTS_ROUTE} from "constants/paths";
 
@@ -32,18 +32,22 @@ import DateTimeValidation from "../DateTimePicker/DateTimePickerRange";
 import ErrorSnackbar from "../../AddTopics/ErrorSnackbar";
 import {eventsSelector} from "../../../store/Event/selectors";
 import {getYear, isAfter, isWithinInterval} from "date-fns";
-
-import {IEvent} from "models/Event";
 import {storeUpcomingEvent, setNextEventStart} from "store/StateRoom/stateRoomSlice";
 import {getClosestEvent} from "utils/events.utils";
 import {getUsers} from "../../../store/User/actionCreators";
 import {usersSelector} from "../../../store/User/selectors";
+import {clearSelectedEvent} from 'store/SelectedEvent/selectedEventSlice';
+
+interface ISelectedInterval {
+    start: string,
+    end: string
+}
 
 interface ICreateMeetingReservation {
     visibility: boolean;
     setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
-    existingEvent?: IEvent | undefined;
     getNextEventFunction?: any;
+    selectedInterval?: any;
 }
 
 const LockIcon = styled(LockOutlined)({
@@ -55,14 +59,24 @@ const LockIcon = styled(LockOutlined)({
     height: "2rem"
 });
 
+interface ISelectedInterval {
+    start: string,
+    end: string
+}
 
 const CreateMeetingReservation = (
     {
         visibility,
         setVisibility,
-        existingEvent,
-        getNextEventFunction
+        getNextEventFunction,
+        selectedInterval
     }: ICreateMeetingReservation) => {
+
+    const [selectedIntervalFromPopup, setSelectedIntervalFromPopup] = useState<ISelectedInterval>({
+        start: "",
+        end: ""
+    });
+    const existingEvent = useAppSelector(state => state.selectedEvent.event);
     // Theme
     const theme = useTheme();
     const hasReachedBp = useMediaQuery(theme.breakpoints.down('md'));
@@ -74,12 +88,12 @@ const CreateMeetingReservation = (
     // Handlers
     const hanldeAgendaPopup = () => setShowAgenda(!showAgenda);
     const handleAttendeesPopup = () => setShowAttendees(!showAttendees);
+
     const eventsCalendar = useSelector(eventsSelector);
     const {start, end, attendees, presenters} = useSelector(meetingSelector);
 
     const isConfirmDisabled = useMemo(() => {
-        const startLimit=(hours:number, minutes:number) => new Date(getYear(new Date()), new Date().getMonth(), new Date().getDate(), hours,minutes);
-        console.log( startLimit(18,0),startLimit(23,59) );
+        const startLimit = (hours: number, minutes: number) => new Date(getYear(new Date()), new Date().getMonth(), new Date().getDate(), hours, minutes);
 
         // if (start) {
         //     return (
@@ -153,7 +167,6 @@ const CreateMeetingReservation = (
     }, [dispatch]);
 
     const handleSubmit = () => {
-
         if (!inputEmail || !inputSubject) {
             setInputError(true);
             return;
@@ -181,32 +194,45 @@ const CreateMeetingReservation = (
 
     };
 
+    const clearInputs = () => {
+        setInputEmail(null)
+        setInputSubject("")
+        dispatch(setAttendees([]));
+    }
+
     useEffect(() => {
-        if (existingEvent) {
-            console.log(existingEvent.attendees);
+        if (existingEvent.id) {
             setInputEmail(existingEvent.userEmail!);
             setInputSubject(existingEvent.subject);
             dispatch(setAttendees(existingEvent.attendees));
+        } else {
+            clearInputs()
         }
+
         dispatch(getUsers());
         dispatch(getEvents());
         GetUpcomingEvent();
-    }, []);
-
-    useEffect(() => {
-        dispatch(clearReservation({}));
-
-    }, [dispatch]);
+    }, [existingEvent]);
+    //
+    // useEffect(() => {
+    //     dispatch(clearReservation({}));
+    // }, [dispatch]);
 
     const deleteEventExistingEvent = (id: string) => {
         dispatch(deleteEvent(id))
             .unwrap()
             .then(() => {
                 setVisibility(false);
+                dispatch(clearSelectedEvent({}));
                 getNextEventFunction();
                 window.location.reload();
             });
     };
+
+    const handleClose = () => {
+        setVisibility(false);
+        dispatch(clearSelectedEvent({}))
+    }
 
     return (
         <>
@@ -221,26 +247,27 @@ const CreateMeetingReservation = (
                         <DialogTitle sx={{display: "grid", placeItems: "center", gap: 1, pr: 0}}>
                             <LockIcon/>
                             <Typography
-                                fontSize="1.5rem">{existingEvent ? "View reservation" : "Create New Reservation"}</Typography>
+                                fontSize="1.5rem">{existingEvent.start ? "View reservation" : "Create New Reservation"}</Typography>
                         </DialogTitle>
                         <Stack>
                             <Box sx={{display: "flex", flexDirection: "column", mb: "0.5rem"}}>
                                 <FormControl>
                                     <Autocomplete value={inputEmail}
-                                                  disabled={!!existingEvent}
+                                                  disabled={!!existingEvent.userEmail}
                                                   onChange={onEmailFieldChange}
                                                   renderInput={(params) => <TextField {...params} margin="dense"
                                                                                       label="Email"/>}
                                                   options={users.map((user) => user.email)}/>
                                     <TextField value={inputSubject}
-                                               disabled={!!existingEvent}
+                                               disabled={!!existingEvent.subject}
                                                error={Boolean(errorSubject?.inputSubject)}
                                                helperText={(errorSubject?.inputSubject)}
                                                onChange={onSubjectFieldChange}
                                                label="Meeting Subject" margin="dense"/>
                                 </FormControl>
-                                <DateTimeValidation existingEvent={existingEvent}/>
+                                <DateTimeValidation selectedIntervalFromPopup={selectedIntervalFromPopup} selectedInterval={selectedInterval}/>
                             </Box>
+
 
                             <DialogActions sx={{p: 0}}>
 
@@ -251,7 +278,7 @@ const CreateMeetingReservation = (
                                 >
                                     <Box sx={{display: "flex", flexDirection: "column", width: "100%",}}>
                                         <Typography component="p"
-                                                    fontSize="1rem">{existingEvent ? "View" : "Add"}</Typography>
+                                                    fontSize="1rem">{existingEvent.start ? "View" : "Add"}</Typography>
                                         <Typography component="p" fontSize="1rem">Attendees</Typography>
                                     </Box>
                                 </Button>
@@ -264,7 +291,7 @@ const CreateMeetingReservation = (
 
                                     >
                                         <Typography component="p"
-                                                    fontSize="1rem">{existingEvent ? "View" : "Add"}</Typography>
+                                                    fontSize="1rem">{existingEvent.start ? "View" : "Add"}</Typography>
                                         <Typography component="p" fontSize="1rem">Agenda</Typography>
                                     </Box>
                                 </Button>
@@ -272,12 +299,12 @@ const CreateMeetingReservation = (
 
                             <DialogActions sx={{p: 0, mt: "1.5rem"}}>
                                 <Button variant="contained" color="error" fullWidth
-                                        onClick={() => setVisibility(false)}>Close</Button>
-                                {existingEvent
+                                        onClick={() => handleClose()}>Close</Button>
+                                {existingEvent.start
                                     ? <Button variant="contained" color="error" fullWidth
                                               onClick={() => deleteEventExistingEvent(existingEvent.id!)}>Delete</Button>
                                     :
-                                    <Button variant="contained" disabled={isConfirmDisabled} color="primary" fullWidth
+                                    <Button variant="contained" color="primary" fullWidth
                                             onClick={() => handleSubmit()}>Confirm</Button>
                                 }
                             </DialogActions>
@@ -285,17 +312,16 @@ const CreateMeetingReservation = (
                     </DialogContent>
                     <DialogContent
                         sx={hasReachedBp ? {width: "100%", height: "40vh", maxHeight: "100%"} : {width: "25%"}}>
-                        <Calendar/>
+                        <Calendar setSelectedIntervalFromPopup={setSelectedIntervalFromPopup}/>
                     </DialogContent>
                 </Box>
             </Dialog>
 
             {showAttendees && (
-                <AddAttendees showAttendees={showAttendees} setShowAttendees={setShowAttendees}
-                              existingEvent={existingEvent}/>)}
+                <AddAttendees showAttendees={showAttendees} setShowAttendees={setShowAttendees}/>)}
 
             {showAgenda && (
-                <AddTopics showAgenda={showAgenda} setShowAgenda={setShowAgenda} existingEvent={existingEvent}/>
+                <AddTopics showAgenda={showAgenda} setShowAgenda={setShowAgenda} />
             )}
             <ErrorSnackbar
                 visibility={inputError}

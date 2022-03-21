@@ -18,7 +18,6 @@ const MeetingEndButton = styled(Button)({
 })
 
 const EndButton = ({isBusy, upcomingEvent, getNextEventFunction}: any) => {
-
   const dispatch = useAppDispatch();
   const DeleteEvent = (id: string) => {
     dispatch(deleteEvent(id))

@@ -4,6 +4,9 @@ const CalendarStyle = styled(Box)(() => ({
   '& .fc': {
     padding: '10px'
   },
+  '& .fc-event': {
+    cursor: 'pointer'
+  },
   '& .fc-event-main': {
     display: 'inline-flex',
     alignItems: 'center',

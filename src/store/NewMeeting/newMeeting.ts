@@ -68,7 +68,7 @@ export const newMeetingSlice = createSlice({
             state.attendees.push(action.payload)
         },
         setAttendees(state,action){
-           state.attendees.push(action.payload)
+           state.attendees = action.payload
         },
         removeAttende(state, action) {
             return ({

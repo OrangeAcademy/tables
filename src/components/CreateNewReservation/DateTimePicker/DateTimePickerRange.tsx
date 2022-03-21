@@ -13,33 +13,38 @@ import {setStartTime, setEndTime} from "store/NewMeeting/newMeeting";
 import {addMinutes, format} from "date-fns";
 import {meetingsDurationSelector, meetingSelector} from "store/NewMeeting/selectors";
 import {useMediaQuery, useTheme} from "@mui/material";
-import {IEvent} from "../../../models/Event";
+import {useAppSelector} from "../../../hooks/redux";
 
-interface IExistingEvent {
-  existingEvent?: IEvent | undefined
+interface ISelectedInterval {
+    start: string,
+    end: string
 }
 
-const DateTimeValidation = ({existingEvent}: IExistingEvent) => {
+interface IExistingEvent {
+    selectedIntervalFromPopup?:ISelectedInterval,
+    selectedInterval?: ISelectedInterval
+}
+
+const DateTimeValidation = ({ selectedIntervalFromPopup, selectedInterval}: IExistingEvent) => {
     const theme = useTheme();
     const hasReachedBp = useMediaQuery(theme.breakpoints.down('sm'));
 
+    const existingEvent = useAppSelector(state => state.selectedEvent.event);
     const [startDateValue, setStartDateValue] = React.useState<Date | null>(null);
     const [endDateValue, setEndDateValue] = React.useState<Date | null>(null);
     const prefferedLength = useSelector(meetingsDurationSelector) || 30;
     const dispatch = useDispatch();
+    const handleEnd = (timeValue: Date | null) => setEndDateValue(timeValue);
 
-  const handleEnd = (timeValue: Date | null) => setEndDateValue(timeValue);
+    const handleStart = (timeValue: Date | null) => {
+        setStartDateValue(timeValue);
+        if (timeValue !== null) {
+            const addMinutes = new Date(timeValue.getTime() + prefferedLength * 60000);
+            setEndDateValue(addMinutes);
+        }
 
-  const handleStart = (timeValue: Date | null) => {
-    setStartDateValue(timeValue);
-    if (timeValue !== null) {
-      const addMinutes = new Date(timeValue.getTime() + prefferedLength * 60000);
-      setEndDateValue(addMinutes);
-    }
-
-  };
-
-   const roundStart = useCallback(() => {
+    };
+    const roundStart = useCallback(() => {
         const coeff = 1000 * 60 * 5;
         const date = new Date();  //or use any other date
         const rounded = new Date(Math.round(date.getTime() / coeff) * coeff);
@@ -55,13 +60,22 @@ const DateTimeValidation = ({existingEvent}: IExistingEvent) => {
     }, [dispatch, endDateValue, startDateValue]);
 
     useEffect(() => {
-      if (existingEvent) {
-        setStartDateValue(new Date(existingEvent.start));
-        setEndDateValue(new Date(existingEvent.end));
-      } else {
-        roundStart();
-      }
-    }, [roundStart]);
+        if (existingEvent.start) {
+            setStartDateValue(new Date(existingEvent.start));
+            setEndDateValue(new Date(existingEvent.end));
+        }
+        else if(selectedIntervalFromPopup?.start){
+            setStartDateValue(new Date(selectedIntervalFromPopup?.start));
+            setEndDateValue(new Date(selectedIntervalFromPopup?.end));
+        }
+        else if(selectedInterval?.start){
+            setStartDateValue(new Date(selectedInterval?.start));
+            setEndDateValue(new Date(selectedInterval?.end));
+        }
+        else {
+            roundStart();
+        }
+    }, [roundStart, selectedIntervalFromPopup, existingEvent]);
 
     const {start} = useSelector(meetingSelector);
     const dateMin = useMemo(() => {
@@ -74,21 +88,20 @@ const DateTimeValidation = ({existingEvent}: IExistingEvent) => {
     }, [start]);
     const timeMin = useMemo(() => {
         if (start) {
-            return addMinutes(new Date(new Date(start).getTime()),15);
+            return addMinutes(new Date(new Date(start).getTime()), 15);
 
         } else {
             return new Date(0, 0, 0, 8);
         }
     }, [start]);
     return (
-
         <Stack direction="row" marginTop="0.5rem" spacing={2}>
             <LocalizationProvider dateAdapter={AdapterDateFns} locale={enUS}>
                 <DateTimePicker
                     views={["day", "hours", "minutes"]}
                     inputFormat={hasReachedBp ? "MMM dd, H:mm" : "MMMM dd, H:mm"}
                     renderInput={props => {
-                        if(props.inputProps) {
+                        if (props.inputProps) {
                             props.inputProps.readOnly = true;
                         }
                         return <TextField fullWidth {...props} />
@@ -96,19 +109,19 @@ const DateTimeValidation = ({existingEvent}: IExistingEvent) => {
                     label="Start Time"
                     value={startDateValue}
                     onChange={handleStart}
-                    disabled={!!existingEvent}
+                    disabled={!!existingEvent.start}
                     minutesStep={5}
-                    minDate={new Date(new Date().getTime() + 15 * 60000)}
-                    minTime={new Date(0, 0, 0, 8)}
-                    maxTime={new Date(0, 0, 0, 17, 45)}
-                  
+                    // minDate={new Date(new Date().getTime() + 15 * 60000)}
+                    // minTime={new Date(0, 0, 0, 8)}
+                    // maxTime={new Date(0, 0, 0, 17, 45)}
+                    //
                 />
 
                 <DateTimePicker
                     inputFormat={hasReachedBp ? "MMM dd, H:mm" : "MMMM dd, H:mm"}
                     views={["day", "hours", "minutes"]}
                     renderInput={props => {
-                        if(props.inputProps) {
+                        if (props.inputProps) {
                             props.inputProps.readOnly = true;
                         }
                         return <TextField fullWidth {...props} />
@@ -117,7 +130,7 @@ const DateTimeValidation = ({existingEvent}: IExistingEvent) => {
                     value={endDateValue}
                     minutesStep={5}
                     onChange={handleEnd}
-                    disabled={!!existingEvent}
+                    disabled={!!existingEvent.start}
                     minDate={dateMin}
                     minTime={timeMin}
                     maxTime={new Date(0, 0, 0, 18, 0)}
