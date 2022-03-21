@@ -27,7 +27,7 @@ const Title = () => {
   return (
     <TitleContainer >
       <TitleText>{`${roomLocation} - ${roomName}`}</TitleText>
-      <TitleText>{isRoomBusy ? `${roomName} is busy` : isNextEventToday ?  `Free until ${timeNextEventStart}` : "No upcoming events"}</TitleText>
+      <TitleText>{isRoomBusy ? `${roomName} is busy` : isNextEventToday ?  `Free until ${timeNextEventStart}` : "Free"}</TitleText>
     </TitleContainer>
   );
 };
