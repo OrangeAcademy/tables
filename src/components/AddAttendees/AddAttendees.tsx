@@ -20,6 +20,7 @@ import ErrorSnackbar from "./ErrorSnackbar";
 import {usersSelector} from "../../store/User/selectors";
 import {IEvent} from "../../models/Event";
 import {ActionButton} from "../AddTopics/AddTopics.styled";
+import {useAppSelector} from "../../hooks/redux";
 
 interface IAddAttendeeBtn {
   addAttendee: () => void
@@ -122,7 +123,6 @@ const AttendeesList = ({attendee, removeAttendee, removeActive}: IAttendeeList) 
 interface IAddAttendeesProps {
   showAttendees: boolean;
   setShowAttendees: (val: boolean) => void;
-  existingEvent?: IEvent | undefined
 }
 
 const errorMessage = {
@@ -130,16 +130,17 @@ const errorMessage = {
   duplicate: "Oh no, this email is already in the list"
 }
 
-export default function AddAttendees({showAttendees, setShowAttendees, existingEvent}: IAddAttendeesProps) {
+export default function AddAttendees({showAttendees, setShowAttendees}: IAddAttendeesProps) {
   const theme = useTheme();
   const users = useSelector(usersSelector);
+  const existingEvent = useAppSelector(state => state.selectedEvent.event);
   const hasReachedBp = useMediaQuery(theme.breakpoints.down('sm'));
   const attendeesStoredRedux = useSelector(meetingsAttendeesSelector);
   const [localAttendee, setLocalAttendee] = useState<string | null>(null);
   const [showEmailError, setShowEmailError] = useState(false);
   const [showDupeError, setShowDupeError] = useState(false);
-
   const dispatch = useDispatch();
+  const { attendees, id} = existingEvent;
   const handleClose = () => setShowAttendees(false);
 
   const handleAttendee = (_event: any, newValue: any) => setLocalAttendee(newValue);
@@ -172,19 +173,22 @@ export default function AddAttendees({showAttendees, setShowAttendees, existingE
     handleClearFields();
 
   }
+const isViewEvent = () => {
+    return attendees.length>0 || id
+}
 
   return (
     <>
       <Dialog fullScreen={hasReachedBp} open={showAttendees} onClose={handleClose}>
         <HeaderContainer sx={{display: 'flex', justifyContent: 'center'}}>
-          <Title>{existingEvent ? "View" : "Add"} attendees</Title>
+          <Title>{isViewEvent() ? "View" : "Add"} attendees</Title>
         </HeaderContainer>
 
         <DialogContent>
           <Table stickyHeader={true}>
             <TableHeadStyled/>
             <TableBody>
-              {!existingEvent &&
+              {!isViewEvent() &&
               <TableRow>
                 <TableCell>
                   <AddAttendeeBtn addAttendee={addAttendee}/>
@@ -213,19 +217,19 @@ export default function AddAttendees({showAttendees, setShowAttendees, existingE
                   attendee={attendeeStored}
                   key={attendeeIndex}
                   removeAttendee={() => removeAttendee(attendeeStored)}
-                  removeActive={!existingEvent}/>
+                  removeActive={!attendees.length}/>
               ))}
 
-              {existingEvent && !!existingEvent.attendees.length && existingEvent.attendees.map((attendeeStored, attendeeIndex) => (
-                <AttendeesList
-                  attendee={attendeeStored}
-                  key={attendeeIndex}
-                  removeAttendee={() => removeAttendee(attendeeStored)}
-                  removeActive={!existingEvent}/>
-              ))}
+              {/*{existingEvent && !!attendees.length && existingEvent.attendees.map((attendeeStored, attendeeIndex) => (*/}
+              {/*  <AttendeesList*/}
+              {/*    attendee={attendeeStored}*/}
+              {/*    key={attendeeIndex}*/}
+              {/*    removeAttendee={() => removeAttendee(attendeeStored)}*/}
+              {/*    removeActive={!existingEvent}/>*/}
+              {/*))}*/}
             </TableBody>
           </Table>
-          {!attendeesStoredRedux.length || (existingEvent && !!existingEvent.attendees.length) && <NoAttendees/>}
+          {!attendeesStoredRedux.length && <NoAttendees/>}
 
         </DialogContent>
         <Divider/>
@@ -234,7 +238,7 @@ export default function AddAttendees({showAttendees, setShowAttendees, existingE
           <ActionButton color="error" onClick={handleClose} variant="contained">
             Close
           </ActionButton>
-          {!existingEvent &&
+          {!isViewEvent() &&
           <ActionButton onClick={handleClose} variant="contained">
             Confirm
           </ActionButton>

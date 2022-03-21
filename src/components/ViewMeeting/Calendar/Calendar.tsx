@@ -9,92 +9,102 @@ import CreateNewReservationPopup from "../../CreateNewReservation/PopUpReservati
 import isBetween from "dayjs/plugin/isBetween"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
 import {eventsSelector} from "../../../store/Event/selectors";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {IEvent} from "../../../models/Event";
-
+import {useAppSelector} from "../../../hooks/redux";
+import {setSelectedEvent} from "../../../store/SelectedEvent/selectedEventSlice"
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrBefore);
 
+interface ISelectedInterval {
+    start: string,
+    end: string
+}
+
 const Calendar = ({getNextEventFunction}: any) => {
 
-  const eventsCalendar = useSelector(eventsSelector);
-  const [visibility, setVisibility] = useState<boolean>(false);
-  const [selectedEvent, setSelectedEvent] = useState<IEvent | undefined>(undefined);
-
-  const calculateDateDiff = (event: any) => {
-    return dayjs(event.end).diff(dayjs(event.start), 'minutes')
-  }
-
-  const renderEventContent = (arg: any) => {
-    let direction = calculateDateDiff(arg.event) <= 35 ? 'row' : 'column';
-    return (
-      <Box sx={{flexDirection: direction}}>
-        <b>{arg.event.extendedProps.subject}</b>
-        <span>{arg.event.extendedProps.userEmail}</span>
-      </Box>
-    )
-  };
-
-  const handleClick = (arg: any) => {
-    if (arg.date > new Date()) {
-      setSelectedEvent(undefined);
-      setVisibility(!visibility);
+    const eventsCalendar = useSelector(eventsSelector);
+    const [visibility, setVisibility] = useState<boolean>(false);
+    const [selectedInterval, setSelectedInterval] = useState<ISelectedInterval>({
+        start: "",
+        end: ""
+    });
+    const dispatch = useDispatch();
+    const calculateDateDiff = (event: any) => {
+        return dayjs(event.end).diff(dayjs(event.start), 'minutes')
     }
-  }
 
-  const handleEventClick = (arg: any) => {
-    let extendedProps = arg.event.extendedProps;
-    let event: IEvent = {
-      userEmail: extendedProps.userEmail,
-      subject: extendedProps.subject,
-      start: arg.event.start,
-      end: arg.event.end,
-      attendees: extendedProps.attendees,
-      agenda: [],
-      presenters: extendedProps.presenters,
-      id: extendedProps._id
+    const renderEventContent = (arg: any) => {
+        let direction = calculateDateDiff(arg.event) <= 35 ? 'row' : 'column';
+        return (
+            <Box sx={{flexDirection: direction}}>
+                <b>{arg.event.extendedProps.subject}</b>
+                <span>{arg.event.extendedProps.userEmail}</span>
+            </Box>
+        )
     };
-    setSelectedEvent(event);
-    setVisibility(!visibility);
-  }
 
-  return (
-    <>
-      <CalendarStyle sx={{width: {mobile: '100%', tablet: '40%'}}}>
-        <FullCalendar
-          selectable
-          plugins={[timeGridDay, interactionPlugin]}
-          initialView="timeGridDay"
-          headerToolbar={false}
-          nowIndicator
-          height={'100vh'}
-          eventMinHeight={30}
-          slotDuration="00:15:00"
-          eventShortHeight={30}
-          eventOverlap={false}
-          allDaySlot={false}
-          eventClick={handleEventClick}
-          slotMinTime={"08:00"}
-          dateClick={handleClick}
-          slotMaxTime={"18:00:01"}
-          dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}
-          slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
-          events={eventsCalendar}
-          displayEventTime={false}
-          eventContent={renderEventContent}
-          expandRows
-        />
-      </CalendarStyle>
+    const selectEvent = (info: any) => {
+        if (new Date(info.startStr) > new Date()) {
+            setSelectedInterval({start: info.startStr, end: info.endStr})
+            setVisibility(!visibility);
+        }
+    }
 
-      {visibility &&
-      <CreateNewReservationPopup
-        setVisibility={setVisibility}
-        visibility={visibility}
-        existingEvent={selectedEvent}
-        getNextEventFunction={getNextEventFunction}
-      />}
-    </>
-  );
+    const handleEventClick = (arg: any) => {
+
+        let extendedProps = arg.event.extendedProps;
+        let event: IEvent = {
+            userEmail: extendedProps.userEmail,
+            subject: extendedProps.subject,
+            start: dayjs(arg.event.start).format(),
+            end: dayjs(arg.event.end).format(),
+            attendees: extendedProps.attendees,
+            agenda: [],
+            presenters: extendedProps.presenters,
+            id: extendedProps.elementId
+        };
+        dispatch(setSelectedEvent(event));
+        setVisibility(!visibility);
+    }
+
+    return (
+        <>
+            <CalendarStyle sx={{width: {mobile: '100%', tablet: '40%'}}}>
+                <FullCalendar
+                    selectable
+                    selectMirror
+                    unselectAuto={false}
+                    plugins={[timeGridDay, interactionPlugin]}
+                    initialView="timeGridDay"
+                    headerToolbar={false}
+                    nowIndicator
+                    height={'100vh'}
+                    slotDuration="00:15:00"
+                    eventOverlap={false}
+                    allDaySlot={false}
+                    eventClick={handleEventClick}
+                    slotMinTime={"08:00"}
+                    // slotMaxTime={"18:00:01"}
+                    dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}
+                    slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
+                    events={eventsCalendar}
+                    displayEventTime={false}
+                    eventContent={renderEventContent}
+                    expandRows
+                    select={selectEvent}
+                />
+            </CalendarStyle>
+
+            {visibility &&
+            <CreateNewReservationPopup
+              setVisibility={setVisibility}
+              visibility={visibility}
+              getNextEventFunction={getNextEventFunction}
+              selectedInterval={selectedInterval}
+            />}
+        </>
+    );
 }
 
 export default Calendar;

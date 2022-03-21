@@ -3,6 +3,9 @@ import {styled} from "@mui/material";
 import {deleteEvent} from "../../../store/Event/actionCreators";
 import {useAppDispatch} from "../../../hooks/redux";
 import { useEffect } from "react";
+import useAutobook from "hooks/useAutoBook";
+import { useSelector } from "react-redux";
+import { nextEventSelector } from "store/StateRoom/selectors";
 
 const MeetingEndButton = styled(Button)({
   width: '100%',
@@ -18,26 +21,36 @@ const MeetingEndButton = styled(Button)({
 })
 
 const EndButton = ({isBusy, upcomingEvent, getNextEventFunction}: any) => {
-
+  const nextEvent = useSelector(nextEventSelector);
+  const ev = upcomingEvent;
   const dispatch = useAppDispatch();
-  const DeleteEvent = (id: string) => {
-    dispatch(deleteEvent(id))
+  const { handlePostAndUpdate } = useAutobook();
+
+  const DeleteEvent = async () => {
+    await handlePostAndUpdate();
+    if(nextEvent && nextEvent.elementId) {
+
+      dispatch(deleteEvent(nextEvent.elementId))
       .unwrap()
       .then(() => {
         getNextEventFunction();
-        window.location.reload();
+        // window.location.reload();
       })
-  }
+    }
+    }
+
+
 
   return (
     <>
       {isBusy 
-      ? <MeetingEndButton onClick={() => DeleteEvent(upcomingEvent._id)}>End Now</MeetingEndButton> 
+      ? <MeetingEndButton onClick={() => DeleteEvent()}>End Now</MeetingEndButton> 
       : null
     }
     </>
   )
 
 }
+
 
 export default EndButton;

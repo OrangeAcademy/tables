@@ -56,7 +56,7 @@ function HomePage() {
     } else {
       setNextUpdate(upcomingEvent.end);
     }
-  }, [])
+  }, [upcomingEvent?.end, upcomingEvent?.start])
 
   const UpdateTime = useCallback((isBusy: boolean) => {
     const currentDay = dayjs();
@@ -84,9 +84,7 @@ function HomePage() {
       return nextMeeting;
     } catch (e) {
       console.log("No upcoming meetings. ");
-    } finally {
-      // window.location.reload();
-    }
+    } 
 
   },[dispatch])
 
@@ -144,15 +142,11 @@ function HomePage() {
 
   const isLessThan15Mins = useSelector(IsLessThan15MinsSelector);
 
-
-
-
-
   return (
     <div>
-      { (isLessThan15Mins || isBusyRoom) && eventStartTime
+      { (isLessThan15Mins || isBusyRoom) 
         ? <ViewMeeting isBusy={isBusyRoom} upcomingEvent={upcomingEvent} seconds={time} timeFunction={UpdateTime} getNextEventFunction={GetUpcomingEvent}/>
-        : <BookMeeting isBusy={isBusyRoom} seconds={time} timeFunction={UpdateTime}/>
+        : <BookMeeting />
       }
 
     </div>

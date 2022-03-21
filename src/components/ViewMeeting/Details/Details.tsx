@@ -41,30 +41,17 @@ const userIcon: any = {
 }
 
 export default function Details(props: any) {
-  // const {upcomingEvent} = props;  
   const nextEventSelected = useSelector(nextEventSelector);
-  const [eventParticipants, setEventParticipant] = useState('');
-
-  useEffect(() => {
-    if(nextEventSelected && nextEventSelected.attendees.length) {
-      const allParticipants = `${nextEventSelected.userEmail}, ${nextEventSelected.attendees.join(",")}`;
-      setEventParticipant(allParticipants);
-    } else if(nextEventSelected && nextEventSelected.userEmail) {
-      setEventParticipant(nextEventSelected.userEmail);
-    }
-  }, [nextEventSelected])
 
   return (
     <>
       {props.isBusy && nextEventSelected ?
         (<Box style={main.div}>
-          <Box style={titleMeeting.div}> Meeting <strong><i>{nextEventSelected.subject}</i></strong></Box>
-          <Box style={authorMeeting.div} title={eventParticipants}>
+          <Box style={titleMeeting.div}> Subject <strong><i>{nextEventSelected.subject}</i></strong></Box>
+          <Box style={authorMeeting.div}>
             <Box> <PersonIcon style={userIcon}> </PersonIcon></Box>
             <Box style={userNameAuthor.div} sx={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'}}>{eventParticipants}</Box>
+              }}>{nextEventSelected.userEmail}</Box>
           </Box>
         </Box>)
         : !props.isBusy && nextEventSelected 

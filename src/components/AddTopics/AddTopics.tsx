@@ -26,11 +26,11 @@ import ErrorSnackbar from "./ErrorSnackbar";
 
 import {usersSelector} from "../../store/User/selectors";
 import {IEvent} from "../../models/Event";
+import {useAppSelector} from "../../hooks/redux";
 
 interface IAddTopicProps {
   showAgenda: boolean;
   setShowAgenda: (val: boolean) => void;
-  existingEvent?: IEvent | undefined
 }
 
 const errorMessages = {
@@ -38,21 +38,21 @@ const errorMessages = {
   duplicate: "We already have this topic registered!"
 }
 
-export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAddTopicProps) {
+export default function AddTopic({showAgenda, setShowAgenda}: IAddTopicProps) {
+  const existingEvent = useAppSelector(state => state.selectedEvent.event);
+const {start, presenters} = existingEvent;
   // Theme
   const theme = useTheme();
   const hasReachedBp = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Redux
-  const dispatch = useDispatch()
-  const users = useSelector(usersSelector);
+  const dispatch = useDispatch();
 
   // State
   const topicsStoredRedux = useSelector(meetingsAgendaSelector);
-  const [topic, setTopic] = useState('');
-  const [presenter, setPresenter] = useState<string | null>(null);
+  const [topic, setTopic] = useState("");
+  const [presenter, setPresenter] = useState("");
   const [meetingTopics, setMeetingTopics] = useState(topicsStoredRedux);
-
   // Errors
   const [emptyFieldsError, setEmptyFieldsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -63,19 +63,27 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
   // Handlers
   const handleClose = () => setShowAgenda(false);
   const handleTopic = (event: React.ChangeEvent<{ value: string }>) => setTopic(event.target.value);
-  const handlePresenter = (_event: any, newValue: any) => setPresenter(newValue);
+  const handlePresenter = (event: React.ChangeEvent<{ value: string }>) => setPresenter(event.target.value);
   const handleClearFields = () => {
     setTopic('');
     setPresenter('');
   };
 
   useEffect(() => {
-    if (existingEvent) {
-      setMeetingTopics(existingEvent.presenters);
+    if (start) {
+      setMeetingTopics(presenters);
     }
-    setErrorMessage(errorMessages.emptyField);
-    setEmptyFieldsError(true);
   }, []);
+
+  useEffect(() =>{
+    if(presenters.length){
+      setEmptyFieldsError(false)
+    }
+    else {
+      setErrorMessage(errorMessages.emptyField);
+    }
+
+  }, [existingEvent])
 
   // // Adds topic to component state if topic and presenter are not empty
   const addTopic = () => {
@@ -91,7 +99,6 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
       setErrorMessage(errorMessages.emptyField);
       setEmptyFieldsError(true);
     }
-
     setMeetingTopics([...meetingTopics, {topic, presenter: presenter!}]);
 
     handleClearFields();
@@ -116,7 +123,7 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
     <>
       <Dialog fullScreen={hasReachedBp} open={showAgenda} onClose={handleClose}>
         <HeaderContainer sx={{display: 'flex', justifyContent: 'center'}}>
-          <Title>{existingEvent ? "View" : "Add"} topics</Title>
+          <Title>{start ? "View" : "Add"} topics</Title>
         </HeaderContainer>
 
         <DialogContent>
@@ -139,17 +146,6 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
 
                   <TableRow>
                     <TableCell>Presenter</TableCell>
-
-                    <TableCell sx={{width: 180}}>
-                      <Autocomplete
-                        fullWidth
-                        value={presenter}
-                        renderInput={(params) =>
-                          <TextField {...params} variant="standard" placeholder={'Email'} fullWidth/>}
-                        options={users.map((user) => user.email)}
-                        onChange={handlePresenter}
-                      />
-                    </TableCell>
                   </TableRow>
 
                   <TableRow>
@@ -187,7 +183,7 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
                 </TableRow>
               </TableHead>
               <TableBody>
-                {!existingEvent &&
+                {!start &&
                 <TableRow>
                   <TableCell>
                     <AddTopicBtn addTopic={addTopic}/>
@@ -203,13 +199,10 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
                   </TableCell>
 
                   <TableCell sx={{width: '19rem'}}>
-                    <Autocomplete
-                      fullWidth
+                    <Input
                       value={presenter}
-                      renderInput={(params) =>
-                        <TextField {...params} placeholder="Email" variant="standard" fullWidth/>}
-                      options={users.map((user) => user.email)}
                       onChange={handlePresenter}
+                      placeholder="Presenter"
                     />
                   </TableCell>
                 </TableRow>
@@ -221,7 +214,7 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
                     topic={topicStored.topic}
                     key={topicIndex}
                     presenter={topicStored.presenter}
-                    removeActive={!existingEvent}
+                    removeActive={!existingEvent.start}
                     removeTopic={() => removeTopic(topicStored.topic, topicStored.presenter)}
                   ></Topic>
                 ))}
@@ -239,7 +232,7 @@ export default function AddTopic({showAgenda, setShowAgenda, existingEvent}: IAd
             Close
           </ActionButton>
 
-          {!existingEvent &&
+          {!existingEvent.start &&
           <ActionButton onClick={handleConfirm} variant="contained">
             Confirm
           </ActionButton>

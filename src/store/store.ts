@@ -4,6 +4,7 @@ import reportReducer from './Report/reportSlice'
 import newMeetingReducer from './NewMeeting/newMeeting'
 import stateRoomReducer from './StateRoom/stateRoomSlice'
 import userReducer from './User/usersSlice'
+import selectedEventReducer from './SelectedEvent/selectedEventSlice'
 import {eventAPI} from "../services/EventServices";
 
 const rootReducer = combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
     roomState:stateRoomReducer,
     newMeeting: newMeetingReducer,
     user: userReducer,
+    selectedEvent: selectedEventReducer,
     [eventAPI.reducerPath]: eventAPI.reducer
 })
 

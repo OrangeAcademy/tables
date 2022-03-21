@@ -40,14 +40,24 @@ export const getClosestEvent = async ({ events } : IGetClosestEvent) => {
   if(!events) return initialState;
   // Sort event date and time [ FROM closest to present date and time TO furthest from now ] 
   const upcomingEvents = events.filter(event => dayjs(event.start).isAfter(timeNow) || dayjs(event.end).isAfter(timeNow));
+    let selectedEvent = upcomingEvents[0];
 
-  const [upcomingEvent] = upcomingEvents.sort((a,b) => {
-      const differenceA: number  = Math.abs(+timeNow - +dayjs(a.start));
-      const differenceB: number = Math.abs(+timeNow - +(dayjs(b.start)));
-      return differenceA - differenceB; // sort a before b when the distance is smaller
-  });
-
-  return upcomingEvent;
+    for (let data of upcomingEvents) {
+      if (timeNow.isBetween(dayjs(data.start), dayjs(data.end))) {
+        return data;
+      }
+      if (dayjs(selectedEvent.start).isAfter(dayjs(data.start))) {
+        selectedEvent = data;
+      }
+    }
+    return selectedEvent;
+  // const [upcomingEvent] = upcomingEvents.sort((a,b) => {
+  //     const differenceA: number  = Math.abs(+timeNow - +dayjs(a.start));
+  //     const differenceB: number = Math.abs(+timeNow - +(dayjs(b.start)));
+  //     return differenceA - differenceB; // sort a before b when the distance is smaller
+  // });
+  //
+  // return upcomingEvent;
   } catch(e) {
     console.log('No upcoming events');
     return upcomingEventInit
