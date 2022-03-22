@@ -5,7 +5,6 @@ import {Route, Routes} from "react-router-dom";
 import PageNotFound from "./pages/404";
 import Home from "pages/HomePage";
 
-
 function App() {
    
   return (

@@ -11,14 +11,13 @@ import {meetingsAttendeesSelector} from "store/NewMeeting/selectors";
 import {useTheme} from '@mui/material/styles';
 import {
   Box, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery, Divider,
-  IconButton, Input, Table, TableBody, TableCell, TableHead, Typography, TableRow, styled, Autocomplete, TextField
+  IconButton, Table, TableBody, TableCell, TableHead, Typography, TableRow, styled, Autocomplete, TextField
 } from '@mui/material';
-import {Close, Done, AddCircleOutline} from '@mui/icons-material';
+import {Close, Done} from '@mui/icons-material';
 
 // Local imports
 import ErrorSnackbar from "./ErrorSnackbar";
 import {usersSelector} from "../../store/User/selectors";
-import {IEvent} from "../../models/Event";
 import {ActionButton} from "../AddTopics/AddTopics.styled";
 import {useAppSelector} from "../../hooks/redux";
 

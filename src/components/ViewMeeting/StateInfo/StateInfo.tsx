@@ -1,12 +1,16 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import {roomStateSelector} from "../../../store/StateRoom/selectors";
+import {useSelector} from "react-redux";
 
 interface IsBusy {
   isBusy: boolean
 }
 
 const StateInfo = ({isBusy}: IsBusy) => {
+  const roomState = useSelector(roomStateSelector)
+const {roomName, roomLocation} = roomState
   let stat: string = '';
 
   if (isBusy) {
@@ -23,7 +27,7 @@ const StateInfo = ({isBusy}: IsBusy) => {
           mobile: '7.5vw',
           tablet: '3.5vw'
         }
-      }}>Orange {"{kITchen}"} - Salt</Typography>
+      }}>{roomLocation} - {roomName}</Typography>
       <Typography variant='h1' fontWeight='600' sx={{
         fontSize: {
           mobile: '7.5vw',

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { getClosestEvent } from 'utils/events.utils';
 import { useAppDispatch } from './redux';
-import { deleteEvent } from 'store/Event/actionCreators';
+import {deleteEvent, getEvents} from 'store/Event/actionCreators';
 
 import { useSelector } from 'react-redux';
 import { selectedEventSelector } from 'store/SelectedEvent/selectors';
@@ -27,10 +27,7 @@ function useDeleteEvent() {
     if (upcomingEv && upcomingEv.elementId) {
       await dispatch(deleteEvent(upcomingEv.elementId));
       // DISPATCH FETCH EVENTS
-      // await dispatch()
-      getClosestEvent(events);
-
-      // setRoomStatus (???)
+      await dispatch(getEvents());
     }
   }, [dispatch, events, upcomingEv]);
 

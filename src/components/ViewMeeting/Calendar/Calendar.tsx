@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import dayjs from "dayjs";
 import Box from "@mui/material/Box";
 import FullCalendar from '@fullcalendar/react';
@@ -11,8 +11,8 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
 import {eventsSelector} from "../../../store/Event/selectors";
 import {useDispatch, useSelector} from "react-redux";
 import {IEvent} from "../../../models/Event";
-import {useAppSelector} from "../../../hooks/redux";
 import {setSelectedEvent} from "../../../store/SelectedEvent/selectedEventSlice"
+
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrBefore);
 
@@ -30,6 +30,12 @@ const Calendar = ({getNextEventFunction}: any) => {
         end: ""
     });
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        unselectIntervalTime();
+
+    }, [eventsCalendar]);
+
     const calculateDateDiff = (event: any) => {
         return dayjs(event.end).diff(dayjs(event.start), 'minutes')
     }
@@ -38,8 +44,8 @@ const Calendar = ({getNextEventFunction}: any) => {
         let direction = calculateDateDiff(arg.event) <= 35 ? 'row' : 'column';
         return (
             <Box sx={{flexDirection: direction}}>
-                <b>{arg.event.extendedProps.subject}</b>
-                <span>{arg.event.extendedProps.userEmail}</span>
+                <b className={direction === 'row' ? 'clipped' : ''}>{arg.event.extendedProps.subject}</b>
+                <span className={direction === 'row' ? 'clipped' : ''}>{arg.event.extendedProps.userEmail}</span>
             </Box>
         )
     };
@@ -52,7 +58,7 @@ const Calendar = ({getNextEventFunction}: any) => {
     }
 
     const handleEventClick = (arg: any) => {
-
+        unselectIntervalTime();
         let extendedProps = arg.event.extendedProps;
         let event: IEvent = {
             userEmail: extendedProps.userEmail,
@@ -69,14 +75,27 @@ const Calendar = ({getNextEventFunction}: any) => {
         setVisibility(!visibility);
     }
 
-    const selectOverlap = (arg:any) => {
+    const selectOverlap = (arg: any) => {
         return arg.rendering === 'background';
+    }
+
+    const selectAllowFunction = (arg: any) => {
+        const date1 = dayjs(arg.endStr)
+        return date1.diff(arg.startStr, 'hour', true) <= 1
+    }
+
+    let calendarRef = useRef<FullCalendar | null>(null);
+
+    const unselectIntervalTime = () => {
+        let calendarApi = calendarRef?.current?.getApi();
+        calendarApi?.unselect();
     }
 
     return (
         <>
             <CalendarStyle sx={{width: {mobile: '100%', tablet: '40%'}}}>
                 <FullCalendar
+                    ref={calendarRef}
                     selectable
                     selectMirror
                     unselectAuto={false}
@@ -91,7 +110,7 @@ const Calendar = ({getNextEventFunction}: any) => {
                     allDaySlot={false}
                     eventClick={handleEventClick}
                     slotMinTime={"08:00"}
-                    slotMaxTime={"18:00:01"}
+                    // slotMaxTime={"18:00:01"}
                     dayHeaderFormat={{weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'}}
                     slotLabelFormat={{hour: '2-digit', minute: '2-digit', hour12: false}}
                     events={eventsCalendar}
@@ -100,6 +119,7 @@ const Calendar = ({getNextEventFunction}: any) => {
                     expandRows
                     select={selectEvent}
                     selectOverlap={selectOverlap}
+                    selectAllow={selectAllowFunction}
                 />
             </CalendarStyle>
 

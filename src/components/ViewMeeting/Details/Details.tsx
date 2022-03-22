@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import PersonIcon from '@mui/icons-material/Person';
 import { useSelector } from "react-redux";
@@ -47,14 +47,14 @@ export default function Details(props: any) {
     <>
       {props.isBusy && nextEventSelected ?
         (<Box style={main.div}>
-          <Box style={titleMeeting.div}> Subject <strong><i>{nextEventSelected.subject}</i></strong></Box>
+          <Box style={titleMeeting.div}>Subject <strong><i>{nextEventSelected.subject}</i></strong></Box>
           <Box style={authorMeeting.div}>
             <Box> <PersonIcon style={userIcon}> </PersonIcon></Box>
             <Box style={userNameAuthor.div} sx={{
-              }}>{nextEventSelected.userEmail}</Box>
+              }}>Owner: {nextEventSelected.userEmail}</Box>
           </Box>
         </Box>)
-        : !props.isBusy && nextEventSelected 
+        : !props.isBusy && nextEventSelected
         ?
         (<Box style={main.div}>
           <Box style={titleMeeting.div}>
