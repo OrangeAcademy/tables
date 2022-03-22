@@ -13,3 +13,6 @@ export const IsLessThan15MinsSelector = createSelector(roomStateSelector, state 
 export const autoBookConfigSelector = createSelector(roomStateSelector, state => state.autoBookConfig);
 export const shouldAutoBookSelector = createSelector(roomStateSelector, state => state.autoBookConfig.isAutoBookable);
 export const autoBookDurationSelector = createSelector(roomStateSelector, state => state.autoBookConfig.duration);
+export const snackbarVisibilitySelector = createSelector(roomStateSelector, state => state.snackbarVisibility);
+export const snackbarMessageSelector = createSelector(roomStateSelector, state => state.snackbarMessage);
+export const snackbarSeveritySelector = createSelector(roomStateSelector, state => state.snackbarSeverity);

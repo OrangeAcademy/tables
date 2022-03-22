@@ -1,6 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IEvent} from "../../models/Event";
-import {reportSlice} from "../Report/reportSlice";
 
 export interface initialSliceState {
     event: IEvent

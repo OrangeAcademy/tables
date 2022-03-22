@@ -1,16 +1,28 @@
 import dayjs from "dayjs";
-import { useAppDispatch } from "hooks/redux";
-import { IEvent, IPresenters } from "models/Event";
-import React, { useCallback, useEffect, useState } from 'react'
-import {  useSelector } from "react-redux";
-import { getEvents } from "store/Event/actionCreators";
-import { nextEventStartSelector, roomStatusSelector, nextEventEndSelector, IsLessThan15MinsSelector } from "store/StateRoom/selectors";
-import {  setIsLessThan15Mins, setNextEventStart, setRoomStatus, storeUpcomingEvent } from "store/StateRoom/stateRoomSlice";
-import { getClosestEvent } from "utils/events.utils";
+import {useAppDispatch} from "hooks/redux";
+import {IEvent, IPresenters} from "models/Event";
+import React, {useCallback, useEffect, useState} from 'react'
+import {useSelector} from "react-redux";
+import {getEvents} from "store/Event/actionCreators";
+import {
+  nextEventStartSelector,
+  roomStatusSelector,
+  nextEventEndSelector,
+  IsLessThan15MinsSelector,
+  snackbarVisibilitySelector, snackbarMessageSelector, snackbarSeveritySelector
+} from "store/StateRoom/selectors";
+import {
+  setIsLessThan15Mins,
+  setNextEventStart,
+  setRoomStatus,
+  storeUpcomingEvent
+} from "store/StateRoom/stateRoomSlice";
+import {getClosestEvent} from "utils/events.utils";
 import BookMeeting from "./BookMeeting";
 import ViewMeeting from "./ViewMeeting";
-
-
+import SnackbarComponent from "../components/CreateNewReservation/PopUpReservation/SnackbarComponent";
+import {setSnackbarVisibility} from 'store/StateRoom/stateRoomSlice'
+import {AlertColor} from "@mui/material";
 
 const controller = new AbortController();
 const upcomingEventInit = {
@@ -38,13 +50,16 @@ function HomePage() {
 
   const endTimeNextEvent = useSelector(nextEventEndSelector);
   const startTimeNextEvent = useSelector(nextEventStartSelector);
+  const snackbarVisibility = useSelector(snackbarVisibilitySelector);
+  const snackbarMessage = useSelector(snackbarMessageSelector);
+  const snackbarSeverity = useSelector(snackbarSeveritySelector);
 
   const StateOfRoom = useCallback(() => {
-    try{
+    try {
       const busyRoom = currentDay.isBetween(dayjs(startTimeNextEvent), dayjs(endTimeNextEvent));
       dispatch(setRoomStatus(busyRoom));
       return busyRoom;
-    } catch(e) {
+    } catch (e) {
       console.error(e);
       return false;
     }
@@ -64,29 +79,28 @@ function HomePage() {
       setTime(0);
     if (isBusy && endTimeNextEvent) {
       setTime(dayjs(endTimeNextEvent).diff(currentDay, 'seconds'));
-      
-    } else if(!isBusy && startTimeNextEvent) {
+
+    } else if (!isBusy && startTimeNextEvent) {
       setTime(dayjs(startTimeNextEvent).diff(currentDay, 'seconds'))
     }
-  },[endTimeNextEvent, startTimeNextEvent, upcomingEvent])
-
+  }, [endTimeNextEvent, startTimeNextEvent, upcomingEvent])
 
 
   const GetUpcomingEvent = useCallback(async () => {
     try {
       const events: IEvent[] = await dispatch(getEvents()).unwrap();
       const nextMeeting = await getClosestEvent(events);
-  
+
       setUpcomingEvent(nextMeeting);
       dispatch(storeUpcomingEvent(nextMeeting));
       dispatch(setNextEventStart(nextMeeting.start));
-  
+
       return nextMeeting;
     } catch (e) {
       console.log("No upcoming meetings. ");
-    } 
+    }
 
-  },[dispatch])
+  }, [dispatch])
 
   useEffect(() => {
     GetUpcomingEvent()
@@ -115,24 +129,23 @@ function HomePage() {
 
 
   const checkIfBusy = useCallback(() => {
-    if(!eventStartTime) return ;
+    if (!eventStartTime) return;
 
     const tillEventStart = dayjs(eventStartTime).diff(dayjs(), "seconds");
 
-    if( tillEventStart < (15 * 60)) {
+    if (tillEventStart < (15 * 60)) {
       dispatch(setIsLessThan15Mins(true));
-    } else if( tillEventStart >= (15 * 60)){
+    } else if (tillEventStart >= (15 * 60)) {
       dispatch(setIsLessThan15Mins(false));
     }
 
-    if(tillEventStart <= 0) {
+    if (tillEventStart <= 0) {
       dispatch(setRoomStatus(true));
     } else {
       dispatch(setRoomStatus(false));
     }
 
 
-     
   }, [dispatch, eventStartTime])
 
   useEffect(() => {
@@ -142,17 +155,23 @@ function HomePage() {
 
   const isLessThan15Mins = useSelector(IsLessThan15MinsSelector);
 
+  const setVisibility = (value: boolean) => {
+    dispatch(setSnackbarVisibility(value))
+  }
+
   return (
     <div>
-      { (isLessThan15Mins || isBusyRoom) 
-        ? <ViewMeeting isBusy={isBusyRoom} upcomingEvent={upcomingEvent} seconds={time} timeFunction={UpdateTime} getNextEventFunction={GetUpcomingEvent}/>
-        : <BookMeeting />
+      {(isLessThan15Mins || isBusyRoom)
+        ?
+        <ViewMeeting isBusy={isBusyRoom} upcomingEvent={upcomingEvent} seconds={time} timeFunction={UpdateTime}
+                     getNextEventFunction={GetUpcomingEvent}/>
+        : <BookMeeting/>
       }
-
+      <SnackbarComponent visibility={snackbarVisibility} setVisibility={setVisibility} message={snackbarMessage}
+                         severity={snackbarSeverity as AlertColor}/>
     </div>
   )
 }
-
 
 
 export default HomePage;

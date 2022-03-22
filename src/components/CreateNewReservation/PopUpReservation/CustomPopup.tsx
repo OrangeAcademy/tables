@@ -22,7 +22,7 @@ import Calendar from "components/Calendar/Calendar";
 import React, {useMemo, useCallback, useState, useEffect} from "react";
 import {useSelector} from "react-redux";
 import {getEvents, postEvents} from "store/Event/actionCreators";
-import {clearReservation, NewMeeting, setSubject, setUserEmail, setAttendees} from "store/NewMeeting/newMeeting";
+import {NewMeeting, setSubject, setUserEmail, setAttendees} from "store/NewMeeting/newMeeting";
 import {meetingSelector} from "store/NewMeeting/selectors";
 import {useAppDispatch, useAppSelector} from "hooks/redux";
 
@@ -40,7 +40,8 @@ import {usersSelector} from "../../../store/User/selectors";
 import {clearSelectedEvent} from 'store/SelectedEvent/selectedEventSlice';
 import dayjs from "dayjs";
 import useDeleteEvent from "hooks/useDeleteEvent";
-import { selectedEventSelector } from "store/SelectedEvent/selectors";
+import {selectedEventSelector} from "store/SelectedEvent/selectors";
+import {setSnackbarVisibility, setSnackbarMessage, setSnackbarSeverity} from 'store/StateRoom/stateRoomSlice';
 
 interface ISelectedInterval {
     start: string,
@@ -80,7 +81,7 @@ const CreateMeetingReservation = (
         start: "",
         end: ""
     });
-    const existingEvent =  useSelector(selectedEventSelector);
+    const existingEvent = useSelector(selectedEventSelector);
 
 
     // Theme
@@ -123,11 +124,11 @@ const CreateMeetingReservation = (
 
 
     // }, [start, end, eventsCalendar]);
-    
+
 
     const isConfirmDisabled = useMemo(() => {
         // Check if the start and end time selected by user overlaps with events
-        if( (start && end) && dayjs(start).isBefore(dayjs(end))) {
+        if ((start && end) && dayjs(start).isBefore(dayjs(end))) {
 
             return eventsCalendar.some(event => {
                 return dayjs(event.start).isBetween(dayjs(start), dayjs(end)) || dayjs(event.end).isBetween(dayjs(start), dayjs(end))
@@ -193,7 +194,7 @@ const CreateMeetingReservation = (
         }, 1000);
     }, [dispatch]);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!inputEmail || !inputSubject) {
             setInputError(true);
             return;
@@ -214,11 +215,21 @@ const CreateMeetingReservation = (
         // These 2 dispatches might be unecessary
         dispatch(setUserEmail(inputEmail));
         dispatch(setSubject(inputSubject));
+        try {
+            await dispatch(postEvents(newReservation)).unwrap();
+            const minutes = dayjs(newReservation.end).diff(newReservation.start, 'minute')
+            dispatch(setSnackbarMessage(`Success!\nYour meeting is booked for ${minutes} minutes`));
+            dispatch(setSnackbarSeverity('success'));
+            dispatch(setSnackbarVisibility(true));
+            dispatch(getEvents());
+            GetUpcomingEvent();
+            setVisibility(false);
 
-        dispatch(postEvents(newReservation));
-        dispatch(getEvents());
-        GetUpcomingEvent();
-        setVisibility(false);
+        } catch (e) {
+            dispatch(setSnackbarMessage('Error\nYour meeting couldn\'t be scheduled. Please retry.'));
+            dispatch(setSnackbarSeverity('error'));
+            dispatch(setSnackbarVisibility(true));
+        }
 
     };
 
@@ -229,7 +240,6 @@ const CreateMeetingReservation = (
     }, [dispatch])
 
     useEffect(() => {
-        console.log(existingEvent)
         if (existingEvent.id) {
             setInputEmail(existingEvent.userEmail!);
             setInputSubject(existingEvent.subject);
@@ -243,21 +253,10 @@ const CreateMeetingReservation = (
         GetUpcomingEvent();
     }, [GetUpcomingEvent, clearInputs, dispatch, existingEvent]);
 
-    useEffect(() => {
-        dispatch(clearReservation({}));
-
-    }, [dispatch]);
-
-    const deleteEventExistingEvent = (id: number) => {
-        dispatch(deleteEvent(id))
-            .unwrap()
-            .then(() => {
-                setVisibility(false);
-                dispatch(clearSelectedEvent({}));
-                getNextEventFunction();
-                // window.location.reload();
-            });
-    };
+    // useEffect(() => {
+    //     dispatch(clearReservation({}));
+    //
+    // }, [dispatch]);
 
     const handleClose = () => {
         setVisibility(false);
@@ -295,7 +294,8 @@ const CreateMeetingReservation = (
                                                onChange={onSubjectFieldChange}
                                                label="Meeting Subject" margin="dense"/>
                                 </FormControl>
-                                <DateTimeValidation selectedIntervalFromPopup={selectedIntervalFromPopup} selectedInterval={selectedInterval}/>
+                                <DateTimeValidation selectedIntervalFromPopup={selectedIntervalFromPopup}
+                                                    selectedInterval={selectedInterval}/>
                             </Box>
 
 
@@ -333,10 +333,12 @@ const CreateMeetingReservation = (
                                 {existingEvent.start
                                     ? <Button variant="contained" color="error" fullWidth
                                               onClick={() => {
-                                                  console.log(existingEvent.elementId)
-                                                if(existingEvent && existingEvent.elementId) {
-                                                    deleteSelectedEvent();
-                                                }
+                                                  if (existingEvent && existingEvent.elementId) {
+                                                      deleteSelectedEvent().then(() => {
+                                                          setVisibility(false);
+                                                          getNextEventFunction();
+                                                      });
+                                                  }
 
                                               }}>Delete</Button>
                                     :
@@ -357,7 +359,7 @@ const CreateMeetingReservation = (
                 <AddAttendees showAttendees={showAttendees} setShowAttendees={setShowAttendees}/>)}
 
             {showAgenda && (
-                <AddTopics showAgenda={showAgenda} setShowAgenda={setShowAgenda} />
+                <AddTopics showAgenda={showAgenda} setShowAgenda={setShowAgenda}/>
             )}
             <ErrorSnackbar
                 visibility={inputError}

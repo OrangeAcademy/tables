@@ -10,58 +10,58 @@ import { selectedEventSelector } from "store/SelectedEvent/selectors";
 import useDeleteEvent from "hooks/useDeleteEvent";
 
 const MeetingEndButton = styled(Button)({
-  width: '100%',
-  background: 'white',
-  borderRadius: '10px',
-  height: '4rem',
-  color: 'black',
-  textTransform: 'none',
-  fontSize: '20px',
-  '&:hover': {
-    background: '#d4d1d1'
-  },
+    width: '100%',
+    background: 'white',
+    borderRadius: '10px',
+    height: '4rem',
+    color: 'black',
+    textTransform: 'none',
+    fontSize: '20px',
+    '&:hover': {
+        background: '#d4d1d1'
+    },
 })
 
 
 
 const EndButton = ({isBusy, upcomingEvent, getNextEventFunction}: any) => {
-  const nextEvent = useSelector(nextEventSelector);
-  const selectedEvent = useSelector(selectedEventSelector);
-  const {deleteSelectedEvent} = useDeleteEvent();
-  
-  const ev = upcomingEvent;
-  const dispatch = useAppDispatch();
-  const { handlePostAndUpdate } = useAutobook();
+    const nextEvent = useSelector(nextEventSelector);
+    const selectedEvent = useSelector(selectedEventSelector);
+    const {deleteSelectedEvent} = useDeleteEvent();
 
-  const DeleteEvent = async () => {
-    await handlePostAndUpdate();
+    const ev = upcomingEvent;
+    const dispatch = useAppDispatch();
+    const { handlePostAndUpdate } = useAutobook();
 
-    if(selectedEvent && selectedEvent.elementId) return deleteSelectedEvent();
-  
+    const DeleteEvent = async () => {
+        await handlePostAndUpdate();
 
-    if(nextEvent && nextEvent.elementId) {
+        if(selectedEvent && selectedEvent.elementId) return deleteSelectedEvent();
 
-      dispatch(deleteEvent(nextEvent.elementId))
-      .unwrap()
-      .then(() => {
-        getNextEventFunction();
-        // window.location.reload();
-      })
 
-      return;
+        if(nextEvent && nextEvent.elementId) {
+
+            dispatch(deleteEvent(nextEvent.elementId))
+                .unwrap()
+                .then(() => {
+                    getNextEventFunction();
+                    // window.location.reload();
+                })
+
+            return;
+        }
     }
-    }
 
 
 
-  return (
-    <>
-      {isBusy 
-      ? <MeetingEndButton onClick={() => DeleteEvent()}>End Now</MeetingEndButton> 
-      : null
-    }
-    </>
-  )
+    return (
+        <>
+            {isBusy
+                ? <MeetingEndButton onClick={() => DeleteEvent()}>End Now</MeetingEndButton>
+                : null
+            }
+        </>
+    )
 
 }
 

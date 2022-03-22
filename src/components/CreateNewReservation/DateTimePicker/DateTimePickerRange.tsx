@@ -111,9 +111,9 @@ const DateTimeValidation = ({ selectedIntervalFromPopup, selectedInterval}: IExi
                     onChange={handleStart}
                     disabled={!!existingEvent.start}
                     minutesStep={5}
-                    // minDate={new Date(new Date().getTime() + 15 * 60000)}
-                    // minTime={new Date(0, 0, 0, 8)}
-                    // maxTime={new Date(0, 0, 0, 17, 45)}
+                    minDate={new Date(new Date().getTime() + 15 * 60000)}
+                    minTime={new Date(0, 0, 0, 8)}
+                    maxTime={new Date(0, 0, 0, 17, 45)}
                     //
                 />
 

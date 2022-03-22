@@ -38,8 +38,8 @@ export const eventSlice = createSlice({
             state.isLoading = false;
             state.error = action.payload
         },
-        [deleteEvent.fulfilled.type]: (state,  action: PayloadAction<string>) => {
-            state.events.splice(state.events.findIndex(item => item.id === action.payload), 1);
+        [deleteEvent.fulfilled.type]: (state,  action: PayloadAction<number>) => {
+            state.events.splice(state.events.findIndex(item => item.elementId === action.payload), 1);
             state.isLoading = false;
             state.error = ''
         },
