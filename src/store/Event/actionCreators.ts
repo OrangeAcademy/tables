@@ -39,7 +39,6 @@ export const postEvents = createAsyncThunk(
 export const deleteEvent = createAsyncThunk(
   'events/deleteEvent',
   async (id: number) => {
-    console.log(id);
     return await fetch(`${SERVER_EVENTS_ROUTE}/${id}`, {
       method: 'DELETE',
     }).then((data) => data.json().then((res) => res));
