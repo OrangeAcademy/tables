@@ -1,7 +1,7 @@
 // Styles for Schedule Meeting component
 export const styles = {
   grid: { display: 'grid', placeItems: 'center', mb: '2rem', mt: "clamp(10px, 10vh, 5.5rem)" },
-  title: { fontWeight: 400, color:'#fef9e7', fontSize: "clamp(1rem, 2.125rem, 7vw)", textAlign: 'center' },
+  title: { fontWeight: 400, color:'#fef9e7', fontSize: "clamp(1rem, 2.125rem, 7vw)", textAlign: 'center', minHeight: "2.70rem", maxWidth: "80vw", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
   icon: { color: 'black', width: '32px', height: '32px' },
   button: {
     mt: 'clamp(10px, 1rem, 10vw)',

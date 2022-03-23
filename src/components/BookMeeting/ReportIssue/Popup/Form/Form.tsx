@@ -1,62 +1,48 @@
-import {useState} from 'react';
-
-// MUI Imports
-import { Box, SelectChangeEvent } from "@mui/material";
-
-
-//Local imports
+import React, {ChangeEvent, useState} from 'react';
+import {SelectChangeEvent} from "@mui/material";
 import IssueTypeField from "./FormFields/IssueTypeField";
 import EmailField from "./FormFields/EmailField";
 import IssueDescriptionField from "./FormFields/IssueDescriptionField";
 import PopupButtons from "./Buttons";
 
-// Redux
-import {addReport} from "../../../../../pages/store/slices/reportIssueSlice";
-import {store} from "../../../../../pages/store/store";
+import {useDispatch} from "react-redux";
+import {postIssue} from "../../../../../store/Report/actionCreators";
+import {FormContainer} from "./FormPartials/FormContainer";
 
 interface IFormProps {
   handleClose: () => void
 }
 
-/* ------------------------ Main Component ------------------------ */
-/* 
-  Contains the main FORM component for 'Report Issue Popup'.
-  Current form fields: email [input], description [input], issue type [select/dropdown]
-*/
+const PopupFormFields = ({handleClose}: IFormProps) => {
 
-const PopupFormFields = ({handleClose} : IFormProps) => {
+  const dispatch = useDispatch();
   const [userEmail, setUserEmail] = useState('');
   const [issueDescription, setIssueDescription] = useState('');
   const [issueType, setIssueType] = useState('');
 
-  const handleEmail = (e: React.ChangeEvent<{value: string}>) => setUserEmail(e.target.value);
-  const handleIssueDescription = (e: React.ChangeEvent<{value: string}>) => setIssueDescription(e.target.value);
+  const handleEmail = (_event: any, newValue: any) => setUserEmail(newValue);
+  const handleIssueDescription = (e: ChangeEvent<{ value: string }>) => setIssueDescription(e.target.value);
   const handleIssueType = (e: SelectChangeEvent) => setIssueType(e.target.value);
 
   const submitReport = () => {
-    if(userEmail && issueDescription && issueType) {
-      store.dispatch(addReport({type: 'addReport', payload: {
-        userId: 2,
-        email: userEmail,
+    if (userEmail && issueDescription && issueType) {
+      dispatch(postIssue({
         description: issueDescription,
+        email: userEmail,
         issueType: issueType
-      }
       }))
-  
       handleClose();
     }
   }
 
-
   return (
-    <Box component="form">
+    <FormContainer>
       <EmailField userEmail={userEmail} handleEmail={handleEmail}/>
-      <IssueDescriptionField issueDescription={issueDescription} handleIssueDescription={handleIssueDescription}  />
-      <IssueTypeField issueType={issueType} handleIssueType={handleIssueType} />
-      <PopupButtons submitReport={submitReport} handleClose={handleClose} />
-    </Box>
+      <IssueDescriptionField issueDescription={issueDescription} handleIssueDescription={handleIssueDescription}/>
+      <IssueTypeField issueType={issueType} handleIssueType={handleIssueType}/>
+      <PopupButtons submitReport={submitReport} handleClose={handleClose}/>
+    </FormContainer>
   );
 };
-
 
 export default PopupFormFields;

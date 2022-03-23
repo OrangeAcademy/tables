@@ -5,11 +5,11 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 // Styles
 import { styles } from './Styles';
 
-import Inputs from "../../Inputs/Inputs";
-import Calendar from "../../Calendar/Calendar";
-
-import CustomPopup from "../../CreateNewReservation/PopUpReservation/CustomPopup";
+import CreateNewReservationPopup from "../../CreateNewReservation/PopUpReservation/CustomPopup";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { nextEventNameSelector } from "store/StateRoom/selectors";
+import useAutobook from "hooks/useAutoBook";
 
 
 
@@ -23,13 +23,19 @@ import { useState } from "react";
 */
 
 const ButtonMeeting = () => {
+
   const [visibility, setVisibility] = useState(false);
+  const nextMeetingName = useSelector(nextEventNameSelector);
+
+  const handleScheduleMeeting = () => {
+    setVisibility(!visibility)
+  }
 
   return (
     <>
     <Grid sx={{ ...styles.grid }}>
       <Typography variant="h4" sx={{ ...styles.title }}>
-        Next Meeting - Test
+        {nextMeetingName ? `Next Meeting - ${nextMeetingName}` : ""}
       </Typography>
       <Button
         variant="contained"
@@ -37,25 +43,15 @@ const ButtonMeeting = () => {
         size="large"
         startIcon={<DateRangeIcon sx={{ ...styles.icon }} />}
         sx={{ ...styles.button }}
-        onClick={() => setVisibility(!visibility)}
+        onClick={handleScheduleMeeting}
       >
         <Typography variant="subtitle1" sx={{ ...styles.btnText }}>
           SCHEDULE A MEETING
         </Typography>
       </Button>
     </Grid>
-    {visibility && 
-    
-    <CustomPopup  onClose={setVisibility} show={visibility} >
-      <Grid container spacing={2}>
-          <Grid item xs={12} md={7} lg={7}>
-            <Inputs />
-          </Grid>
-          <Grid item xs={12} md={5} lg={5}>
-            <Calendar />
-        </Grid>
-        </Grid>
-    </CustomPopup>}
+
+      {visibility && <CreateNewReservationPopup setVisibility={setVisibility} visibility={visibility}/>}
     </>
   );
 };

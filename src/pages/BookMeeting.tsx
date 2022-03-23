@@ -1,11 +1,9 @@
-import React from "react";
 
 // MUI Imports
-import { ThemeProvider } from "@emotion/react";
+import {ThemeProvider} from "@emotion/react";
 
 // Style - breakpoints
-import { bookMeetBreakpoints } from "./BookMeeting.bp";
-
+import {bookMeetBreakpoints} from "./BookMeeting.bp";
 
 // Local imports
 import BackgroundContainer from '../components/BookMeeting/BackgroundContainer/Main';
@@ -15,16 +13,24 @@ import ReportIssue from '../components/BookMeeting/ReportIssue/Main';
 import Timer from '../components/BookMeeting/Timer/Main';
 import Title from '../components/BookMeeting/Title/Main';
 
+import { useEffect } from "react";
+import useAutobook from "hooks/useAutoBook";
 
 const BookMeeting = () => {
+  const { resetConfig } = useAutobook();
+
+  useEffect(() => {
+    return () => resetConfig();
+  }, [resetConfig])
+
   return (
     <ThemeProvider theme={bookMeetBreakpoints}>
       <BackgroundContainer>
-        <Timer />
-        <Title location={"Orange {kITchen}"} meetingRoom={"Agora"} isRoomAvailable={true}/>
+        <Timer/>
+        <Title />
         <MeetingDurationButtons />
-        <ButtonMeeting />
-        <ReportIssue />
+        <ButtonMeeting/>
+        <ReportIssue/>
       </BackgroundContainer>
     </ThemeProvider>
   );

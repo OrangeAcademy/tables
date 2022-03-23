@@ -23,7 +23,7 @@ interface IReportIssueProps {
 }
 
 // Create an outlined SELECT field. Could be refactored to receive dropdown items as props
-// Current dropdown options: app, meeting
+// Current dropdown options: redux, meeting
 const IssueTypeField = ({issueType, handleIssueType}: IReportIssueProps) => {
   const [open, setOpen] = useState(false);
 
@@ -31,7 +31,7 @@ const IssueTypeField = ({issueType, handleIssueType}: IReportIssueProps) => {
   const handleOpen = () => setOpen(true);
 
   return (
-    <FormControl margin="dense" fullWidth  >
+    <FormControl margin="dense" fullWidth>
       <Label inputLabel="Issue type"/>
       <Select
         open={open}

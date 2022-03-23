@@ -4,12 +4,19 @@
 */
 
 // React imports
-import { useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
+
+
 
 // Local imports
 import BookMeetingBtn from './Button';
 import StyledBox from './Containers/Box';
-
+import {useDispatch, useSelector} from "react-redux";
+import { autoBookDurationSelector, nextEventStartSelector } from "store/StateRoom/selectors";
+import dayjs from "dayjs";
+import { setIsLessThan15Mins } from "store/StateRoom/stateRoomSlice";
+import { focusedStyled, unFocusedStyle } from "./Button";
+import useAutobook from "hooks/useAutoBook";
 
 // This array defines the duration of a meeting user wants to book
 const MEETING_DURATIONS: number[] = [15, 30, 45, 60];
@@ -22,23 +29,56 @@ const MEETING_DURATIONS: number[] = [15, 30, 45, 60];
 */
 
 const MeetingDurationButtons = () => {
+  const dispatch = useDispatch(); // Instantiating the Redux Store dispatch
+  const {resetConfig } = useAutobook(); // Custom Hook for managing autoBookConfig in Redux store 
+  const eventStartTime = useSelector(nextEventStartSelector);  // Upcoming event start time
+  const isSelected = useSelector(autoBookDurationSelector);   // Variable that holds the duration selected by user
+  const { _getDuration, automaticallyBookMeeting} = useAutobook();
 
-  // Storing the user-selected meeting duration
-  const selectedDuration = useRef(MEETING_DURATIONS[0]);
+  const [isDisabled, setIsDisabled] = useState<number[]>([]);   // Array that holds invalid durations
+  
+  // Handles | Toggles autoBookConfig
+  const handleClick = async (meetingDuration: number) => {
 
-  // Sets the meeting duration to the value of the user-clicked button
-  const setDuration = (index: number):number =>
-    (selectedDuration.current = MEETING_DURATIONS[index]);
+   automaticallyBookMeeting(meetingDuration);
+
+  } 
+
+  // Checks how much time is left till the next event start and stores invalid durations if any
+  const btnsToDisable = useCallback(() => {
+    const tillEventStart = dayjs(eventStartTime).diff(dayjs(), "seconds");
+
+    return MEETING_DURATIONS.filter(dur => dur > tillEventStart / 60);
+  }, [eventStartTime])
+
+
+  // Interval that handles the disabled state of buttons
+  useEffect(() => {
+    const checkForDisableInterval = setInterval(() => {
+      setIsDisabled(btnsToDisable());
+
+      if(isSelected && isDisabled.includes(isSelected)) return resetConfig();
+      if(isDisabled.length === MEETING_DURATIONS.length) return dispatch(setIsLessThan15Mins(true));
+
+    }, 1000);
+
+    return () => clearInterval(checkForDisableInterval);
+    
+  }, [btnsToDisable, dispatch, eventStartTime, isDisabled, isSelected, resetConfig])
 
   return (
     <StyledBox>
       {MEETING_DURATIONS.map((meetingDuration, index) => (
-        
-        <BookMeetingBtn index={index} key={index} duration={meetingDuration} setDuration={setDuration} />
+        // onClick={() => handleClick(meetingDuration)}
+        <BookMeetingBtn key={index} sx={isSelected === meetingDuration ? focusedStyled : unFocusedStyle} onClick={() => automaticallyBookMeeting(meetingDuration)}  disabled={btnsToDisable().includes(meetingDuration)}>
+          {meetingDuration} min
+        </BookMeetingBtn>
 
       ))}
+     
     </StyledBox>
   );
 };
 
 export default MeetingDurationButtons;
+

@@ -65,5 +65,4 @@ export const calendarProps = {
     slotMaxTime: END_WORKING_TIME,
     weekends: true,
     slotDuration: "00:30:00"
-
 };
