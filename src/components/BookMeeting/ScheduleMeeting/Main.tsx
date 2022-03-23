@@ -23,15 +23,11 @@ import useAutobook from "hooks/useAutoBook";
 */
 
 const ButtonMeeting = () => {
-  const {_getConfig, automaticallyBookMeeting} = useAutobook();
+
   const [visibility, setVisibility] = useState(false);
   const nextMeetingName = useSelector(nextEventNameSelector);
 
   const handleScheduleMeeting = () => {
-    if(_getConfig.isAutoBookable) {
-      return automaticallyBookMeeting();
-    }
-
     setVisibility(!visibility)
   }
 
