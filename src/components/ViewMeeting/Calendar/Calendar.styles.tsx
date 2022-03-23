@@ -13,12 +13,24 @@ const CalendarStyle = styled('div')(() => ({
     justifyContent: 'center',
     textAlign: 'center'
   },
-  '& .fc-event-main div': {
-    display: 'flex'
-  },
-  '& .fc-event-main div b': {
-    margin: '0 5px'
-  },
+    '& .fc-event-main div': {
+        display: 'flex',
+        width: '100%'
+    },
+    '& .fc-event-main div b': {
+        margin: '0 5px'
+    },
+    '& .fc-event-main div b.clipped': {
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        width: '60%'
+    },
+    '& .fc-event-main div span.clipped': {
+        width: '40%',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden'
+    },
   '& .fc-timegrid-slots, & .fc-col-header': {
     background: '#f8e8d0'
   },

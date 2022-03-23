@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import CustomPopup from '../components/CreateNewReservation/PopUpReservation/CustomPopup';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import {Button} from "@mui/material";
-import {INextEvent} from "../interfaces/MeetingDetails";
 
 const PopUpMeeting = () => {
     const [visibility, setVisibility] = useState(false);

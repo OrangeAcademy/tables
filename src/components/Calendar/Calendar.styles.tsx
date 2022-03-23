@@ -11,13 +11,26 @@ const CalendarStyle = styled(Box)(() => ({
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+    width: '100%'
   },
   '& .fc-event-main div': {
-    display: 'inline-flex'
+    display: 'flex',
+    width: '100%'
   },
   '& .fc-event-main div b': {
     margin: '0 5px'
+  },
+  '& .fc-event-main div b.clipped': {
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    width: '50%'
+  },
+  '& .fc-event-main div span.clipped': {
+    width: '50%',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden'
   },
   '& .fc-timegrid-slots, & .fc-col-header': {
     background: '#f8e8d0'

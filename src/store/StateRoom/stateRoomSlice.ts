@@ -14,7 +14,9 @@ export interface IRoomState {
     duration: number | null
   },
   upcomingEvent: NewMeeting | IEvent | null,
-
+  snackbarVisibility: boolean,
+  snackbarMessage: string,
+  snackbarSeverity: string
 }
 
 
@@ -45,6 +47,9 @@ const initialState: IRoomState = {
     duration: null
   },
   upcomingEvent: upcomingEventInit,
+  snackbarVisibility: false,
+  snackbarMessage: '',
+  snackbarSeverity: 'success'
 }
 
 export const stateRoomSlice = createSlice({
@@ -69,10 +74,18 @@ export const stateRoomSlice = createSlice({
     },
     setAutoBookDuration: (state, action) => {
       state.autoBookConfig.duration = action.payload
+    },
+    setSnackbarVisibility: (state, action) => {
+      state.snackbarVisibility = action.payload
+    },
+    setSnackbarMessage: (state, action) => {
+      state.snackbarMessage = action.payload
+    },
+    setSnackbarSeverity: (state, action) => {
+      state.snackbarSeverity = action.payload
     }
-
   }
 });
 
-export const { setAutoBookDuration, setShouldAutoBook, storeUpcomingEvent, setNextEventStart, setRoomStatus, setIsLessThan15Mins } = stateRoomSlice.actions;
+export const { setAutoBookDuration, setShouldAutoBook, storeUpcomingEvent, setNextEventStart, setRoomStatus, setIsLessThan15Mins, setSnackbarVisibility, setSnackbarMessage,setSnackbarSeverity } = stateRoomSlice.actions;
 export default stateRoomSlice.reducer

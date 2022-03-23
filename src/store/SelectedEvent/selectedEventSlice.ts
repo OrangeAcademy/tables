@@ -1,12 +1,20 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IEvent} from "../../models/Event";
-import {reportSlice} from "../Report/reportSlice";
 
-interface initialSliceState {
+export interface initialSliceState {
     event: IEvent
 }
 const initialState: initialSliceState = {
-   event: { agenda: [], attendees: [], end: "", presenters: [], start: "", subject: "", userEmail: ""}
+   event: { 
+    agenda: [], 
+    attendees: [], 
+    elementId: null,
+    end: "", 
+    presenters: [], 
+    start: "", 
+    subject: "", 
+    userEmail: ""
+ }
 }
 
 const selectedEventSlice = createSlice({
