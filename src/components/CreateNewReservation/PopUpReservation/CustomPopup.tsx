@@ -361,10 +361,14 @@ const CreateMeetingReservation = (
             {showAgenda && (
                 <AddTopics showAgenda={showAgenda} setShowAgenda={setShowAgenda}/>
             )}
-            <ErrorSnackbar
+            {existingEvent.start
+            ? <></>
+            : <ErrorSnackbar
                 visibility={inputError}
                 setVisibility={setInputError}
                 message={errorMessage.emptyField}/>
+            }
+
         </>
     );
 };
